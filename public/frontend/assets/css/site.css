@@ -1,0 +1,22 @@
+.title {
+    font-size: 16px;
+    display: block;
+    height: 40px;
+    width: 100%;
+    /* background-color: aqua; */
+}
+
+.title_estate {
+    font-size: 15px !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    white-space: normal !important;
+    -webkit-line-clamp: 2 !important;
+    overflow: hidden !important;
+}
+
+.date_estate {
+    font-size: 15px;
+    margin-top: 20px;
+    font-style: italic;
+}
