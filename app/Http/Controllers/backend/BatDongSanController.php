@@ -24,7 +24,7 @@ class BatDongSanController extends Controller
     }
     // Hàm lấy danh sách tin bất động sản
     public function Bds_Ajax(){
-        $bds=BatDongSan::get();
+        $bds=BatDongSan::orderBy('idBDS','desc')->get();
         return Datatables::of($bds)
         ->addIndexColumn()
         ->addColumn(__('hinhanh'),function($bds){
@@ -44,7 +44,7 @@ class BatDongSanController extends Controller
                     
         })
         ->addColumn(__('tinhtrang'),function($bds){
-            if($bds->HienThi==1){
+            if($bds->HienThiBDS==1){
                 return '<span class="badge bg-primary">Đã duyệt</span>
                 <a onclick=btn_remove('.$bds->idBDS.') class="btn btn-danger">Gỡ bài</a>';
             }
@@ -268,7 +268,7 @@ class BatDongSanController extends Controller
             $bds=new BatDongSan();
             $idBDS=$request->id_bds;
             $bds=BatDongSan::find($idBDS);
-            $bds->HienThi=1;
+            $bds->HienThiBDS=1;
             $bds->idUserPost=Auth::id();
             $bds->save();
             return response()->json([
@@ -287,7 +287,7 @@ class BatDongSanController extends Controller
         $bds=new BatDongSan();
         $idBDS=$request->id_bds;
         $bds=BatDongSan::find($idBDS);
-        $bds->HienThi=0;
+        $bds->HienThiBDS=0;
         $bds->idUserPost=Auth::id();
         $bds->save();
         return response()->json([
@@ -311,7 +311,7 @@ class BatDongSanController extends Controller
                                 ->join('loai_tin','loai_tin.idLoaiTin','=','bat_dong_san.id_LoaiTin')
                                 ->join('user','user.id','=','bat_dong_san.id_User')
                                 ->where('idBDS',$id_bds)
-                                ->select('*','districts.name AS dic','provinces.name AS pro','wards.name AS war','danh_muc.TieuDeDanhMuc AS TieuDeDM','bat_dong_san.HienThi AS Show')
+                                ->select('*','districts.name AS dic','provinces.name AS pro','wards.name AS war','danh_muc.TieuDeDanhMuc AS TieuDeDM','bat_dong_san.HienThiBDS AS Show')
                                 ->first();
         $hinhanh=HinhAnh::where('id_BDS',$id_bds)->get();
                                 
@@ -331,7 +331,7 @@ class BatDongSanController extends Controller
         ->join('loai_tin','loai_tin.idLoaiTin','=','bat_dong_san.id_LoaiTin')
         ->join('user','user.id','=','bat_dong_san.id_User')
         ->where('idBDS',$idBDS)
-        ->select('*','districts.name AS dic','provinces.name AS pro','wards.name AS war','danh_muc.TieuDeDanhMuc AS TieuDeDM','bat_dong_san.HienThi AS Show')
+        ->select('*','districts.name AS dic','provinces.name AS pro','wards.name AS war','danh_muc.TieuDeDanhMuc AS TieuDeDM','bat_dong_san.HienThiBDS AS Show')
         ->first();
         $city=Provinces::orderBy('id','ASC')->get();
         $district=Districts::orderBy('id','ASC')->get();
@@ -352,7 +352,7 @@ class BatDongSanController extends Controller
                                 ->join('loai_tin','loai_tin.idLoaiTin','=','bat_dong_san.id_LoaiTin')
                                 ->join('user','user.id','=','bat_dong_san.id_User')
                                 ->where('idBDS',$idBDS)
-                                ->select('*','districts.name AS dic','provinces.name AS pro','wards.name AS war','danh_muc.TieuDeDanhMuc AS TieuDeDM','bat_dong_san.HienThi AS Show')
+                                ->select('*','districts.name AS dic','provinces.name AS pro','wards.name AS war','danh_muc.TieuDeDanhMuc AS TieuDeDM','bat_dong_san.HienThiBDS AS Show')
                                 ->first();
         $hinhanh=HinhAnh::where('id_BDS',$idBDS)->get();
         return response()->json([

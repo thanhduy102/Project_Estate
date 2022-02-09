@@ -21,10 +21,10 @@ class CreateTinTucTable extends Migration
             $table->text('MoTaTinTuc')->nullable();
             $table->text('NoiDungTinTuc')->nullable();
             $table->string('AnhDaiDien',255)->nullable();
-            $table->dateTime('ThoiGianTao')->nullable();
-            $table->dateTime('ThoiGianSua')->nullable();
-            $table->dateTime('ThoiGianXoa')->nullable();
-            $table->tinyInteger('HienThi')->nullable();
+            $table->dateTime('ThoiGianTaoTT')->nullable();
+            $table->dateTime('ThoiGianSuaTT')->nullable();
+            $table->dateTime('ThoiGianXoaTT')->nullable();
+            $table->tinyInteger('HienThiTT')->nullable();
         });
     }
 

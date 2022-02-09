@@ -20,3 +20,7 @@
     margin-top: 20px;
     font-style: italic;
 }
+
+#drop_down:hover .dropdown-menu {
+    display: inline-block !important;
+}

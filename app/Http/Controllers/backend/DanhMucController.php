@@ -18,7 +18,7 @@ class DanhMucController extends Controller
     //List danh sach danh muc
     public function ListCategory(){
      
-        $danhmuc=DanhMuc::where('HienThi','=',null)
+        $danhmuc=DanhMuc::where('HienThiDM','=',null)
         ->orderBy('idDanhMuc','desc')
         ->get();
         return Datatables::of($danhmuc)
@@ -113,7 +113,7 @@ class DanhMucController extends Controller
             $danhmuc->ViTriTrenHeadMenu=$request->txt_vitritrenheadmenu;
             
             $dateTime=Carbon::now('Asia/Ho_Chi_Minh');
-            $danhmuc->ThoiGianTao=$dateTime;
+            $danhmuc->ThoiGianTaoDM=$dateTime;
             $danhmuc->save();
             $response=['success'=>'Them moi thanh cong'];
            
@@ -191,7 +191,7 @@ class DanhMucController extends Controller
             $danhmuc->MoTaDanhMuc=$request->txt_mota;
             $danhmuc->NoiDungDanhMuc=$request->txt_noidung;
             $dateTime=Carbon::now('Asia/Ho_Chi_Minh');
-            $danhmuc->ThoiGianSua=$dateTime;
+            $danhmuc->ThoiGianSuaDM=$dateTime;
             $danhmuc->save();
 
             $response=['success'=>'Chỉnh sửa thành công!'];

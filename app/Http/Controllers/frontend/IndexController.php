@@ -6,6 +6,7 @@ use App\models\BatDongSan;
 use App\models\TinTuc;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\models\ChiTietBatDongSan;
 use App\models\Provinces;
 use DB;
 class IndexController extends Controller
@@ -45,10 +46,12 @@ class IndexController extends Controller
 
     public function featured_estate(){
         $batdongsan=BatDongSan::query()->fromSub(function($query){
-            $query->from('bat_dong_san')->join('provinces','provinces.id','=','bat_dong_san.id_TinhThanh')->where('HinhThuc',12);
-        },'batdongsan')->where('HienThi',1)->orderBy('idBDS','ASC')->get();
+            $query->from('bat_dong_san')->join('provinces','provinces.id','=','bat_dong_san.id_TinhThanh')
 
-        $tintuc=TinTuc::orderBy('idTinTuc','ASC')->get();
+                                        ->where('HinhThuc',2);
+        },'batdongsan')->where('HienThiBDS',1)->orderBy('idBDS','ASC')->paginate(8);
+
+        $tintuc=TinTuc::orderBy('idTinTuc','DESC')->paginate(8);
 
         //$count=BatDongSan::groupBy('id_TinhThanh')->count();
         $count=BatDongSan::select('id_TinhThanh',DB::raw("count(*) as BDS "))
@@ -65,9 +68,42 @@ class IndexController extends Controller
             'batdongsan'=>$batdongsan,
             'tintuc'=>$tintuc,
             'count'=>$count,
-            'id'=>$arr,
+            'array'=>$arr,
         ],200);
     }
 
-   
+    public function GetCategorys($slug_category){
+
+        $category=DanhMuc::where('TieuDeDanhMuc_Slug',$slug_category)->first()->toarray();
+        
+        foreach($category as $idDanhMuc){
+            
+            $batdongsan=ChiTietBatDongSan::query()->fromSub(function($query) use($idDanhMuc){
+                $query->from('chi_tiet_bat_dong_san')->join('danh_muc','danh_muc.idDanhMuc','=','chi_tiet_bat_dong_san.id_DanhMuc')
+                                                    ->join('bat_dong_san','bat_dong_san.idBDS','=','chi_tiet_bat_dong_san.id_BDS')
+                                                    ->leftjoin('provinces','provinces.id','=','bat_dong_san.id_TinhThanh')
+                                                    ->where('chi_tiet_bat_dong_san.id_DanhMuc',$idDanhMuc)
+                                                    ->where('bat_dong_san.HienThiBDS',1);
+                                                    
+            },'batdongsan')->orderBy('id_LoaiTin','DESC')->orderBy('idBDS','DESC')->paginate(16);
+            $category=DanhMuc::where('idDanhMuc',$idDanhMuc)->first();
+            return view('frontend.listing')->with('batdongsan',$batdongsan)->with('category',$category);
+            // return response()->json(['bds'=>$batdongsan]);
+        }
+       
+    }
+
+    public function tin_tuc(){
+
+        return view('frontend.blog');
+    }
+    
+    public function Tintuc(){
+        $tintuc=TinTuc::orderBy('idTinTuc','DESC')->paginate(8);
+
+        return response()->json([
+            'tintuc'=>$tintuc,
+        ],200);
+    }
+  
 }

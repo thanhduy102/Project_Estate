@@ -30,7 +30,7 @@
         <div class="container-fluid">
             <nav class="navbar navbar-expand-lg stroke px-0">
                 <h1>
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="../">
                         <span class="fa fa-home"></span> BDS
                     </a>
                 </h1>
@@ -352,16 +352,24 @@
                 
                 for(var i=0;i<result.danhmuccha.length;i++){
                     
-                    str+="<li class='nav-item dropdown @@pages__active'>";
-                    str+="<a class='nav-link dropdown-toggle' href='#'' id='navbarDropdown"+result.danhmuccha[i].idDanhMuc+"'";
-                    str+="role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+result.danhmuccha[i].TieuDeDanhMuc;      
+                    str+="<li class='nav-item' id='drop_down'>";
+                    str+="<a class='nav-link dropdown-toggle' href='../";
+                    if(result.danhmuccha[i].TieuDeDanhMuc_Slug=="tin-tuc"){
+                        str+="tin-tuc";
+                    }
+                    else{
+                        str+=result.danhmuccha[i].TieuDeDanhMuc_Slug+".html";
+                    }
+                    // +result.danhmuccha[i].TieuDeDanhMuc_Slug+
+                    //  str+=".html'";
+                    str+="'>"+result.danhmuccha[i].TieuDeDanhMuc;      
                     if(result.arr[result.danhmuccha[i].idDanhMuc]>0){
                         str+="<span class='fa fa-angle-down'></span></a>";
                         str+="<div class='dropdown-menu' id='drop' aria-labelledby='navbarDropdown"+result.danhmuccha[i].idDanhMuc+"'>";
 
                         for(var j=0;j<result.danhmuccon.length;j++){
                             if(result.danhmuccha[i].idDanhMuc===result.danhmuccon[j].idDanhMucCha){       
-                                str+="<a class='dropdown-item @@about__active' href='about.html'>"+result.danhmuccon[j].TieuDeDanhMuc+"</a>";           
+                                str+="<a class='dropdown-item @@about__active' href='../"+result.danhmuccon[j].TieuDeDanhMuc_Slug+".html'>"+result.danhmuccon[j].TieuDeDanhMuc+"</a>";           
                             }  
                         }
                             str+="</div>";

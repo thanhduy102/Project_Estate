@@ -25,10 +25,10 @@ class CreateUserTable extends Migration
             $table->bigInteger('SoTien')->unsigned()->default(50000);
             $table->string('AnhAvatar',255)->nullable();
             $table->string('password',255);
-            $table->dateTime('ThoiGianTao')->nullable();
-            $table->dateTime('ThoiGianSua')->nullable();
-            $table->dateTime('ThoiGianXoa')->nullable();
-            $table->tinyInteger('HienThi')->nullable();
+            $table->dateTime('ThoiGianTaoUs')->nullable();
+            $table->dateTime('ThoiGianSuaUs')->nullable();
+            $table->dateTime('ThoiGianXoaUs')->nullable();
+            $table->tinyInteger('HienThiUs')->nullable();
         });
     }
 

@@ -98,7 +98,7 @@ class AuthController extends Controller
             $user->password=bcrypt($request->password);
             $user->AnhAvatar='avatar.jpg';
             $dateTime=Carbon::now('Asia/Ho_Chi_Minh');
-            $user->ThoiGianTao=$dateTime;
+            $user->ThoiGianTaoUs=$dateTime;
             $user->save();
 
             $idUser=$user->id;

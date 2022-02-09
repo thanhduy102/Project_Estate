@@ -203,6 +203,7 @@ function DocSo3ChuSo(baso)
             txt_gia:{
                 digits: true,
                 min:0,
+                step:0.1,
             },
             select_file:{
                 extension: "jpeg|png|jpg",

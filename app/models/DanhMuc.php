@@ -10,4 +10,6 @@ class DanhMuc extends Model
     protected $table="danh_muc";
     protected $primaryKey="idDanhMuc";
     public $timestamps = FALSE;
+
+   
 }

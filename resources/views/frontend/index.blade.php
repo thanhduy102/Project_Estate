@@ -209,8 +209,8 @@
                     <!-- <h6 class="title-small">Explore cities</h6> -->
                     <h3 class="title-big">Khu vực</h3>
                 </div>
-                <div class="row pt-5">
-                    <div class="col-lg-3 col-md-4 col-6">
+                <div class="row pt-5" id="location_estate">
+                    {{-- <div class="col-lg-3 col-md-4 col-6">
                         <a href="#url">
                             <div class="box16">
                                 <img class="img-fluid" src="assets/images/p1.jpg" alt="">
@@ -297,7 +297,8 @@
                                 </div>
                             </div>
                         </a>
-                    </div>
+                    </div> --}}
+
                 </div>
             </div>
         </div>
@@ -360,42 +361,40 @@
             var formatter = new Intl.NumberFormat({
             style: 'currency',
             currency: 'VND',
-});
-
-
+        });
             $.ajax({
                 type:'post',
                 url:'/featured_estate',
                 success:function(result){
                     console.log(result);
                     var str="";
-                    if(result.batdongsan.length==0){
+                    if(result.batdongsan.data.length==0){
                         str+="Đang cập nhật...";
                     }
                     else{
-                        for(var i=0;i<result.batdongsan.length;i++){
+                        for(var i=0;i<result.batdongsan.data.length;i++){
 
-                            var dateNew=new Date(result.batdongsan[i].ThoiGianTao);
+                            var dateNew=new Date(result.batdongsan.data[i].ThoiGianTaoBDS);
 
                             str+="<div class='col-lg-3 col-md-6 listing-img mb-5'>";
                             str+="<a href='#url'>";
                             str+="<div class='box16'>";
                                 str+="<div class='rentext-listing-category'><span>Hot</span><span>New</span></div>";
-                                str+="<img class='img-fluid' src='../image/avatar/estate/"+result.batdongsan[i].AnhDaiDien+"' alt=''>";
+                                str+="<img class='img-fluid' src='../image/avatar/estate/"+result.batdongsan.data[i].AnhDaiDien+"' alt=''>";
                                 str+="<div class='box-content'>";
-                                    str+="<h3 class='title'>"+formatter.format(result.batdongsan[i].GiaTienBDS)+" VND</h3>";
+                                    str+="<h3 class='title'>"+formatter.format(result.batdongsan.data[i].GiaTienBDS)+" VND</h3>";
                                 str+="</div>";
                             str+="</div>";
                         str+="</a>";
                         str+="<div class='listing-details blog-details align-self'>";
                             str+="<h4 class='user_title agent'>";
-                                str+="<a class='title_estate' href='#url' title='"+result.batdongsan[i].TieuDeBDS+"'>"+result.batdongsan[i].TieuDeBDS+"</a>";
+                                str+="<a class='title_estate' href='#url' title='"+result.batdongsan.data[i].TieuDeBDS+"'>"+result.batdongsan.data[i].TieuDeBDS+"</a>";
                             str+="</h4>";
-                            str+="<i class='fa fa-map-marker'> "+result.batdongsan[i].name+"</i>";
+                            str+="<i class='fa fa-map-marker'> "+result.batdongsan.data[i].name+"</i>";
                             str+="<ul class='mt-3 estate-info'>";
                                 // str+="<li><span class='fa fa-bed'></span> 1 Bed</li>";
                                 // str+="<li><span class='fa fa-shower'></span> 2 Baths</li>";
-                                str+="<li><span class='fa fa-share-square-o'></span> "+result.batdongsan[i].DienTich+" (M²)</li>";
+                                str+="<li><span class='fa fa-share-square-o'></span> "+result.batdongsan.data[i].DienTich+" (M²)</li>";
                             str+="</ul>";
                             str+="<div class='author' style='display:flex;'>";
                                 str+="<p class='date_estate'><span class='fa fa-clock-o'></span> "+dateNew.getUTCDate()+"-"+(dateNew.getUTCMonth() + 1)+"-"+dateNew.getFullYear()+ "</p>";
@@ -413,46 +412,77 @@
             })
         });
     </script>
-<script>
-    $(document).ready(function(){
-        $.ajax({
+    <script>
+        $(document).ready(function(){
+            $.ajax({
+                    type:'post',
+                    url:'/featured_estate',
+                    success:function(result){
+                        console.log(result);
+                        var str="";
+                        if(result.tintuc.data.length==0){
+                            str+="Đang cập nhật...";
+                        }
+                        else{
+                            for(var i=0;i<result.tintuc.data.length;i++){
+                                var dateNew=new Date(result.tintuc.data[i].ThoiGianTaoTT);
+                                
+
+                                str+="<div class='col-lg-3 col-md-6 mt-md-0 mt-sm-4 mb-5'>";
+                                    str+="<div class='grids5-info'>";
+                                        str+="<span class='posted-date'>";
+                                            str+="<a href='#blog-single'>";
+                                                str+="<span class='small'>"+dateNew.getFullYear()+"</span>";
+                                                str+="<span class='big'>"+dateNew.getUTCDate()+"</span>";
+                                                str+="<span class='small'>Tháng "+(dateNew.getUTCMonth() + 1)+"</span>";
+                                            str+="</a>";
+                                        str+="</span>";
+                                    str+="<a href='#blog-single' class='d-block zoom'><img src='../backend/dist/img/"+result.tintuc.data[i].AnhDaiDien+"' alt='' class='img-fluid news-image' /></a>";
+                                        str+="<div class='blog-info'>";
+                                            // str+="<a href='#category' class='category'>Tin tức 1</a>";
+                                            str+="<h4><a class='title_estate' title='"+result.tintuc.data[i].TieuDeTinTuc+"' href='#blog-single'>"+result.tintuc.data[i].TieuDeTinTuc+"</a></h4>";
+                                            str+="<p class='title_estate'>"+result.tintuc.data[i].MoTaTinTuc+"</p>";
+                                        str+="</div>";
+                                    str+="</div>";
+                            str+="</div>";
+
+                            }
+                        }
+
+                        $("#location_new").html(str);
+                    }
+                })
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+            $.ajax({
                 type:'post',
                 url:'/featured_estate',
                 success:function(result){
-                    console.log(result);
                     var str="";
-                    if(result.tintuc.length==0){
+                    if(result.count.data.length==0){
                         str+="Đang cập nhật...";
                     }
                     else{
-                        for(var i=0;i<result.tintuc.length;i++){
-                            var dateNew=new Date(result.tintuc[i].ThoiGianTao);
-                            
-
-                            str+="<div class='col-lg-3 col-md-6 mt-md-0 mt-sm-4 mb-5'>";
-                                str+="<div class='grids5-info'>";
-                                    str+="<span class='posted-date'>";
-                                        str+="<a href='#blog-single'>";
-                                            str+="<span class='small'>"+dateNew.getFullYear()+"</span>";
-                                            str+="<span class='big'>"+dateNew.getUTCDate()+"</span>";
-                                            str+="<span class='small'>"+(dateNew.getUTCMonth() + 1)+"</span>";
-                                        str+="</a>";
-                                    str+="</span>";
-                                str+="<a href='#blog-single' class='d-block zoom'><img src='../backend/dist/img/"+result.tintuc[i].AnhDaiDien+"' alt='' class='img-fluid news-image' /></a>";
-                                    str+="<div class='blog-info'>";
-                                        // str+="<a href='#category' class='category'>Tin tức 1</a>";
-                                        str+="<h4><a class='title_estate' title='"+result.tintuc[i].TieuDeTinTuc+"' href='#blog-single'>"+result.tintuc[i].TieuDeTinTuc+"</a></h4>";
-                                        str+="<p class='title_estate'>"+result.tintuc[i].MoTaTinTuc+"</p>";
-                                    str+="</div>";
+                        for(var i=0;i<result.count.data.length;i++){
+                            str+="<div class='col-lg-3 col-md-4 col-6'>";
+                        str+="<a href='#url'>";
+                            str+="<div class='box16'>";
+                                str+="<img class='img-fluid' src='assets/images/p1.jpg' alt=''>";
+                                str+="<div class='box-content'>";
+                                    str+="<h3 class='title mb-1'>"+result.array[result.count.data[i].id_TinhThanh][0].name+"</h3>";
+                                    str+="<span class='post'>"+result.count.data[i].BDS+" căn</span>";
                                 str+="</div>";
-                        str+="</div>";
+                            str+="</div>";
+                        str+="</a>";
+                    str+="</div>";
 
                         }
                     }
-
-                    $("#location_new").html(str);
+                    $("#location_estate").html(str);
                 }
-            })
-    });
-</script>
+            });
+        })
+    </script>
     @endsection

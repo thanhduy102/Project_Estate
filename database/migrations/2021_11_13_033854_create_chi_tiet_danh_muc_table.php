@@ -16,10 +16,7 @@ class CreateChiTietDanhMucTable extends Migration
         Schema::create('chi_tiet_danh_muc', function (Blueprint $table) {
             $table->bigIncrements('idTinTucDanhMuc'); //Khóa chính
             
-            $table->dateTime('ThoiGianTao')->nullable();
-            $table->dateTime('ThoiGianSua')->nullable();
-            $table->dateTime('ThoiGianXoa')->nullable();
-            $table->tinyInteger('HienThi')->nullable();
+        
 
             $table->bigInteger('id_DanhMuc')->unsigned();//Khóa ngoại danh mục
             $table->bigInteger('id_TinTuc')->unsigned(); //Khóa ngoại tin tức

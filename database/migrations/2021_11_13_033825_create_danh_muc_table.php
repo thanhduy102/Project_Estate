@@ -25,10 +25,10 @@ class CreateDanhMucTable extends Migration
             $table->integer('HienThiTrenMainMenu')->unsigned()->nullable();
             $table->integer('ViTriTrenHeadMenu')->unsigned()->nullable();
             $table->integer('HienThiTrenHeadMenu')->unsigned()->nullable();
-            $table->dateTime('ThoiGianTao')->nullable();
-            $table->dateTime('ThoiGianSua')->nullable();
-            $table->dateTime('ThoiGianXoa')->nullable();
-            $table->tinyInteger('HienThi')->nullable();
+            $table->dateTime('ThoiGianTaoDM')->nullable();
+            $table->dateTime('ThoiGianSuaDM')->nullable();
+            $table->dateTime('ThoiGianXoaDM')->nullable();
+            $table->tinyInteger('HienThiDM')->nullable();
 
              
 

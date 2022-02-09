@@ -12,6 +12,11 @@
 */
 Route::get('','frontend\IndexController@Index');
 Route::post('/danh_muc','frontend\IndexController@danh_muc');
+
+Route::get('{slug_category}.html','frontend\IndexController@GetCategorys');
+
+Route::get('tin-tuc','frontend\IndexController@tin_tuc');
+Route::post('/tin_tuc','frontend\IndexController@Tintuc');
 Route::post('/featured_estate','frontend\IndexController@featured_estate');
 // Phan frontend
 Route::get('dang-nhap','Auth\AuthController@Login')->middleware('CheckLogout');

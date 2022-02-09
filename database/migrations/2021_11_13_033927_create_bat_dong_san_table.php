@@ -43,10 +43,10 @@ class CreateBatDongSanTable extends Migration
             $table->string('emailUser',100)->nullable();
             $table->date('NgayBatDau');
             $table->date('NgayKetThuc');
-            $table->dateTime('ThoiGianTao')->nullable();
-            $table->dateTime('ThoiGianSua')->nullable();
-            $table->dateTime('ThoiGianXoa')->nullable();
-            $table->tinyInteger('HienThi')->nullable();
+            $table->dateTime('ThoiGianTaoBDS')->nullable();
+            $table->dateTime('ThoiGianSuaBDS')->nullable();
+            $table->dateTime('ThoiGianXoaBDS')->nullable();
+            $table->tinyInteger('HienThiBDS')->nullable();
             $table->bigInteger('idUserPost')->unsigned()->nullable();
             $table->bigInteger('id_TinhThanh')->unsigned();//Khóa ngoại tinh thanh
             $table->bigInteger('id_QuanHuyen')->unsigned();//Khóa ngoại quan huyen

@@ -18,10 +18,10 @@ class CreateLoaiTinTable extends Migration
 
             $table->string('LoaiTin',50)->nullable();
             $table->bigInteger('GiaTien')->unsigned()->nullable();
-            $table->dateTime('ThoiGianTao')->nullable();
-            $table->dateTime('ThoiGianSua')->nullable();
-            $table->dateTime('ThoiGianXoa')->nullable();
-            $table->tinyInteger('HienThi')->nullable();
+            $table->dateTime('ThoiGianTaoLT')->nullable();
+            $table->dateTime('ThoiGianSuaLT')->nullable();
+            $table->dateTime('ThoiGianXoaLT')->nullable();
+            $table->tinyInteger('HienThiLT')->nullable();
         });
     }
 

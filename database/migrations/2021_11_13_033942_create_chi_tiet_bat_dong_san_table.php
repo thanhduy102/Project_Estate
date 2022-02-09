@@ -17,11 +17,7 @@ class CreateChiTietBatDongSanTable extends Migration
             $table->bigIncrements('idChiTietBDS');//Khóa chính
 
 
-           
-            $table->dateTime('ThoiGianTao')->nullable();
-            $table->dateTime('ThoiGianSua')->nullable();
-            $table->dateTime('ThoiGianXoa')->nullable();
-            $table->tinyInteger('HienThi')->nullable();
+        
 
             $table->bigInteger('id_DanhMuc')->unsigned();//Khóa ngoại danh mục
             $table->bigInteger('id_BDS')->unsigned();//Khóa ngoại bds

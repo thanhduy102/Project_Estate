@@ -17,10 +17,10 @@ class CreateHinhAnhTable extends Migration
             $table->bigIncrements('idHinhAnh');//Khóa chính
 
             $table->string('TenAnh',255)->nullable();
-            $table->dateTime('ThoiGianTao')->nullable();
-            $table->dateTime('ThoiGianSua')->nullable();
-            $table->dateTime('ThoiGianXoa')->nullable();
-            $table->tinyInteger('HienThi')->nullable();
+            $table->dateTime('ThoiGianTaoHA')->nullable();
+            $table->dateTime('ThoiGianSuaHA')->nullable();
+            $table->dateTime('ThoiGianXoaHA')->nullable();
+            $table->tinyInteger('HienThiHA')->nullable();
 
             $table->bigInteger('id_BDS')->unsigned();//Khóa ngoại bds
             $table->foreign('id_BDS')->references('idBDS')->on('bat_dong_san')->onDelete('cascade');

@@ -21,8 +21,8 @@
             <div class="container py-lg-4 py-md-3 py-2">
                 <div class="row mt-md-5">
                     <div class="col-lg-8 bds-news">
-                        <div class="row">
-                            <div class="col-md-6 mt-md-0 mt-sm-4 mb-5">
+                        <div class="row" id="new_estate">
+                            {{-- <div class="col-md-6 mt-md-0 mt-sm-4 mb-5">
                                 <div class="grids5-info">
                                     <span class="posted-date">
                                 <a href="#url">
@@ -124,7 +124,7 @@
                                         <p>Mô tả</p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <!-- <div class="col-md-6 mt-md-0 mt-5 pt-md-0 pt-4 mb-5">
                                 <div class="grids5-info">
@@ -364,4 +364,49 @@
             </div>
         </section>
         <!--//blog-posts-->
+
+        <script>
+            $(document).ready(function(){
+                $.ajax({
+                    type:'post',
+                    url:'/tin_tuc',
+                    success:function(result){
+                        
+                        console.log(result);
+                        var str="";
+                        if(result.tintuc.data.length==0){
+                            str+="Đang cập nhật...";
+                        }
+                        else{
+                            for(var i=0;i<result.tintuc.data.length;i++){
+                                var dateNew=new Date(result.tintuc.data[i].ThoiGianTaoTT);
+                                
+                                str+="<div class='col-md-6 mt-md-0 mt-sm-4 mb-5'>";
+                                    str+="<div class='grids5-info'>";
+                                        str+="<span class='posted-date'>";
+                                            str+="<a href='#blog-single'>";
+                                                str+="<span class='small'>"+dateNew.getFullYear()+"</span>";
+                                                str+="<span class='big'>"+dateNew.getUTCDate()+"</span>";
+                                                str+="<span class='small'>Tháng "+(dateNew.getUTCMonth() + 1)+"</span>";
+                                            str+="</a>";
+                                        str+="</span>";
+                                    str+="<a href='#blog-single' class='d-block zoom'><img src='../backend/dist/img/"+result.tintuc.data[i].AnhDaiDien+"' alt='' class='img-fluid news-image' /></a>";
+                                        str+="<div class='blog-info'>";
+                                            // str+="<a href='#category' class='category'>Tin tức 1</a>";
+                                            str+="<h4><a class='title_estate' title='"+result.tintuc.data[i].TieuDeTinTuc+"' href='#blog-single'>"+result.tintuc.data[i].TieuDeTinTuc+"</a></h4>";
+                                            str+="<p class='title_estate'>"+result.tintuc.data[i].MoTaTinTuc+"</p>";
+                                        str+="</div>";
+                                    str+="</div>";
+                            str+="</div>";
+
+                            }
+                        }
+
+                        $("#new_estate").html(str);
+                    }
+                })
+            });
+        </script>
+
+
 @endsection

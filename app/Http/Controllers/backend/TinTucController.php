@@ -117,7 +117,7 @@ class TinTucController extends Controller
             $tintuc->NoiDungTinTuc=$request->txt_noidung;
             $danhmuc=$request->txt_danhmuc;
             $dateTime=Carbon::now('Asia/Ho_Chi_Minh');
-            $tintuc->ThoiGianTao=$dateTime;
+            $tintuc->ThoiGianTaoTT=$dateTime;
             $tintuc->save();
 
             $idTinTuc=$tintuc->idTinTuc;
@@ -213,7 +213,7 @@ class TinTucController extends Controller
             
             $tintuc->NoiDungTinTuc=$request->txt_noidung;
             $dateTime=Carbon::now('Asia/Ho_Chi_Minh');
-            $tintuc->ThoiGianSua=$dateTime;
+            $tintuc->ThoiGianSuaTT=$dateTime;
             $tintuc->save();
 
             // Chinh sua danh muc
