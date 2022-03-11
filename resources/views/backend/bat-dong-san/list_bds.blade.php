@@ -42,6 +42,8 @@
                                                 <th>Tiêu đề</th>
                                                 <th>Ngày bắt đầu</th>
                                                 <th>Ngày kết thúc</th>
+                                                <th>Thông tin ngày</th>
+                                                <th>Cập nhật lần cuối</th>
                                                 <th style="width:100px">Tình trạng</th>
                                                 <th style="width: 100px">Hanh dong</th>
                                             </tr>
@@ -110,11 +112,13 @@
                 {data:'TieuDeBDS'},
                 {data:'NgayBatDau'},
                 {data:'NgayKetThuc'},
+                {data:'thongtinngay',name:'thongtinngay'},
+                {data:'ngaycapnhat',name:'ngaycapnhat'},
                 {data:'tinhtrang',name:'tinhtrang'},
                 {data:'hanhdong',name:'hanhdong'},
-                // {data:'edit_danh_muc',name:'edit_danh_muc'},
             ],
             "pageLength":10
+
         });
     });
 

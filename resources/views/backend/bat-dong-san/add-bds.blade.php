@@ -2,316 +2,15 @@
 @section('title','Đăng tin bất động sản')
 @section('content')
 
-
-{{--  --}}
-<script>
-    var ChuSo=new Array(" không "," một "," hai "," ba "," bốn "," năm "," sáu "," bảy "," tám "," chín ");
-    var Tien=new Array( "", " nghìn", " triệu", " tỷ", " nghìn tỷ", " triệu tỷ");
-
-//1. Hàm đọc số có ba chữ số;
-function DocSo3ChuSo(baso)
-{
-    var tram;
-    var chuc;
-    var donvi;
-    var KetQua="";
-    tram=parseInt(baso/100);
-    chuc=parseInt((baso%100)/10);
-    donvi=baso%10;
-    if(tram==0 && chuc==0 && donvi==0) return "";
-    if(tram!=0)
-    {
-        KetQua += ChuSo[tram] + " trăm ";
-        if ((chuc == 0) && (donvi != 0)) KetQua += " linh ";
-    }
-    if ((chuc != 0) && (chuc != 1))
-    {
-            KetQua += ChuSo[chuc] + " mươi";
-            if ((chuc == 0) && (donvi != 0)) KetQua = KetQua + " linh ";
-    }
-    if (chuc == 1) KetQua += " mười ";
-    switch (donvi)
-    {
-        case 1:
-            if ((chuc != 0) && (chuc != 1))
-            {
-                KetQua += " mốt ";
-            }
-            else
-            {
-                KetQua += ChuSo[donvi];
-            }
-            break;
-        case 5:
-            if (chuc == 0)
-            {
-                KetQua += ChuSo[donvi];
-            }
-            else
-            {
-                KetQua += " lăm ";
-            }
-            break;
-        default:
-            if (donvi != 0)
-            {
-                KetQua += ChuSo[donvi];
-            }
-            break;
-        }
-    return KetQua;
-}
-    function DocTienBangChu()
-    {
-        var SoTien=$("#txt_gia").val();
-        var lan=0;
-        var i=0;
-        var so=0;
-        var KetQua="";
-        var tmp="";
-        var ViTri = new Array();
-        if(SoTien<0) return "Số tiền âm !";
-        if(SoTien==0) return "Không đồng !";
-        if(SoTien>0)
-        {
-            so=SoTien;
-        }
-        else
-        {
-            so = -SoTien;
-        }
-        if (SoTien > 8999999999999999)
-        {
-            //SoTien = 0;
-            return "Số quá lớn!";
-        }
-        ViTri[5] = Math.floor(so / 1000000000000000);
-        if(isNaN(ViTri[5]))
-            ViTri[5] = "0";
-        so = so - parseFloat(ViTri[5].toString()) * 1000000000000000;
-        ViTri[4] = Math.floor(so / 1000000000000);
-        if(isNaN(ViTri[4]))
-            ViTri[4] = "0";
-        so = so - parseFloat(ViTri[4].toString()) * 1000000000000;
-        ViTri[3] = Math.floor(so / 1000000000);
-        if(isNaN(ViTri[3]))
-            ViTri[3] = "0";
-        so = so - parseFloat(ViTri[3].toString()) * 1000000000;
-        ViTri[2] = parseInt(so / 1000000);
-        if(isNaN(ViTri[2]))
-            ViTri[2] = "0";
-        ViTri[1] = parseInt((so % 1000000) / 1000);
-        if(isNaN(ViTri[1]))
-            ViTri[1] = "0";
-        ViTri[0] = parseInt(so % 1000);
-    if(isNaN(ViTri[0]))
-            ViTri[0] = "0";
-        if (ViTri[5] > 0)
-        {
-            lan = 5;
-        }
-        else if (ViTri[4] > 0)
-        {
-            lan = 4;
-        }
-        else if (ViTri[3] > 0)
-        {
-            lan = 3;
-        }
-        else if (ViTri[2] > 0)
-        {
-            lan = 2;
-        }
-        else if (ViTri[1] > 0)
-        {
-            lan = 1;
-        }
-        else
-        {
-            lan = 0;
-        }
-        for (i = lan; i >= 0; i--)
-        {
-        tmp = DocSo3ChuSo(ViTri[i]);
-        KetQua += tmp;
-        if (ViTri[i] > 0) KetQua += Tien[i];
-        if ((i > 0) && (tmp.length > 0)) KetQua += ',';//&& (!string.IsNullOrEmpty(tmp))
-        }
-    if (KetQua.substring(KetQua.length - 1) == ',')
-    {
-            KetQua = KetQua.substring(0, KetQua.length - 1);
-    }
-    KetQua = KetQua.substring(1,2).toUpperCase()+ KetQua.substring(2);
-    $("#txt_sotien").html(KetQua);
-}
-</script>
-<script>
-    function to_slug() {
-        var txt_tieude, tieude_slug;
-        txt_tieude = $("#txt_tieude").val();
-        // Chuyển hết sang chữ thường
-        tieude_slug = txt_tieude.toLowerCase();
-
-        // xóa dấu
-        tieude_slug = tieude_slug.replace(/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/g, 'a');
-        tieude_slug = tieude_slug.replace(/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/g, 'e');
-        tieude_slug = tieude_slug.replace(/(ì|í|ị|ỉ|ĩ)/g, 'i');
-        tieude_slug = tieude_slug.replace(/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/g, 'o');
-        tieude_slug = tieude_slug.replace(/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/g, 'u');
-        tieude_slug = tieude_slug.replace(/(ỳ|ý|ỵ|ỷ|ỹ)/g, 'y');
-        tieude_slug = tieude_slug.replace(/(đ)/g, 'd');
-
-        // Xóa ký tự đặc biệt
-        tieude_slug = tieude_slug.replace(/([^0-9a-z-\s])/g, '');
-
-        // Xóa khoảng trắng thay bằng ký tự -
-        tieude_slug = tieude_slug.replace(/(\s+)/g, '-');
-
-        // xóa phần dự - ở đầu
-        tieude_slug = tieude_slug.replace(/^-+/g, '');
-
-        // xóa phần dư - ở cuối
-        tieude_slug = tieude_slug.replace(/-+$/g, '');
-
-        // return
-        //$("#txt_slug_category").val() = txt_slug_category;
-        document.getElementById('tieude_slug').value = tieude_slug;
-    }
-</script>
-{{--  --}}
-
- <script>
-    $(document).ready(function(){
-        
-         $("#frm_add_bds").validate({
-        rules:{
-            txt_tieude:{
-                required:true,
-                minlength:6,
-                maxlength:100,
-            },
-            txt_hinhthuc:{
-                required:true,
-            },
-            txt_loaibds:{
-                required:true,
-            },
-          
-            txt_gia:{
-                digits: true,
-                min:0,
-                step:0.1,
-            },
-            select_file:{
-                extension: "jpeg|png|jpg",
-            },
-            txt_mota:{
-                required: true,
-                maxlength:3000,
-            },
-          
-            txt_mattien:{
-                digits: true,
-                min:0,
-            },
-            txt_duongvao:{
-                digits: true,
-                min:0,
-            },
-            txt_sotang:{
-                digits: true,
-                min:0,
-            },
-            txt_sophongngu:{
-                digits: true,
-                min:0,
-            },
-            txt_sotoilet:{
-                digits: true,
-                min:0,
-            },
-            txt_tenlienhe:{
-                required: true,  
-            },
-            txt_diachilienhe:{
-                required: true,
-                
-            },
-            txt_dienthoailienhe:{
-                required: true,  
-            },
-            txt_emaillienhe:{
-                email:true,
-            }
-
-        },
-        messages:{
-            txt_tieude:{
-                required:"*Vui lòng nhập vào trường này",
-                minlength:"*Không nhỏ hơn 6 ký tự",
-                maxlength:"*Không lớn hơn 100 ký tự",
-            },
-            txt_hinhthuc:{
-                required:"*Vui lòng nhập vào trường này",
-            },
-            txt_loaibds:{
-                required:"*Vui lòng nhập vào trường này",
-            },
-           
-            txt_gia:{
-                digits:"*Dữ liệu nhập phải là số",
-                min:"*Dữ liệu nhập không được số âm",
-            },
-            select_file:{
-                extension:"*File ảnh phải đúng định dạng: jpg,png,jpeg",
-            },
-            txt_mota:{
-                required:"*Vui lòng nhập vào trường này",
-                maxlength:"*Không lớn hơn 3000 ký tự",
-            },
-            txt_mattien:{
-                digits:"*Dữ liệu nhập phải là số",
-                min:"*Dữ liệu nhập không được số âm",
-            },
-            txt_duongvao:{
-                digits:"*Dữ liệu nhập phải là số",
-                min:"*Dữ liệu nhập không được số âm",
-            },
-            txt_sotang:{
-                digits:"*Dữ liệu nhập phải là số",
-                min:"*Dữ liệu nhập không được số âm",
-            },
-            txt_sophongngu:{
-                digits:"*Dữ liệu nhập phải là số",
-                min:"*Dữ liệu nhập không được số âm",
-            },
-            txt_sotoilet:{
-                digits:"*Dữ liệu nhập phải là số",
-                min:"*Dữ liệu nhập không được số âm",
-            },
-            txt_tenlienhe:{
-                required:"*Vui lòng nhập vào trường này",
-            },
-            txt_diachilienhe:{
-                required:"*Vui lòng nhập vào trường này",
-            },
-            txt_dienthoailienhe:{
-                required:"*Vui lòng nhập vào trường này",
-            },
-            txt_emaillienhe:{
-                email:"*Email khong đúng định dạng",
-            }
-        }
-    });
-    })
-   
-</script> 
+<script src="dist/js/readmoney.js"></script>
+<script src="dist/js/to_slug.js"></script>
+<script src="dist/js/validate_add_bds.js"></script> 
+<script src="dist/js/money.js"></script>
 <style>
     label.error {
     color:red!important;
     font-size: 13px;
 }
-
 </style>
 
 
@@ -322,7 +21,7 @@ function DocSo3ChuSo(baso)
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Thêm Danh Mục</h1>
+                            <h1>Thêm Bất Động Sản</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -350,7 +49,7 @@ function DocSo3ChuSo(baso)
                                 <!-- form start -->
                                 @csrf
                                 <div>
-                                     <form id="frm_add_bds" name="frm_add_bds" class="dropzone" enctype="multipart/form-data" method="POST" enctype="multipart/form-data" role="form" action="{{ route('add_estate') }}">
+                                     <form id="frm_add_bds" name="frm_add_bds" class="dropzone" method="POST" enctype="multipart/form-data" role="form" action="{{ route('add_estate') }}">
                                         
                                     <div class="card-body">
                                         <input type="hidden" class="id_bds" name="id_bds" id="id_bds">
@@ -422,25 +121,36 @@ function DocSo3ChuSo(baso)
                                         </div>
                                         
                                         <div class="row">
-                                            <div class="col-4">
+                                            <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="txt_dientich">Diện tích (m²)</label>
                                                     <input type="number" min="0" value="0" step="0.1"  class="dientich form-control" id="txt_dientich" name="txt_dientich" placeholder="Diện tích...">
                                                     <div id="show_error3"></div>
                                                 </div>
                                             </div>
-                                            <div class="col-4">
+                                            <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="txt_gia">Giá</label>
-                                                    <input type="number" min="0" value="0" class="form-control" id="txt_gia" name="txt_gia" placeholder="Giá..." onkeyup="DocTienBangChu();">
-                                                    <div id="show_error4"></div>
+                                                    <input type="text" class="form-control" id="txt_gia" name="txt_gia" placeholder="Giá..." onkeyup="viewGiaTien();" onkeypress="return onlyNumberKey(event)" maxlength="19">
+                                                    
+                                                    <div class="text-danger" id="txt_sotien"></div>
                                                 </div>
                                             </div>
-                                           
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label for="">Đơn vị</label>
+                                                    <select class="form-control" name="txt_donvi" id="txt_donvi" onchange="viewGiaTien1();">
+                                                        <option value="VNĐ">VNĐ</option>
+                                                        <option value="m²">Giá/m²</option>
+                                                        <option value="tháng">Giá/tháng</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="txt_showMoney" id="txt_showMoney">
+                                            <input type="hidden" name="txt_giaBDS" id="txt_giaBDS">
                                         </div>
                                      
-                                       <p class="text-danger" id="txt_sotien"></p>
-                                      
+            
                                         <div class="form-group">
                                             <label for="txt_diachi">Địa chỉ (<span class="text-danger">*</span>)</label>
                                             <input type="text" class="form-control" id="txt_diachi" name="txt_diachi" placeholder="Địa chỉ...">
@@ -608,9 +318,9 @@ function DocSo3ChuSo(baso)
                                             <div class="col-4">
                                                 <div class="form-group">
                                                     <label for="txt_loaitin">Loại tin rao</label>
-                                                    <select class="form-control" name="txt_loaitin" id="txt_loaitin">
-                                                        <option value="1">Tin thường</option>
-                                                        <option value="2">Tin VIP</option>
+                                                    <select class="form-control money" name="txt_loaitin" id="txt_loaitin">
+                                                        <option value="20000">Tin thường</option>
+                                                        <option value="50000">Tin VIP</option>
                                                     </select>
                                                     {{-- <div id="show_error"></div> --}}
                                                 </div>
@@ -618,22 +328,20 @@ function DocSo3ChuSo(baso)
                                             <div class="col-4">
                                                 <div class="form-group">
                                                     <label for="txt_ngaybatdau">Ngày bắt đầu</label>
-                                                    <input type="date" class="form-control" id="txt_ngaybatdau" name="txt_ngaybatdau" value="{{ $date }}">
+                                                    <input type="date" class="form-control money" id="txt_ngaybatdau" name="txt_ngaybatdau" value="{{ $date }}">
                                                     <div id="show_error15"></div>
                                                 </div>
                                             </div>
                                             <div class="col-4">
                                                 <div class="form-group">
                                                     <label for="txt_ngayketthuc">Ngày kết thúc</label>
-                                                    <input type="date" class="form-control" id="txt_ngayketthuc" name="txt_ngayketthuc" value="{{ $date_end }}">
+                                                    <input type="date" class="form-control money" id="txt_ngayketthuc" name="txt_ngayketthuc" value="{{ $date_end }}">
                                                     <div id="show_error16"></div>
                                                 </div>
                                             </div>
+                                            <input type="hidden" name="txt_money" id="txt_money" />
+                                        <p class="sumMoney text-danger"></p>
                                         </div>
-                                        
-                                        
-                                        
-
                                         
                                     </div>
                                     <!-- /.card-body -->
@@ -657,7 +365,10 @@ function DocSo3ChuSo(baso)
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-        <script>
+        <script src="/dist/js/select_location.js"></script>
+        <script src="/dist/js/select_category.js"></script> 
+        {{-- <script>
+            $('#txt_gia').simpleMoneyFormat();
             $(document).ready(function(){
                 $('.category').on('change',function(){
                     var action=$(this).attr('id');
@@ -668,7 +379,7 @@ function DocSo3ChuSo(baso)
                         result='txt_loaibds';
                     }
                     $.ajax({
-                        url:'{{ url('/admin/select_category') }}',
+                        url:'{{ url('/select_category') }}',
                         method:'post',
                         data:{action:action,id_dm:id_dm,_token:_token},
                         success:function(data)
@@ -694,7 +405,7 @@ function DocSo3ChuSo(baso)
                         result='txt_phuongxa';
                     }
                     $.ajax({
-                        url:'{{url('/admin/select_location')}}',
+                        url:'{{url('/select_location')}}',
                         method:'post',
                         data:{action:action,matp:matp,_token:_token},
                         success:function(data){
@@ -704,17 +415,16 @@ function DocSo3ChuSo(baso)
                 });
             });
             
-        </script>
+        </script> --}}
 
     <script>
-        Dropzone.autoDiscover = false;
-        // Dropzone.options.demoform = false;	
+        Dropzone.autoDiscover = false;	
         let token = $('meta[name="csrf-token"]').attr('content');
         $(function() {
             
         var myDropzone = new Dropzone("div#dropzoneDragArea", { 
             
-            url: "{{ url('/admin/image-estate') }}",
+            url: "{{ url('/image-estate') }}",
             previewsContainer: 'div.dropzone-previews',
             addRemoveLinks: true,
             autoProcessQueue: false,
@@ -748,11 +458,17 @@ function DocSo3ChuSo(baso)
                             console.log(result);
                             if(result[0].success == "success"){
                                 
-                                 var id_bds = result.id_bds;
-                                $("#id_bds").val(id_bds); 
-                                toastr.success('Đăng tin thành công!','Thong bao');
+                                var id_bds = result[0].id_bds;
+                                $("#id_bds").val(id_bds);
                                 myDropzone.processQueue();
-                                window.location.href='../admin/estate';
+                                toastr.success('Đăng tin thành công. Tin đang của bạn đang chờ duyệt.','Thông báo');
+                                
+                                // window.location.href='../admin/estate';
+                                 location.reload(); 
+                            }
+                            else if(result[0].err=="err"){
+                            // toastr.wa('Đăng tin thành công. Tin đăng của bạn đang chờ duyệt!','Thông báo');
+                            toastr.error('Tài khoản bạn không đủ tiền đăng tin', 'Thông báo!')
                             }
                             else
                             {
@@ -769,9 +485,9 @@ function DocSo3ChuSo(baso)
                                 if(result[i].txt_dientich){
                                     $("#show_error3").append('<p class="alert alert-danger">'+result[i].txt_dientich+'</p>');
                                 }
-                                if(result[i].txt_gia){
-                                    $("#show_error4").append('<p class="alert alert-danger">'+result[i].txt_gia+'</p>');
-                                }
+                                // if(result[i].txt_gia){
+                                //     $("#show_error4").append('<p class="alert alert-danger">'+result[i].txt_gia+'</p>');
+                                // }
                                 if(result[i].txt_diachi){
                                     $("#show_error5").append('<p class="alert alert-danger">'+result[i].txt_diachi+'</p>');
                                 }
@@ -856,27 +572,28 @@ function DocSo3ChuSo(baso)
             });
         });
         </script>
+
        <script>
            $(function() {
-  $("input.dientich").bind("change keyup input", function() {
-    var position = this.selectionStart - 1;
-    //remove all but number and .
-    var fixed = this.value.replace(/[^0-9\.]/g, "");
-    if (fixed.charAt(0) === ".")
-      //can't start with .
-      fixed = fixed.slice(1);
+                $("input.dientich").bind("change keyup input", function() {
+                    var position = this.selectionStart - 1;
+                    //remove all but number and .
+                    var fixed = this.value.replace(/[^0-9\.]/g, "");
+                    if (fixed.charAt(0) === ".")
+                    //can't start with .
+                    fixed = fixed.slice(1);
 
-    var pos = fixed.indexOf(".") + 1;
-    if (pos >= 0)
-      //avoid more than one .
-      fixed = fixed.substr(0, pos) + fixed.slice(pos).replace(".", "");
+                    var pos = fixed.indexOf(".") + 1;
+                    if (pos >= 0)
+                    //avoid more than one .
+                    fixed = fixed.substr(0, pos) + fixed.slice(pos).replace(".", "");
 
-    if (this.value !== fixed) {
-      this.value = fixed;
-      this.selectionStart = position;
-      this.selectionEnd = position;
-    }
-  });
+                    if (this.value !== fixed) {
+                    this.value = fixed;
+                    this.selectionStart = position;
+                    this.selectionEnd = position;
+                    }
+                });
            });
        </script>
 

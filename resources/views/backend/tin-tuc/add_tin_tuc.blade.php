@@ -77,7 +77,7 @@
                                             <input type="text" class="form-control" id="txt_tieude" name="txt_tieude" placeholder="Tiêu đề tin tức..." onkeyup="to_slug();">
                                             <div id="show_error"></div>
                                           </div>
-                                            <input type="hidden" name="txt_tieude_slug" id="txt_tieude_slug" onkeyup="to_slug();"/>
+                                            <input type="hidden" name="txt_tieude_slug" id="txt_tieude_slug" />
                                         <div class="form-group">
                                             <label for="txt_mota">Mô tả</label>
                                             <input type="text" class="form-control" id="txt_mota" name="txt_mota" placeholder="Mô tả...">

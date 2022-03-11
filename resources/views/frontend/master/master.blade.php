@@ -17,10 +17,35 @@
 
     <link rel="stylesheet" href="assets/css/style-liberty.css">
     <link rel="stylesheet" href="assets/css/site.css">
-    
+    <link rel="stylesheet" href="../backend/plugins/select2/css/select2.min.css">
 
+    <link rel="stylesheet" href="../backend/assets/css/dropzone.css">
+    <link rel="stylesheet" href="../backend/plugins/summernote/summernote-bs4.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
     <script src="../backend/plugins/jquery/jquery.min.js"></script>
+    <script src="assets/js/jquery.formatCurrency-1.4.0.min.js"></script>
+    <script src="assets/js/simple.money.format.js"></script>
+    <script src="../backend/assets/js/dropzone.js"></script>
+    <script src="assets/js/rangeslider.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/additional-methods.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <style>
+    	.dropzoneDragArea {
+		    background-color: #fbfdff;
+		    border: 1px dashed #c0ccda;
+		    border-radius: 6px;
+		    padding: 60px;
+		    text-align: center;
+		    margin-bottom: 15px;
+		    cursor: pointer;
+		}
+		.dropzone{
+			box-shadow: 0px 2px 20px 0px #f2f2f2;
+			border-radius: 10px;
+		}
+    </style>
 </head>
 
 <body>
@@ -54,13 +79,14 @@
                         <ul class="navbar-nav ml-lg-5 mr-auto" style="float: left;padding-right: 110px">
                             <li class="nav-item dropdown @@pages__active">
                                 <a class="nav-link dropdown-toggle" style="width: 30px;" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <img src="assets/images/avatar-png.png" alt="" style="width: 40px;">
+                                    <img src="assets/images/PngItem_786293.png" alt="" style="width: 40px;">
                                     <span class="fa fa-angle-down"></span>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                                    <a class="dropdown-item @@about__active" href="about.html">{{ Auth::user()->Ten }}</a>
-                                    <a class="dropdown-item @@team__active" href="agents.html">Quản lý tin đăng</a>
-                                    <a class="dropdown-item @@team-single__active" href="agents-single.html">Đăng tin</a>
+                                    <a class="dropdown-item @@about__active">{{ Auth::user()->Ten }}</a>
+                                    <a class="dropdown-item @@team__active" href="../danh-sach-tin-dang">Quản lý tin đăng</a>
+                                    <a class="dropdown-item @@team-single__active" href="../dang-tin">Đăng tin</a>
+                                    <a class="dropdown-item @@team-single__active" href="../trang-ca-nhan">Thông tin cá nhân</a>
                                     <a class="dropdown-item @@team-single__active" href="../logout">Đăng xuất</a>
                                     @hasrole((['Admin','Nhân viên']))
                                     <a class="dropdown-item @@team-single__active" href="../admin">Admin Page</a>
@@ -73,7 +99,7 @@
                         
                         <a href="../dang-ky" class="btn btn-primary mr-1"> Đăng ký</a>
                         <a href="../dang-nhap" class="btn btn-primary mr-1"> Đăng nhập</a>      
-                        <a href="#buytheme" class="btn btn-style btn-primary"> Đăng tin</a>
+                        <a href="../dang-tin" class="btn btn-style btn-primary"> Đăng tin</a>
                     @endhasrole
                     </div>
                     <!--/search-right-->
@@ -179,16 +205,67 @@
 
     <!-- jQuery and Bootstrap JS -->
     {{-- <script src="assets/js/jquery-3.3.1.min.js"></script> --}}
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script src="../backend/plugins/select2/js/select2.full.min.js"></script>
+    <script src="../backend/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" type="text/javascript" charset="utf-8" async defer></script>
 
-    <script src="assets/js/theme-change.js"></script>
+    {{-- <script src="assets/js/theme-change.js"></script> --}}
     <!-- theme switch js (light and dark)-->
 
     <!-- stats number counter-->
     <script src="assets/js/jquery.waypoints.min.js"></script>
-    <script src="assets/js/jquery.countup.js"></script>
+    {{-- <script src="assets/js/jquery.countup.js"></script> --}}
+
+    <script src="../backend/plugins/summernote/summernote-bs4.min.js"></script>
     <script>
-        $('.counter').countUp();
+        function changeImg(input){
+		    //Nếu như tồn thuộc tính file, đồng nghĩa người dùng đã chọn file mới
+		    if(input.files && input.files[0]){
+		        var reader = new FileReader();
+		        //Sự kiện file đã được load vào website
+		        reader.onload = function(e){
+		            //Thay đổi đường dẫn ảnh
+		            $('#avatar').attr('src',e.target.result);
+		        }
+		        reader.readAsDataURL(input.files[0]);
+		    }
+		}
+
+        function changeImgBank(input){
+		    //Nếu như tồn thuộc tính file, đồng nghĩa người dùng đã chọn file mới
+		    if(input.files && input.files[0]){
+		        var reader = new FileReader();
+		        //Sự kiện file đã được load vào website
+		        reader.onload = function(e){
+		            //Thay đổi đường dẫn ảnh
+		            $('#img_transfer').attr('src',e.target.result);
+		        }
+		        reader.readAsDataURL(input.files[0]);
+		    }
+		}
+        $(function() {
+            // bsCustomFileInput.init();
+
+            $('.select2').select2();
+
+            $('#summernote').summernote();
+            $('#avatar').click(function(){
+		        $('#select_file').click();
+		    });
+
+            $('#img_transfer').click(function(){
+		        $('#select_file_bank').click();
+		    });
+        });
+
+ 
+    </script>
+    <script>
+        // $('.counter').countUp();
     </script>
     <!-- //stats number counter -->
     <script type="text/javascript" charset="utf-8">
@@ -229,73 +306,14 @@
                     },
                     1090: {
                         items: 1,
-                        nav: true
+                        nav: true,
+                        
                     }
                 }
             })
         })
     </script>
-    <!-- //script for blog post slider -->
-
-    <!-- script for tesimonials carousel slider -->
-    <script>
-        $(document).ready(function() {
-            $("#owl-demo1").owlCarousel({
-                loop: true,
-                nav: false,
-                margin: 50,
-                responsiveClass: true,
-                responsive: {
-                    0: {
-                        items: 1,
-                        nav: false
-                    },
-                    736: {
-                        items: 1,
-                        nav: false
-                    }
-                }
-            })
-        })
-    </script>
-    <!-- //script for tesimonials carousel slider -->
-
-    <script src="assets/js/jquery.magnific-popup.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.popup-with-zoom-anim').magnificPopup({
-                type: 'inline',
-
-                fixedContentPos: false,
-                fixedBgPos: true,
-
-                overflowY: 'auto',
-
-                closeBtnInside: true,
-                preloader: false,
-
-                midClick: true,
-                removalDelay: 300,
-                mainClass: 'my-mfp-zoom-in'
-            });
-
-            $('.popup-with-move-anim').magnificPopup({
-                type: 'inline',
-
-                fixedContentPos: false,
-                fixedBgPos: true,
-
-                overflowY: 'auto',
-
-                closeBtnInside: true,
-                preloader: false,
-
-                midClick: true,
-                removalDelay: 300,
-                mainClass: 'my-mfp-slide-bottom'
-            });
-        });
-    </script>
+    
 
     <!-- disable body scroll which navbar is in active -->
     <script>
@@ -337,7 +355,6 @@
     <!-- //MENU-JS -->
 
     <!-- bootstrap -->
-    <script src="assets/js/bootstrap.min.js"></script>
 
     <div id="v-w3layouts"></div>
 

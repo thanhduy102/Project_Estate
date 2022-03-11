@@ -8,13 +8,18 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\models\ChiTietBatDongSan;
 use App\models\Provinces;
+use Carbon\Carbon;
 use DB;
 class IndexController extends Controller
 {
     //
 
     function Index(){
-         return view('frontend.index');
+        $data['category']=DanhMuc::where('TieuDeDanhMuc','<>','Tin tức')->get()->toArray();
+        $city=Provinces::orderBy('id','ASC')->get();
+        $category=DanhMuc::where('idDanhMucCha','=','-1')->where('TieuDeDanhMuc','<>','Tin tức')->orderBy('idDanhMuc','asc')->get();
+
+        return view('frontend.index',$data)->with('city',$city)->with('category',$category);
     }
 
     public function danh_muc(){
@@ -39,7 +44,7 @@ class IndexController extends Controller
         return response()->json([
             'danhmuccha'=>$danhmuccha,
             'danhmuccon'=>$danhmuccon,
-            'idDanhmuc'=>$idDanhMuc,
+            // 'idDanhmuc'=>$idDanhMuc,
             'arr'=>$arr,
         ],200);
     }
@@ -86,9 +91,10 @@ class IndexController extends Controller
                                                     ->where('bat_dong_san.HienThiBDS',1);
                                                     
             },'batdongsan')->orderBy('id_LoaiTin','DESC')->orderBy('idBDS','DESC')->paginate(16);
+         
             $category=DanhMuc::where('idDanhMuc',$idDanhMuc)->first();
             return view('frontend.listing')->with('batdongsan',$batdongsan)->with('category',$category);
-            // return response()->json(['bds'=>$batdongsan]);
+           
         }
        
     }

@@ -3,7 +3,7 @@
 namespace App\models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\QueryFilter;
 class BatDongSan extends Model
 {
     //
@@ -11,5 +11,8 @@ class BatDongSan extends Model
     protected $primaryKey="idBDS";
     public $timestamps = FALSE;
 
-  
+    public function scopeFilter($query, QueryFilter $filters)
+    {
+    	return $filters->apply($query);
+    }
 }

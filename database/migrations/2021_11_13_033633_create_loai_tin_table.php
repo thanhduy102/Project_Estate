@@ -14,8 +14,8 @@ class CreateLoaiTinTable extends Migration
     public function up()
     {
         Schema::create('loai_tin', function (Blueprint $table) {
-            $table->bigIncrements('idLoaiTin'); //Khóa chính
-
+            $table->bigInteger('idLoaiTin')->unsigned(); //Khóa chính
+            $table->primary('idLoaiTin');
             $table->string('LoaiTin',50)->nullable();
             $table->bigInteger('GiaTien')->unsigned()->nullable();
             $table->dateTime('ThoiGianTaoLT')->nullable();

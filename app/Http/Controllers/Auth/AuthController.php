@@ -144,4 +144,9 @@ class AuthController extends Controller
         echo json_encode($return);
         exit;
     }
+
+
+    public function forgetPass(){
+        return view('frontend.forgotPass');
+    }
 }

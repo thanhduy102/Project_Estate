@@ -13,8 +13,8 @@ class LoaiTin extends Seeder
     {
         DB::table('loai_tin')->delete();
         DB::table('loai_tin')->insert([
-            ['idLoaiTin'=>1,'LoaiTin'=>'Tin thường','GiaTien'=>20000],
-            ['idLoaiTin'=>2,'LoaiTin'=>'Tin VIP','GiaTien'=>50000],
+            ['idLoaiTin'=>20000,'LoaiTin'=>'Tin thường','GiaTien'=>20000],
+            ['idLoaiTin'=>50000,'LoaiTin'=>'Tin VIP','GiaTien'=>50000],
         ]);
 
     }

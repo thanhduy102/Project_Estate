@@ -507,15 +507,7 @@ function DocSo3ChuSo(baso)
                                                 <div class="form-group">
                                                     <label for="txt_huongnha">Hướng nhà</label>
                                                     <select class="form-control" name="txt_huongnha" id="txt_huongnha">
-                                                        {{-- <option value="KXĐ">---KXĐ---</option>
-                                                        <option value="Đông">Đông</option>
-                                                        <option value="Tây">Tây</option>
-                                                        <option value="Nam">Nam</option>
-                                                        <option value="Bắc">Bắc</option>
-                                                        <option value="ĐôngBắc">Đông - Bắc</option>
-                                                        <option value="TâyBắc">Tây - Bắc</option>
-                                                        <option value="TâyNam">Tây - Nam</option>
-                                                        <option value="ĐôngNam">Đông - Nam</option> --}}
+                                                        
                                                     </select>
                                                     {{-- <div id="show_error12"></div> --}}
                                                 </div>
@@ -524,15 +516,7 @@ function DocSo3ChuSo(baso)
                                                 <div class="form-group">
                                                     <label for="txt_huongbancong">Hướng ban công</label>
                                                     <select class="form-control" name="txt_huongbancong" id="txt_huongbancong">
-                                                        {{-- <option value="KXĐ">---KXĐ---</option>
-                                                        <option value="Đông">Đông</option>
-                                                        <option value="Tây">Tây</option>
-                                                        <option value="Nam">Nam</option>
-                                                        <option value="Bắc">Bắc</option>
-                                                        <option value="ĐôngBắc">Đông - Bắc</option>
-                                                        <option value="TâyBắc">Tây - Bắc</option>
-                                                        <option value="TâyNam">Tây - Nam</option>
-                                                        <option value="ĐôngNam">Đông - Nam</option> --}}
+                                                       
                                                     </select>
                                                     {{-- <div id="show_error13"></div> --}}
                                                 </div>
@@ -686,7 +670,7 @@ function DocSo3ChuSo(baso)
                         result='txt_phuongxa';
                     }
                     $.ajax({
-                        url:'{{url('/admin/select_location')}}',
+                        url:'{{url('/select_location')}}',
                         method:'post',
                         data:{action:action,matp:matp,_token:_token,idBDS:idBDS},
                         success:function(data){
@@ -708,7 +692,7 @@ function DocSo3ChuSo(baso)
                         result='txt_loaibds';
                     }
                     $.ajax({
-                        url:'{{ url('/admin/select_category') }}',
+                        url:'{{ url('/select_category') }}',
                         method:'post',
                         data:{action:action,id_dm:id_dm,_token:_token},
                         success:function(data)
@@ -748,9 +732,7 @@ function DocSo3ChuSo(baso)
         init: function() {
             var myDropzone = this;
             $("form[name='frm_edit_bds']").submit(function(event) {
-                
                 event.preventDefault();
-    
                 URL = $("#frm_edit_bds").attr('action');
                 $('.alert').remove();
                 $.ajax({
@@ -762,15 +744,16 @@ function DocSo3ChuSo(baso)
                     processData: false,
                     cache:false,
                     success: function(result){
-                        if(result[0].success == "success"){
-                            
+                        if(result[0].success == "success")
+                        {
                             var txt_id_bds = result.txt_id_bds;
                             $("#txt_id_bds").val(txt_id_bds); // inseting userid into hidden input field
                             toastr.success('Chỉnh sửa tin đăng thành công!','Thong bao');
-
                             myDropzone.processQueue();
                             window.location.href="../admin/estate";
-                        }else{
+                        }
+                        else
+                        {
                             for(var i=0;i<result.length;i++){
                                 if(result[i].txt_tieude){
                                     $("#show_error").append('<p class="alert alert-danger">'+result[i].txt_tieude+'</p>');
@@ -830,8 +813,8 @@ function DocSo3ChuSo(baso)
                 });
             });
             var urls=window.location.pathname;
-                var idBDS=urls.substring(urls.lastIndexOf('=')+1);
-                $("#txt_id_bds").val(idBDS);
+            var idBDS=urls.substring(urls.lastIndexOf('=')+1);
+            $("#txt_id_bds").val(idBDS);
             
             $.ajax({
                 type:'post',
@@ -878,28 +861,13 @@ function DocSo3ChuSo(baso)
             });
             
             this.on("success", function (file, response) {
-                // alert(file)
                 $('#frm_edit_bds')[0].reset();
-                
                 $('.dropzone-previews').empty();
             });
-    
-            this.on("queuecomplete", function () {
-            
-            });
-            
-            this.on("sendingmultiple", function(file) {
-             
-            });
-            
-            this.on("successmultiple", function(files, response) {
-              
-              
-            });
-            
-            this.on("errormultiple", function(files, response) {
-              
-            });
+            this.on("queuecomplete", function () {});
+            this.on("sendingmultiple", function(file) {}); 
+            this.on("successmultiple", function(files, response) {  });
+            this.on("errormultiple", function(files, response) { });
         }
         });
     });

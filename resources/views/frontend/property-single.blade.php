@@ -24,24 +24,24 @@
                     <!-- <li>
                         <div class="listing-category"><span>Buy</span><span>Rent</span></div>
                     </li> -->
-                    <li><span class="fa fa-clock-o"></span> 5 months ago</li>
-                    <li><span class="fa fa-eye"></span> 250 views</li>
+                    <li><span class="fa fa-clock-o"></span> {{ $days }}</li>
+                    <li><span class="fa fa-eye"></span> {{ $batdongsan->ViewBDS==null ? '0' : $batdongsan->ViewBDS }} views</li>
                 </ul>
             </div>
             <div class="post-content">
-                <h2 class="title-single">Tiêu đề</h2>
+                <h2 class="title-single">{{ $batdongsan->TieuDeBDS }}</h2>
             </div>
             <div class="blo-singl mb-4">
                 <ul class="blog-single-author-date align-items-center">
-                    <li>
+                    {{-- <li>
                         <p>Địa chỉ</p>
-                    </li>
-                    <li><span class="fa fa-bed"></span> 3 Beds</li>
-                    <li><span class="fa fa-bath"></span> 4 Baths</li>
-                    <li><span class="fa fa-share-square-o"></span> 1258 sqrft</li>
+                    </li> --}}
+                    <li><span class="fa fa-map-marker"></span> {{ $batdongsan->DiaChiBDS }}</li>
+                    {{-- <li><span class="fa fa-bath"></span> 4 Baths</li>
+                    <li><span class="fa fa-share-square-o"></span> 1258 sqrft</li> --}}
                 </ul>
                 <ul class="share-post">
-                    <a href="#url" class="cost-estate m-o">Giá: 1111</a>
+                    <a href="#url" class="cost-estate m-o">Giá: {{ $batdongsan->GiaTienBDS_JS }}</a>
                 </ul>
             </div>
             <div class="row">
@@ -49,68 +49,78 @@
                     <div class="blog-single-post">
                         <div class="single-post-image mb-5">
                             <div class="owl-blog owl-carousel owl-theme">
-                                <div class="item">
-                                    <div class="card">
-                                        <img src="assets/images/p1.jpg" class="img-fluid radius-image" alt="image">
+                                @forelse ($hinhanh as $row)
+                                    <div class="item">
+                                        <div class="card">
+                                            <img src="../image/estates/{{ $row->TenAnh }}" class="img-fluid radius-image" style="height: 500px" alt="image">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="item">
-                                    <div class="card">
-                                        <img src="assets/images/p2.jpg" class="img-fluid radius-image" alt="image">
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="card">
-                                        <img src="assets/images/p3.jpg" class="img-fluid radius-image" alt="image">
-                                    </div>
-                                </div>
+                                @empty
+                                    
+                                @endforelse
+                               
                             </div>
                         </div>
 
                         <div class="single-post-content">
                             <h3 class="post-content-title mb-3">Mô tả</h3>
                             <p class="mb-4">
-                                Lorem model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose injected humour and the like. </p>
-                            <p class="mb-4">When you decide to put your business online it is a little bet tricky step for novice computer users because they want to keep data safe & secure. This problem developed from companies which did not take security seriously.
-                                Lorem ipsum dolor sit amet elit. </p>
+                                {!! nl2br($batdongsan->MoTaBDS) !!}
+                            </p>
                             <div class="single-bg-white">
                                 <h3 class="post-content-title mb-4">Chi tiết</h3>
                                 <ul class="details-list">
-                                    <li><strong>Property id :</strong> PRPT12345 </li>
-                                    <li><strong>Property size :</strong> 1200sqft </li>
-                                    <li><strong>Rooms :</strong> 2 </li>
-                                    <li><strong>Bedrooms :</strong> 5 </li>
-                                    <li><strong>Bathrooms :</strong> 2 </li>
-                                    <li><strong>Exterior material :</strong> Brick </li>
-                                    <li><strong>Structure type :</strong> Wood </li>
-                                    <li><strong>Garage size :</strong> 15 cars </li>
-                                    <li><strong>Garages :</strong> 15 </li>
-                                    <li><strong>Property Price :</strong> $ 750 </li>
-                                    <li><strong>Built Year :</strong> 2018 </li>
-                                    <li><strong>Avaiable from :</strong> Aug 2019 </li>
+                                    <li><strong>Mã tin :</strong> {{ $batdongsan->idBDS }} </li>
+                                    <li><strong>Diện tích :</strong> {{ $batdongsan->DienTich }}(m²)</li>
+                                    @if ($batdongsan->SoTang!=0)
+                                        <li><strong>Số tầng :</strong> {{ $batdongsan->SoTang }} </li>
+                                    @else
+                                    @endif
+                                    @if ($batdongsan->SoPhongNgu!=0)
+                                        <li><strong>Số phòng ngủ :</strong> {{ $batdongsan->SoPhongNgu }} </li>
+                                    @else
+                                    @endif
+                                    @if ($batdongsan->SoToilet!=0)
+                                        <li><strong>Số Toilet :</strong> {{ $batdongsan->SoToilet }} </li>
+                                    @else   
+                                    @endif
+                                    @if ($batdongsan->MatTien!=0)
+                                        <li><strong>Mặt tiền :</strong> {{ $batdongsan->MatTien }} </li>
+                                    @else  
+                                    @endif
+                                    @if ($batdongsan->DuongVao!=0)
+                                        <li><strong>Đường vào :</strong> {{ $batdongsan->DuongVao }} </li>
+                                    @else            
+                                    @endif
+                                    <li><strong>Hướng nhà :</strong> {{ $batdongsan->HuongNha }} </li>
+                                    <li><strong>Hướng ban công :</strong> {{ $batdongsan->HuongBanCong }} </li>
+                                    @if ($batdongsan->ThongTinPhapLy!=0)
+                                        <li><strong>Thông tin pháp lý :</strong> {{ $batdongsan->ThongTinPhapLy }} </li>
+                                    @else 
+                                    @endif
+                                    
                                 </ul>
                             </div>
-                            <div class="single-bg-white">
-                                <h3 class="post-content-title mb-4">Nội thất</h3>
-                                <ul class="details-list">
-                                    <li><strong>Air Conditioning </strong></li>
-                                    <li><strong>Buil-In Wardrobes </strong> </li>
-                                    <li><strong>Dishwasher</strong> </li>
-                                    <li><strong>Floor Coverings </strong> </li>
-                                    <li><strong>Medical / Clinic </strong> </li>
-                                    <li><strong>Fencing</strong> </li>
-                                    <li><strong>Internet and wifi </strong> </li>
-                                </ul>
-                            </div>
+                            @if ($batdongsan->NoiThat!=null)
+                                <div class="single-bg-white">
+                                    <h3 class="post-content-title mb-4">Nội thất</h3>
+                                    <p class="mb-4">
+                                        {!! nl2br($batdongsan->NoiThat) !!}
+                                    </p>
+                                </div>
+                            @else
+                                
+                            @endif
+                            
                         </div>
 
-                        <div class="single-bg-white">
+                        {{-- <div class="single-bg-white">
                             <h3 class="post-content-title mb-4">Khu vực</h3>
                             <div class="agent-map">
                                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387190.2895687731!2d-74.26055986835598!3d40.697668402590374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew+York%2C+NY%2C+USA!5e0!3m2!1sen!2sin!4v1562582305883!5m2!1sen!2sin"
                                     frameborder="0" style="border:0" allowfullscreen=""></iframe>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <!-- <div class="single-bg-white mb-0">
                             <h3 class="post-content-title mb-4">Video</h3>
@@ -130,12 +140,13 @@
                             </div>
 
                             <article class="post">
-                                <figure class="post-thumb"><img src="assets/images/l5.jpg" class="radius-image" alt="">
+                                <figure class="post-thumb"><img src="../image/avatar/users/avatar.jpg" class="radius-image" alt="">
                                 </figure>
-                                <div class="text mb-0"><a href="#blog-single">Thanh Duy
+                                <div class="text mb-0"><a>{{ $batdongsan->TenLienHe }}
                                 </a>
-                                    <div class="post-info">0123 456 789</div>
-                                    <div class="post-info">thanhduy@mail.com</div>
+                                <div class="post-info"><span class="fa fa-map-marker"></span> {{ $batdongsan->DiaChiLienHe }}</div>
+                                    <div class="post-info"><span class="fa fa-phone"></span> {{ $batdongsan->DienThoai }}</div>
+                                    <div class="post-info"><span class="fa fa-envelope"></span> {{ $batdongsan->emailUser }}</div>
                                 </div>
                             </article>
                             <!-- <button type="submit" class="btn btn-primary btn-style w-100">Request details</button> -->
@@ -145,7 +156,7 @@
                         <!-- Popular Post Widget-->
                         <div class="sidebar-widget popular-posts">
                             <div class="sidebar-title">
-                                <h4>Tin hot</h4>
+                                <h4>Tin liên quan</h4>
                             </div>
 
                             <article class="post">

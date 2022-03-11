@@ -254,8 +254,8 @@
                     }
                 });
                 e.preventDefault();
-            })
-        })
+            });
+        });
     </script>
 </body>
 

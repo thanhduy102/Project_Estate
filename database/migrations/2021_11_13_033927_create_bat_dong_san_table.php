@@ -26,6 +26,7 @@ class CreateBatDongSanTable extends Migration
             $table->text('NoiDungBDS')->nullable();
             $table->float('DienTich',8,2)->unsigned();
             $table->bigInteger('GiaTienBDS')->unsigned();
+            $table->string('GiaTienBDS_JS',100)->nullable();
             $table->string('DonVi',100)->nullable();
             $table->string('DiaChiBDS',255)->nullable();
             $table->float('MatTien',8,1)->unsigned()->nullable();
@@ -43,10 +44,12 @@ class CreateBatDongSanTable extends Migration
             $table->string('emailUser',100)->nullable();
             $table->date('NgayBatDau');
             $table->date('NgayKetThuc');
+            $table->string('ViewBDS',255)->nullable();
             $table->dateTime('ThoiGianTaoBDS')->nullable();
             $table->dateTime('ThoiGianSuaBDS')->nullable();
             $table->dateTime('ThoiGianXoaBDS')->nullable();
-            $table->tinyInteger('HienThiBDS')->nullable();
+            $table->integer('HienThiBDS')->default(0);
+            $table->bigInteger('TongTien')->default(0);
             $table->bigInteger('idUserPost')->unsigned()->nullable();
             $table->bigInteger('id_TinhThanh')->unsigned();//Khóa ngoại tinh thanh
             $table->bigInteger('id_QuanHuyen')->unsigned();//Khóa ngoại quan huyen

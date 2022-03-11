@@ -24,3 +24,47 @@
 #drop_down:hover .dropdown-menu {
     display: inline-block !important;
 }
+
+.txt_info{
+    font-size: 15px !important;
+}
+
+.form_password{
+    position:relative !important;
+}
+
+.eye{
+    position: absolute !important;
+    top:54% !important;
+    right:10px !important;
+}
+.note-editable {
+    height: 600px !important;
+}
+
+
+.btn_money{
+    width: 60px !important;
+    height: auto !important;
+    text-decoration: none !important;
+    color: black !important;
+    font-weight: bold !important;
+}
+.btn_money .img_bank1{
+    width: 100% !important;
+}
+.img_bank{
+    width: 100% !important;
+    border: 0 !important;
+    border: 2px solid rgb(121, 116, 116) !important;
+    border-radius: 15px !important;
+}
+.img_bank:hover{
+    cursor: pointer !important;
+    border: 2px solid rgb(237, 52, 52) !important;
+    border-radius: 15px !important;
+}
+.avatar_image{
+    height:200px !important;
+    object-fit: cover !important;
+}

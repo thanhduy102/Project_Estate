@@ -21,22 +21,25 @@
                 <div class="row">
                     @forelse ($batdongsan as $row)
                         <div class="col-lg-3 col-md-6 listing-img mb-5">
-                        <a href="#url">
+                        <a href="../{{ \Carbon\Carbon::parse($row->ThoiGianTaoBDS)->format('Ymd') }}/{{ $row->idBDS }}/{{ $row->TieuDeBDS_Slug }}">
                             <div class="box16">
-                                <div class="rentext-listing-category">@if ($row->id_LoaiTin==2)
+                                <div class="rentext-listing-category">@if ($row->id_LoaiTin==50000)
                                     <span>Tin nổi bật</span>
                                     {{-- <span>New</span> --}}
                                 @endif
                                 </div>
-                                <img class="img-fluid" src="../image/avatar/estate/{{ $row->AnhDaiDien }}" alt="">
+                                <img class="img-fluid avatar_image" src="../image/avatar/estate/{{ $row->AnhDaiDien }}" alt="">
                                 <div class="box-content">
-                                    <h3 class="title">{{ $row->GiaTienBDS }} VNĐ</h3>
+                                    <h3 class="title">{{ ($row->GiaTienBDS_JS) }} </h3>
+                                        
+                                        
+                                      
                                 </div>
                             </div>
                         </a>
                         <div class="listing-details blog-details align-self">
                             <h4 class="user_title agent">
-                                <a class='title_estate' href="#url">{{ $row->TieuDeBDS }}</a>
+                                <a class='title_estate' href="../{{ \Carbon\Carbon::parse($row->ThoiGianTaoBDS)->format('Ymd') }}/{{ $row->idBDS }}/{{ $row->TieuDeBDS_Slug }}">{{ $row->TieuDeBDS }}</a>
                             </h4>
                             <i class="fa fa-map-marker"> {{ $row->name }}</i>
                             <p class="user_position title_estate">{{ $row->MoTaBDS }}</p>
@@ -56,124 +59,22 @@
                         <p>Đang cập nhật...</p>
                     @endforelse
                     
-                    {{-- <div class="col-lg-4 col-md-6 listing-img mb-5">
-                        <a href="#url">
-                            <div class="box16">
-                                <div class="rentext-listing-category"><span>Hot</span><span>New</span></div>
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title">25,000,000 VNĐ</h3>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="listing-details blog-details align-self">
-                            <h4 class="user_title agent">
-                                <a href="#url">Tiêu đề</a>
-                            </h4>
-                            <p class="user_position">Mô tả</p>
-                            <ul class="mt-3 estate-info">
-                                <li><span class="fa fa-bed"></span> 1 Bed</li>
-                                <li><span class="fa fa-shower"></span> 2 Baths</li>
-                                <li><span class="fa fa-share-square-o"></span> 1760 M²</li>
-                            </ul>
-                            <div class="author ">
-                                <a href="#more" class="more">Xem chi tiết <span class="fa fa-long-arrow-right"></span> </a>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 listing-img mb-5">
-                        <a href="#url">
-                            <div class="box16">
-                                <div class="rentext-listing-category"><span>Hot</span><span>New</span></div>
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title">25,000,000 VNĐ</h3>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="listing-details blog-details align-self">
-                            <h4 class="user_title agent">
-                                <a href="#url">Tiêu đề</a>
-                            </h4>
-                            <p class="user_position">Mô tả</p>
-                            <ul class="mt-3 estate-info">
-                                <li><span class="fa fa-bed"></span> 1 Bed</li>
-                                <li><span class="fa fa-shower"></span> 2 Baths</li>
-                                <li><span class="fa fa-share-square-o"></span> 1760 M²</li>
-                            </ul>
-                            <div class="author ">
-                                <a href="#more" class="more">Xem chi tiết <span class="fa fa-long-arrow-right"></span> </a>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 listing-img mb-5">
-                        <a href="#url">
-                            <div class="box16">
-                                <div class="rentext-listing-category"><span>Hot</span><span>New</span></div>
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title">25,000,000 VNĐ</h3>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="listing-details blog-details align-self">
-                            <h4 class="user_title agent">
-                                <a href="#url">Tiêu đề</a>
-                            </h4>
-                            <p class="user_position">Mô tả</p>
-                            <ul class="mt-3 estate-info">
-                                <li><span class="fa fa-bed"></span> 1 Bed</li>
-                                <li><span class="fa fa-shower"></span> 2 Baths</li>
-                                <li><span class="fa fa-share-square-o"></span> 1760 M²</li>
-                            </ul>
-                            <div class="author ">
-                                <a href="#more" class="more">Xem chi tiết <span class="fa fa-long-arrow-right"></span> </a>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 listing-img mb-5">
-                        <a href="#url">
-                            <div class="box16">
-                                <div class="rentext-listing-category"><span>Hot</span><span>New</span></div>
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title">25,000,000 VNĐ</h3>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="listing-details blog-details align-self">
-                            <h4 class="user_title agent">
-                                <a href="#url">Tiêu đề</a>
-                            </h4>
-                            <p class="user_position">Mô tả</p>
-                            <ul class="mt-3 estate-info">
-                                <li><span class="fa fa-bed"></span> 1 Bed</li>
-                                <li><span class="fa fa-shower"></span> 2 Baths</li>
-                                <li><span class="fa fa-share-square-o"></span> 1760 M²</li>
-                            </ul>
-                            <div class="author ">
-                                <a href="#more" class="more">Xem chi tiết <span class="fa fa-long-arrow-right"></span> </a>
-
-                            </div>
-                        </div>
-                    </div> --}}
+                   
 
 
                 </div>
 
                 <!-- pagination -->
                 <div class="pagination-wrapper mt-5 pt-lg-3 text-center">
-                    <ul class="page-pagination">
+                    {!! $batdongsan->links() !!}
+                    {{-- <ul class="page-pagination">
                         <li><span aria-current="page" class="page-numbers current">1</span></li>
                         <li><a class="page-numbers" href="#url">2</a></li>
                         <li><a class="page-numbers" href="#url">3</a></li>
                         <li><a class="page-numbers" href="#url">...</a></li>
                         <li><a class="page-numbers" href="#url">15</a></li>
                         <li><a class="next" href="#url">Next <span class="fa fa-angle-right"></span></a></li>
-                    </ul>
+                    </ul> --}}
                 </div>
                 <!-- //pagination -->
             </div>

@@ -32,10 +32,25 @@
                                 <div class="card-header">
                                     <h3 class="card-title">Danh sách người dùng</h3>
                                 </div>
+                                @if(session()->has('success'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>{{ session()->get('success') }}</strong>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                @elseif(session()->has('err'))
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <strong>{{ session()->get('err') }}</strong>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                @endif
                                 <!-- /.card-header -->
                                 <div class="card-body">
                                 {{-- <input type="hidden" value="{{route('danhmuc.data')}}" id="danhmucData"/> --}}
-                                    <table class="table table-bordered" id="userTable">
+                                    <table class="table table-bordered" id="userTables">
                                         <thead>
                                             <tr>
                                                 <th style="width: 10px">#</th>
@@ -80,21 +95,21 @@
                                         </form>
                                             @endforeach
                                             <?php $i++;?>
-                                            
-                                            
+                                    
                                         </tbody>
                                     </table>
                                 </div>
                                 <!-- /.card-body -->
-                                {{-- <div class="card-footer clearfix">
-                                    <ul class="pagination pagination-sm m-0 float-right">
+                                <div class="card-footer clearfix pull-right">
+                                    {!! $users->links() !!}
+                                    {{-- <ul class="pagination pagination-sm m-0 float-right">
                                         <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
                                         <li class="page-item"><a class="page-link" href="#">1</a></li>
                                         <li class="page-item"><a class="page-link" href="#">2</a></li>
                                         <li class="page-item"><a class="page-link" href="#">3</a></li>
                                         <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                                    </ul>
-                                </div> --}}
+                                    </ul> --}}
+                                </div>
                             </div>
                             <!-- /.card -->
 
@@ -157,7 +172,7 @@
                     str+="<p><label>Số điện thoại:</label> "+result.users.Phone+"</p>";
                     str+="<p><label>Địa chỉ:</label> "+result.users.DiaChi+"</p>";
                     str+="<p><label>Giới tính:</label> "+result.users.GioiTinh+"</p>";
-                    str+="<p><label>Số tiền:</label> "+result.users.SoTien+" VNĐ</p>";
+                    str+="<p><label>Số tiền:</label> "+parseInt(result.users.SoTien).toLocaleString()+" VNĐ</p>";
 
                     $(".modal-body").html(str);
                 }

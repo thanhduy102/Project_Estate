@@ -11,6 +11,7 @@ use App\models\Wards;
 use App\models\DanhMuc;
 use App\models\ChiTietBatDongSan;
 use Carbon\Carbon;
+use App\User;
 use Auth;
 use Yajra\Datatables\Datatables;
 use App\Http\Controllers\Controller;
@@ -28,13 +29,11 @@ class BatDongSanController extends Controller
         return Datatables::of($bds)
         ->addIndexColumn()
         ->addColumn(__('hinhanh'),function($bds){
-            
-            
             return '<img src="../image/avatar/estate/'.$bds->AnhDaiDien.'" alt="'.$bds->AnhDaiDien.'" style="width:100%;">';
         })
         ->addColumn(__('hanhdong'),function($bds){
             if(Auth::user()->hasRole(['Admin'])){
-                return '<a href="../admin/edit-bat-dong-san/id='.$bds->idBDS.'" class="fa fa-edit"></a>
+                return '
                 <a id="'.$bds->idBDS.'" onclick=btn_del_bds('.$bds->idBDS.') class="fas fa-trash-alt" style="color:red"></a>
                 <a id="'.$bds->idBDS.'" onclick=btn_detail('.$bds->idBDS.') class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="width:100px;height:35px;font-size:14px">Xem chi tiết</a>';
             }
@@ -43,17 +42,57 @@ class BatDongSanController extends Controller
               }         
                     
         })
+        ->addColumn(__('thongtinngay'),function($bds){
+            $ngaybatdau=strtotime($bds->NgayBatDau);
+            $ngaykethuc=strtotime($bds->NgayKetThuc);
+            $datediff=abs($ngaybatdau-$ngaykethuc);
+            $numberDate=floor($datediff / (60*60*24));
+            $now=Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d');
+            $kcngay=$ngaykethuc-strtotime($now);
+            $ngayconlai=floor($kcngay / (60*60*24));
+            if($bds->HienThiBDS==1){
+                if($ngayconlai>0){
+                    return 'Tổng: '.$numberDate. ' ngày. Còn lại: '.$ngayconlai.' ngày.';
+                }
+                else{
+                    return 'Tổng: '.$numberDate. ' ngày. Đã hết hạn.';
+                }      
+            }
+            else if($bds->HienThiBDS==0 || $bds->HienThiBDS==3){
+                return 'Tổng: '.$numberDate.' ngày.';
+            }
+        })
+        ->addColumn(__('ngaycapnhat'),function($bds){
+            if($bds->ThoiGianSuaBDS!=null){
+                Carbon::setLocale('vi');
+                $dateTime=Carbon::create($bds->ThoiGianSuaBDS,'Asia/Ho_Chi_Minh');
+                $now = Carbon::now('Asia/Ho_Chi_Minh');
+                return $bds->ThoiGianSuaBDS.'</br>('.$dateTime->diffForHumans($now).')';
+            }
+            else{
+                return 'Chưa cập nhật';
+            }
+            
+        })
         ->addColumn(__('tinhtrang'),function($bds){
             if($bds->HienThiBDS==1){
                 return '<span class="badge bg-primary">Đã duyệt</span>
                 <a onclick=btn_remove('.$bds->idBDS.') class="btn btn-danger">Gỡ bài</a>';
             }
-            else{
+            else if($bds->HienThiBDS==0){
                 return '<span class="badge bg-gradient-red">Chưa duyệt</span>
                 <a onclick=btn_approve('.$bds->idBDS.') class="btn btn-primary">Duyệt bài</a>';
             }
+            else if($bds->HienThiBDS==3){
+                return '<span class="badge bg-primary">Đăng lại</span>
+                <a onclick=btn_approve('.$bds->idBDS.') class="btn btn-primary">Duyệt bài</a>';
+
+            }
+            else{
+                return '<span class="badge bg-gradient-red">Hết hạn</span>';
+            }
         })
-        ->rawColumns([__('hinhanh'),__('hanhdong'),__('tinhtrang')])
+        ->rawColumns([__('hinhanh'),__('hanhdong'),__('tinhtrang'),__('ngaycapnhat'),__('thongtinngay')])
         ->make(true);
     }
 
@@ -115,8 +154,6 @@ class BatDongSanController extends Controller
             'txt_tieude.min'=>'Tiêu đề tối thiểu 6 ký tự',
             'txt_dientich.numeric'=>'Diện tích phải là chữ số',
             'txt_dientich.min'=>'Diện tích phải lớn hơn 0',
-            'txt_gia.numeric'=>'Giá tiền phải là chữ số',
-            'txt_gia.min'=>'Giá tiền phải lớn hơn 0',
             'select_file.mimes'=>'File ảnh phải đúng định dạng (jpg, jpeg, png)',
             'txt_mota.max'=>'Mô tả tối đa 3000 ký tự',
             'txt_mattien.numeric'=>'Mặt tiền phải là chữ số',
@@ -129,9 +166,7 @@ class BatDongSanController extends Controller
             'txt_sophongngu.min'=>'Số phòng ngủ phải lớn hơn 0',
             'txt_sotoilet.numeric'=>'Số Toilet phải là chữ số',
             'txt_sotoilet.min'=>'Số Toilet phải lớn hơn 0',
-            // 'document.mimes'=>'File ảnh phải đúng định dạng (jpg, jpeg, png)',
-            'date'=>'Dữ liệu nhập phải đúng định dạng',
-            // 'txt_ngaybatdau.before_or_equal'=>'Ngày bắt đầu lớn hơn hoặc bằng hiện tại',
+            'txt_ngayketthuc.date'=>'Dữ liệu nhập phải đúng định dạng',
             'txt_ngayketthuc.after'=>'Ngày kết thúc lớn hơn ngày bắt đầu',
         ];
 
@@ -142,7 +177,6 @@ class BatDongSanController extends Controller
                 'txt_hinhthuc'=>'required',
                 'txt_loaibds'=>'required',
                 'txt_dientich'=>'numeric|min:0',
-                'txt_gia'=>'numeric|min:0',
                 'txt_diachi'=>'required',
                 'select_file'=>'mimes:jpg,jpeg,png',
                 'txt_mota'=>'required|max:3000',
@@ -154,87 +188,109 @@ class BatDongSanController extends Controller
                 'txt_tenlienhe'=>'required',
                 'txt_diachilienhe'=>'required',
                 'txt_dienthoailienhe'=>'required',
-                // 'document'=>'mimes:jpg,jpeg,png',
-                // 'txt_ngaybatdau'=>'date|before_or_equal:today',
                 'txt_ngayketthuc'=>'date|after:txt_ngaybatdau',
             ],
             $messages
         );
+
         if($validate->fails()){
             $response=$validate->messages();
             return response()->json([$response]);
         }
-        else{
-            $batdongsan=new BatDongSan();
+        else
+        {
+            $txt_money=$request->txt_money;
+            $user=User::find(Auth::user()->id);
+            $money=$user->SoTien;
 
-            $batdongsan->TieuDeBDS=$request->txt_tieude;
-            $batdongsan->TieuDeBDS_Slug=$request->tieude_slug;
-            $batdongsan->HinhThuc=$request->txt_hinhthuc;
-            $batdongsan->LoaiBDS=$request->txt_loaibds;
-            $batdongsan->id_TinhThanh=$request->txt_tinhthanh;
-            $batdongsan->id_QuanHuyen=$request->txt_quanhuyen;
-            $batdongsan->id_XaPhuong=$request->txt_phuongxa;
-            $batdongsan->DienTich=$request->txt_dientich;
-            $batdongsan->GiaTienBDS=$request->txt_gia;
-            $batdongsan->DonVi=$request->txt_donvi;
-            $batdongsan->DiaChiBDS=$request->txt_diachi;
-            $batdongsan->MoTaBDS=$request->txt_mota;
-            $batdongsan->NoiDungBDS=$request->txt_noidung;
-            $batdongsan->MatTien=$request->txt_mattien;
-            $batdongsan->DuongVao=$request->txt_duongvao;
-            $batdongsan->HuongNha=$request->txt_huongnha;
-            $batdongsan->HuongBanCong=$request->txt_huongbancong;
-            $batdongsan->SoTang=$request->txt_sotang;
-            $batdongsan->SoPhongNgu=$request->txt_sophongngu;
-            $batdongsan->SoToilet=$request->txt_sotoilet;
-            $batdongsan->NoiThat=$request->txt_noithat;
-            $batdongsan->ThongTinPhapLy=$request->txt_phaply;
-            $batdongsan->TenLienHe=$request->txt_tenlienhe;
-            $batdongsan->DiaChiLienHe=$request->txt_diachilienhe;
-            $batdongsan->DienThoai=$request->txt_dienthoailienhe;
-            $batdongsan->emailUser=$request->txt_emaillienhe;
-            $batdongsan->id_LoaiTin=$request->txt_loaitin;
-            $batdongsan->NgayBatDau=$request->txt_ngaybatdau;
-            $batdongsan->NgayKetThuc=$request->txt_ngayketthuc;
-            $batdongsan->id_User=Auth::id();
-
-            if($request->hasFile('select_file')){
-                $image=$request->file('select_file');
-                $new_name=$request->tieude_slug . '-' . rand(1,10000) . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('image/avatar/estate/'),$new_name);
-                $batdongsan->AnhDaiDien=$new_name;
-               
-            }
-            else{
-                $batdongsan->AnhDaiDien='no-img.jpg';
-                
-            }
-
+            if($txt_money<=$money)
+            {
+                $batdongsan=new BatDongSan();
+                $batdongsan->TieuDeBDS=$request->txt_tieude;
+                $batdongsan->TieuDeBDS_Slug=$request->tieude_slug;
+                $batdongsan->HinhThuc=$request->txt_hinhthuc;
+                $batdongsan->LoaiBDS=$request->txt_loaibds;
+                $batdongsan->id_TinhThanh=$request->txt_tinhthanh;
+                $batdongsan->id_QuanHuyen=$request->txt_quanhuyen;
+                $batdongsan->id_XaPhuong=$request->txt_phuongxa;
+                $batdongsan->DienTich=$request->txt_dientich;
+                $batdongsan->GiaTienBDS=$request->txt_giaBDS;
+                $batdongsan->GiaTienBDS_JS=$request->txt_showMoney;
+                $batdongsan->DonVi=$request->txt_donvi;
+                $batdongsan->DiaChiBDS=$request->txt_diachi;
+                $batdongsan->MoTaBDS=$request->txt_mota;
+                $batdongsan->NoiDungBDS=$request->txt_noidung;
+                $batdongsan->MatTien=$request->txt_mattien;
+                $batdongsan->DuongVao=$request->txt_duongvao;
+                $batdongsan->HuongNha=$request->txt_huongnha;
+                $batdongsan->HuongBanCong=$request->txt_huongbancong;
+                $batdongsan->SoTang=$request->txt_sotang;
+                $batdongsan->SoPhongNgu=$request->txt_sophongngu;
+                $batdongsan->SoToilet=$request->txt_sotoilet;
+                $batdongsan->NoiThat=$request->txt_noithat;
+                $batdongsan->ThongTinPhapLy=$request->txt_phaply;
+                $batdongsan->TenLienHe=$request->txt_tenlienhe;
+                $batdongsan->DiaChiLienHe=$request->txt_diachilienhe;
+                $batdongsan->DienThoai=$request->txt_dienthoailienhe;
+                $batdongsan->emailUser=$request->txt_emaillienhe;
+                $batdongsan->id_LoaiTin=$request->txt_loaitin;
+                $batdongsan->NgayBatDau=$request->txt_ngaybatdau;
+                $batdongsan->NgayKetThuc=$request->txt_ngayketthuc;
+                $batdongsan->id_User=Auth::id();
+    
+                if($request->hasFile('select_file'))
+                {
+                    $image=$request->file('select_file');
+                    $new_name=$request->tieude_slug . '-' . rand(1,10000) . '.' . $image->getClientOriginalExtension();
+                    $image->move(public_path('image/avatar/estate/'),$new_name);
+                    $batdongsan->AnhDaiDien=$new_name;
+                }
+                else
+                {
+                    $batdongsan->AnhDaiDien='no-img.jpg';  
+                }
+                $batdongsan->TongTien=$request->txt_money;
             
-            $batdongsan->save();
-            // Anh
-           
-            $hinhThucBDS=$batdongsan->HinhThuc;
-            $loaiBDS=$batdongsan->LoaiBDS;
-            $chiTietBDS=new ChiTietBatDongSan();
-            $chiTietBDS->id_DanhMuc=$hinhThucBDS;
-            $chiTietBDS->id_BDS=$batdongsan->idBDS;
-            $chiTietBDS->save();
+                $dateTime=Carbon::now('Asia/Ho_Chi_Minh');
+                $batdongsan->ThoiGianTaoBDS=$dateTime;
 
-            $chiTietBDS=new ChiTietBatDongSan();
-            $chiTietBDS->id_DanhMuc=$loaiBDS;
-            $chiTietBDS->id_BDS=$batdongsan->idBDS;
-            $chiTietBDS->save();
+                $batdongsan->save();
+                $idBDS=$batdongsan->idBDS;
 
-            $id_bds=$batdongsan->idBDS;
-            $response=['success'=>'success'];
-            return response()->json([
-                $response,
-                'id_bds'=>$id_bds,
+                // Anh
+                $hinhThucBDS=$batdongsan->HinhThuc;
+                $loaiBDS=$batdongsan->LoaiBDS;
+                $chiTietBDS=new ChiTietBatDongSan();
+                $chiTietBDS->id_DanhMuc=$hinhThucBDS;
+                $chiTietBDS->id_BDS=$batdongsan->idBDS;
+                $chiTietBDS->save();
+    
+                $chiTietBDS=new ChiTietBatDongSan();
+                $chiTietBDS->id_DanhMuc=$loaiBDS;
+                $chiTietBDS->id_BDS=$batdongsan->idBDS;
+                $chiTietBDS->save();
                 
-            ],200);
-        } 
+                $users=User::find(Auth::user()->id);
+                $sotien=$users->SoTien;
+                $sotien_update=$sotien-$request->txt_money;
+                $users->SoTien=$sotien_update;
+                $users->save();
 
+                $response=[
+                    'id_bds'=>$idBDS,
+                    'success'=>"success",
+                ];
+            }
+            else
+            {
+                $response=[
+                    'err'=>"err",
+                ];
+            }
+         } 
+            return response()->json([
+                $response, 
+            ],200);
     }
 
     // Hàm lưu hình ảnh bất động sản
@@ -268,8 +324,22 @@ class BatDongSanController extends Controller
             $bds=new BatDongSan();
             $idBDS=$request->id_bds;
             $bds=BatDongSan::find($idBDS);
+            $ngaybatdau=strtotime($bds->NgayBatDau);
+            $ngaykethuc=strtotime($bds->NgayKetThuc);
+            $datediff=abs($ngaybatdau-$ngaykethuc);
+            $numberDate=floor($datediff / (60*60*24));
+
+            $dateTime=Carbon::now('Asia/Ho_Chi_Minh');
+            $date_start=$dateTime->toDateString();
+            $date_end=$dateTime->addDays($numberDate)->toDateString();
+
+            $bds->NgayBatDau=$date_start;
+            $bds->NgayKetThuc=$date_end;
+
             $bds->HienThiBDS=1;
             $bds->idUserPost=Auth::id();
+            $dateTime=Carbon::now('Asia/Ho_Chi_Minh');
+            $bds->ThoiGianTaoBDS=$dateTime;
             $bds->save();
             return response()->json([
                 'success'=>'Duyệt bài thành công',
@@ -281,25 +351,27 @@ class BatDongSanController extends Controller
             ],200);
         }   
     }
- // Hàm gỡ bài đăng
- public function remove_estate(Request $request){
-    try {
-        $bds=new BatDongSan();
-        $idBDS=$request->id_bds;
-        $bds=BatDongSan::find($idBDS);
-        $bds->HienThiBDS=0;
-        $bds->idUserPost=Auth::id();
-        $bds->save();
-        return response()->json([
-            'success'=>'Gỡ bài thành công',
-        ],200);
-        
-    } catch (\Throwable $e) {
-        return response()->json([
-            'err'=>'Gỡ bài không thành công',
-        ],200);
-    }   
-}
+    // Hàm gỡ bài đăng
+    public function remove_estate(Request $request){
+        try {
+            $bds=new BatDongSan();
+            $idBDS=$request->id_bds;
+            $bds=BatDongSan::find($idBDS);
+            $bds->HienThiBDS=0;
+            $bds->idUserPost=Auth::id();
+            $dateTime=Carbon::now('Asia/Ho_Chi_Minh');
+            $bds->ThoiGianXoaBDS=$dateTime;
+            $bds->save();
+            return response()->json([
+                'success'=>'Gỡ bài thành công',
+            ],200);
+            
+        } catch (\Throwable $e) {
+            return response()->json([
+                'err'=>'Gỡ bài không thành công',
+            ],200);
+        }   
+    }
     // Ham xem chi tiet bai dang
     public function estate_detail(Request $request){
         $id_bds=$request->id_bds;
@@ -320,177 +392,6 @@ class BatDongSanController extends Controller
             'hinhanh'=>$hinhanh,
         ]);
         
-    }
-    // Ham hien thi trang view edit
-    public function View_Edit_Estate($idBDS){
-        $batdongsan=BatDongSan::join('districts','districts.id','=','bat_dong_san.id_QuanHuyen')
-        ->join('provinces','provinces.id','=','bat_dong_san.id_TinhThanh')
-        ->join('wards','wards.id','=','bat_dong_san.id_XaPhuong')
-        ->join('chi_tiet_bat_dong_san','chi_tiet_bat_dong_san.id_BDS','=','bat_dong_san.idBDS')
-        ->leftjoin('danh_muc','danh_muc.idDanhMuc','=','chi_tiet_bat_dong_san.id_DanhMuc')
-        ->join('loai_tin','loai_tin.idLoaiTin','=','bat_dong_san.id_LoaiTin')
-        ->join('user','user.id','=','bat_dong_san.id_User')
-        ->where('idBDS',$idBDS)
-        ->select('*','districts.name AS dic','provinces.name AS pro','wards.name AS war','danh_muc.TieuDeDanhMuc AS TieuDeDM','bat_dong_san.HienThiBDS AS Show')
-        ->first();
-        $city=Provinces::orderBy('id','ASC')->get();
-        $district=Districts::orderBy('id','ASC')->get();
-        $ward=Wards::orderBy('id','ASC')->get();
-        $hinhthuc=DanhMuc::where('danh_muc.idDanhMucCha','-1')->orderBy('idDanhMuc','asc')->get();
-        $loai=DanhMuc::where('danh_muc.idDanhMucCha','<>','-1')->orderBy('idDanhMuc','asc')->get();
-                                    
-        return view('backend.bat-dong-san.edit-bds')->with('city',$city)->with('bds',$batdongsan)->with('district',$district)->with('ward',$ward)->with('hinhthuc',$hinhthuc)->with('loai',$loai);
-    }
-    // Ham lay thong tin bat dong san theo id
-    public function Get_Estate(Request $request){
-        $idBDS=$request->all();
-        $batdongsan=BatDongSan::join('districts','districts.id','=','bat_dong_san.id_QuanHuyen')
-                                ->join('provinces','provinces.id','=','bat_dong_san.id_TinhThanh')
-                                ->join('wards','wards.id','=','bat_dong_san.id_XaPhuong')
-                                ->join('chi_tiet_bat_dong_san','chi_tiet_bat_dong_san.id_BDS','=','bat_dong_san.idBDS')
-                                ->leftjoin('danh_muc','danh_muc.idDanhMuc','=','chi_tiet_bat_dong_san.id_DanhMuc')
-                                ->join('loai_tin','loai_tin.idLoaiTin','=','bat_dong_san.id_LoaiTin')
-                                ->join('user','user.id','=','bat_dong_san.id_User')
-                                ->where('idBDS',$idBDS)
-                                ->select('*','districts.name AS dic','provinces.name AS pro','wards.name AS war','danh_muc.TieuDeDanhMuc AS TieuDeDM','bat_dong_san.HienThiBDS AS Show')
-                                ->first();
-        $hinhanh=HinhAnh::where('id_BDS',$idBDS)->get();
-        return response()->json([
-            'bds'=>$batdongsan,
-            'hinhanh'=>$hinhanh,
-        ]);
-    }
-
-    // Hàm chỉnh sửa bất động sản
-    public function edit_estate(Request $request){
-        $messages=[
-            'required'=>'Không được để trống!',
-            'txt_tieude.max'=>'Tiêu đề tối đa 100 ký tự',
-            'txt_tieude.min'=>'Tiêu đề tối thiểu 6 ký tự',
-            'txt_dientich.numeric'=>'Diện tích phải là chữ số',
-            'txt_dientich.min'=>'Diện tích phải lớn hơn 0',
-            'txt_gia.numeric'=>'Giá tiền phải là chữ số',
-            'txt_gia.min'=>'Giá tiền phải lớn hơn 0',
-            'select_file.mimes'=>'File ảnh phải đúng định dạng (jpg, jpeg, png)',
-            'txt_mota.max'=>'Mô tả tối đa 3000 ký tự',
-            'txt_mattien.numeric'=>'Mặt tiền phải là chữ số',
-            'txt_mattien.min'=>'Mặt tiền phải lớn hơn 0',
-            'txt_duongvao.numeric'=>'Đường vào phải là chữ số',
-            'txt_duongvao.min'=>'Đường vào phải lớn hơn 0',
-            'txt_sotang.numeric'=>'Số tầng phải là chữ số',
-            'txt_sotang.min'=>'Số tầng phải lớn hơn 0',
-            'txt_sophongngu.numeric'=>'Số phòng ngủ phải là chữ số',
-            'txt_sophongngu.min'=>'Số phòng ngủ phải lớn hơn 0',
-            'txt_sotoilet.numeric'=>'Số Toilet phải là chữ số',
-            'txt_sotoilet.min'=>'Số Toilet phải lớn hơn 0',
-            // 'document.mimes'=>'File ảnh phải đúng định dạng (jpg, jpeg, png)',
-            'date'=>'Dữ liệu nhập phải đúng định dạng',
-            // 'txt_ngaybatdau.before_or_equal'=>'Ngày bắt đầu lớn hơn hoặc bằng hiện tại',
-            'txt_ngayketthuc.after'=>'Ngày kết thúc lớn hơn ngày bắt đầu',
-        ];
-
-        $validate=Validator::make(
-            $request->all(),
-            [
-                'txt_tieude'=>'required|min:6|max:100',
-                'txt_hinhthuc'=>'required',
-                'txt_loaibds'=>'required',
-                'txt_dientich'=>'numeric|min:0',
-                'txt_gia'=>'numeric|min:0',
-                'txt_diachi'=>'required',
-                'select_file'=>'mimes:jpg,jpeg,png',
-                'txt_mota'=>'required|max:3000',
-                'txt_mattien'=>'numeric|min:0',
-                'txt_duongvao'=>'numeric|min:0',
-                'txt_sotang'=>'numeric|min:0',
-                'txt_sophongngu'=>'numeric|min:0',
-                'txt_sotoilet'=>'numeric|min:0',
-                'txt_tenlienhe'=>'required',
-                'txt_diachilienhe'=>'required',
-                'txt_dienthoailienhe'=>'required',
-                // 'document'=>'mimes:jpg,jpeg,png',
-                // 'txt_ngaybatdau'=>'date|before_or_equal:today',
-                'txt_ngayketthuc'=>'date|after:txt_ngaybatdau',
-            ],
-            $messages
-        );
-        if($validate->fails()){
-            $response=$validate->messages();
-            return response()->json([$response]);
-        }
-        else{
-            $txt_id_bds=$request->txt_id_bds;
-            $batdongsan=BatDongSan::find($txt_id_bds);
-
-            $batdongsan->TieuDeBDS=$request->txt_tieude;
-            $batdongsan->TieuDeBDS_Slug=$request->tieude_slug;
-            $batdongsan->HinhThuc=$request->txt_hinhthuc;
-            $batdongsan->LoaiBDS=$request->txt_loaibds;
-            $batdongsan->id_TinhThanh=$request->txt_tinhthanh;
-            $batdongsan->id_QuanHuyen=$request->txt_quanhuyen;
-            $batdongsan->id_XaPhuong=$request->txt_phuongxa;
-            $batdongsan->DienTich=$request->txt_dientich;
-            $batdongsan->GiaTienBDS=$request->txt_gia;
-            
-            $batdongsan->DiaChiBDS=$request->txt_diachi;
-            $batdongsan->MoTaBDS=$request->txt_mota;
-            $batdongsan->NoiDungBDS=$request->txt_noidung;
-            $batdongsan->MatTien=$request->txt_mattien;
-            $batdongsan->DuongVao=$request->txt_duongvao;
-            $batdongsan->HuongNha=$request->txt_huongnha;
-            $batdongsan->HuongBanCong=$request->txt_huongbancong;
-            $batdongsan->SoTang=$request->txt_sotang;
-            $batdongsan->SoPhongNgu=$request->txt_sophongngu;
-            $batdongsan->SoToilet=$request->txt_sotoilet;
-            $batdongsan->NoiThat=$request->txt_noithat;
-            $batdongsan->ThongTinPhapLy=$request->txt_phaply;
-            $batdongsan->TenLienHe=$request->txt_tenlienhe;
-            $batdongsan->DiaChiLienHe=$request->txt_diachilienhe;
-            $batdongsan->DienThoai=$request->txt_dienthoailienhe;
-            $batdongsan->emailUser=$request->txt_emaillienhe;
-            $batdongsan->id_LoaiTin=$request->txt_loaitin;
-            $batdongsan->NgayBatDau=$request->txt_ngaybatdau;
-            $batdongsan->NgayKetThuc=$request->txt_ngayketthuc;
-            $batdongsan->id_User=Auth::id();
-// Chinh sua anh dai dien
-            if($request->hasFile('select_file'))
-            {
-                if($batdongsan->AnhDaiDien!='no-img.jpg')
-                {
-                    unlink('image/avatar/estate/'.$batdongsan->AnhDaiDien);
-                }
-                
-                $image=$request->file('select_file');
-                $new_name=$request->tieude_slug . '-' . rand(1,10000) . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('image/avatar/estate'),$new_name);
-                $batdongsan->AnhDaiDien=$new_name;
-            }
-
-            $batdongsan->save();
-            // Anh
-             $hinhThucBDS=$batdongsan->HinhThuc;
-             $loaiBDS=$batdongsan->LoaiBDS;
-             $chitietBDS=ChiTietBatDongSan::where('id_BDS',$txt_id_bds)->get();
-             foreach($chitietBDS as $row){
-                 $del_chitietBDS=ChiTietBatDongSan::find($row->idChiTietBDS);
-                 $del_chitietBDS->delete();
-             }
-            $chiTietbds=new ChiTietBatDongSan();
-            $chiTietbds->id_DanhMuc=$hinhThucBDS;
-            $chiTietbds->id_BDS=$txt_id_bds;
-            $chiTietbds->save();
-
-            $chiTietbds=new ChiTietBatDongSan();
-            $chiTietbds->id_DanhMuc=$loaiBDS;
-            $chiTietbds->id_BDS=$txt_id_bds;
-            $chiTietbds->save();
-            $response=['success'=>'success'];
-            return response()->json([
-                $response,
-                'txt_id_bds'=>$txt_id_bds,
-                
-            ],200);
-        } 
     }
 
     // Ham remote image dropzone

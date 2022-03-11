@@ -5914,7 +5914,7 @@ a.close.disabled {
     max-width: 350px;
     overflow: hidden;
     font-size: 0.875rem;
-    background-color: rgba(255, 255, 255, 0.85);
+    /* background-color: rgba(1 183 32 / 85%); */
     background-clip: padding-box;
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
@@ -14323,12 +14323,13 @@ nav ul li a:hover {
 .bds-cover-3 .bds-cover-3-gd span.input-group-btn {
     width: 23.5%;
     background: #fff;
+    border-radius: 4px;
 }
 
-.bds-cover-3 .bds-cover-3-gd select {
+.bds-cover-3 .bds-cover-3-gd .bds_filter {
     padding: 0 10px;
     border: none;
-    height: 60px;
+    height: 45px;
     border-left: 1px solid #eee;
     background: url(../images/down.png) no-repeat 92% 52%;
     outline: none;
@@ -17826,7 +17827,7 @@ h5.error {
 }
 
 .bds-contact-7 .cont-details p span.fa {
-    margin-right: 10px;
+    /* margin-right: 10px; */
     font-size: 16px;
     width: 20px;
     text-align: center;

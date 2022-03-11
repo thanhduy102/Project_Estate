@@ -29,6 +29,8 @@
     
    <!-- jQuery -->
    <script src="plugins/jquery/jquery.min.js"></script>
+   <script src="../frontend/assets/js/jquery.formatCurrency-1.4.0.min.js"></script>
+   <script src="../frontend/assets/js/simple.money.format.js"></script>
    <script src="assets/js/dropzone.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>  
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/additional-methods.min.js"></script>
@@ -193,7 +195,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="../" class="nav-link">
+                            <a href="../admin" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
                                     Home
@@ -204,7 +206,7 @@
 
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
                                     Tin tức
@@ -230,7 +232,7 @@
                         </li>
 
                           <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
                                     Danh mục
@@ -256,7 +258,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
                                     Bất động sản
@@ -283,7 +285,7 @@
 
                         @hasrole(['Admin'])
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
                                     User
@@ -307,10 +309,26 @@
                            
                             </ul>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                <i class="nav-icon fas fa-copy"></i>
+                                <p>
+                                    Nạp tiền
+                                    <i class="fas fa-angle-left right"></i>
+                                    {{-- <span class="badge badge-info right">6</span> --}}
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="../admin/recharge" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thông tin nạp tiền</p>
+                                    </a>
+                                </li>
+                           
+                            </ul>
+                        </li>
                         @endhasrole
-
-
-
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -394,8 +412,13 @@
 		        $('#select_file').click();
 		    });
         });
-
+  
  
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#userTable').DataTable();
+        });
     </script>
 
 

@@ -20,6 +20,7 @@ class CreateTinTucTable extends Migration
             $table->string('TieuDeTinTuc_Slug',255)->nullable();
             $table->text('MoTaTinTuc')->nullable();
             $table->text('NoiDungTinTuc')->nullable();
+            $table->string('ViewTinTuc',255)->nullable();
             $table->string('AnhDaiDien',255)->nullable();
             $table->dateTime('ThoiGianTaoTT')->nullable();
             $table->dateTime('ThoiGianSuaTT')->nullable();

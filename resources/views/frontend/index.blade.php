@@ -1,6 +1,20 @@
 @extends('frontend.master.master')
 @section('title','Home')
 @section('content')
+<style>
+    .select2-container{
+        height:45px !important;
+    }
+    .select2-selection{
+        height:45px !important;
+    }
+    .select2-selection__rendered{
+        line-height:45px !important;
+    }
+    .select2-selection__arrow{
+        height:45px !important;
+    }
+</style>
     <section class="bds-cover-3">
         <div class="cover top-bottom">
             <div class="container">
@@ -8,103 +22,101 @@
                     <div class="section-width">
                         <p>Hello</p>
                         <h2>Bạn muốn tìm gì?</h2>
-                        <div class="most-searches">
-                            <!-- <h4>Most Searches</h4>
+                        {{-- <div class="most-searches">
+                            <h4>Most Searches</h4>
                             <ul>
                                 <li><a href="#link">Villa</a></li>
                                 <li><a href="#link">Apartment</a></li>
                                 <li><a href="#link">Private house</a></li>
-                            </ul> -->
-                        </div>
-                        <form action="#" class="bds-cover-3-gd" method="GET">
-                            <input type="search" name="text" placeholder="Nhập tên bất động sản..." required>
-                            <span class="input-group-btn">
-								<select class="btn btn-default" name="ext" required>
-									<option selected="">Khu vực</option>
-									<option>Hà Nội</option>
-									<option>Ninh Bình</option>
-									<option>TP Hồ Chí Minh</option>
-									<option>Đà Nẵng</option>
-									
-								</select>
-							</span>
-                            <span class="input-group-btn">
-								<select class="btn btn-default" name="ext" required>
-									<option selected="">Loại</option>
-									<option>Nhà cho thuê</option>
-									<option>Nhà bán</option>
-									
-								</select>
-							</span>
-                            <button type="submit" class="btn-primary">Search</button>
+                            </ul> 
+                        </div> --}}
+                        <input type="hidden" class="id_bds" name="id_bds" id="id_bds">
+                        <form action="{{ route('filterEstate') }}" class="bds-cover-3-gd" method="GET">
+                            
+
+                                <span class="input-group-btn mt-3 mb-3 mr-2">
+                                    <select class="btn btn-default bds_filter select2 category parent_cate" name="form" id="txt_hinhthuc" >
+                                        <option value="0">---Hình thức---</option>
+                                        @foreach ($category as $row)
+                                            <option value="{{ $row->idDanhMuc }}">{{ $row->TieuDeDanhMuc }}</option>
+                                        @endforeach
+                                        
+                                    </select>
+                                </span>
+                                <span class="input-group-btn mt-3 mb-3 mr-2">
+                                    <select class="btn btn-default bds_filter select2 kind" name="type" id="txt_loaibds" >
+                                        <option value="0">---Loại---</option>
+                                    </select>
+                                </span>
+                                <span class="input-group-btn mt-3 mb-3 mr-2">
+                                    <select class="btn btn-default bds_filter select2 choose city" name="province" id="txt_tinhthanh" >
+                                        <option value="">---Tỉnh/Thành---</option>
+                                        @foreach ($city as $row)
+                                            <option value="{{ $row->id }}">{{ $row->name }}</option> 
+                                        @endforeach
+                                        
+                                    </select>
+                                </span>
+                                <span class="input-group-btn mt-3 mb-3 mr-2">
+                                    <select class="btn btn-default bds_filter select2 choose districts" name="district" id="txt_quanhuyen" >
+                                        <option value="0">---Quận/Huyện---</option>
+                                    </select>
+                                </span>
+                                <span class="input-group-btn mr-2">
+                                    <select class="btn btn-default bds_filter select2 wards" name="ward" id="txt_phuongxa" >
+                                        <option value="0">---Phường/Xã---</option>
+                                    </select>
+                                </span>
+                            
+                                <span class="input-group-btn mr-2">
+                                    <select class="btn btn-default bds_filter" name="bedroom" >
+                                        <option value="" selected="">Số phòng ngủ</option>
+                                        <option value="1">1+</option>
+                                        <option value="2">2+</option>
+                                        <option value="3">3+</option>
+                                        <option value="4">4+</option>
+                                        <option value="5">5+</option>
+                                        <option value="6">6+</option>
+                                        <option value="7">7+</option>
+                                        <option value="8">8+</option>
+                                        
+                                    </select>
+                                </span>
+                              
+                                <span class="input-group-btn mr-2">
+                                    <select class="btn btn-default bds_filter" name="floor" >
+                                        <option value="" selected="">Số tầng</option>
+                                        <option value="1">1+</option>
+                                        <option value="2">2+</option>
+                                        <option value="3">3+</option>
+                                        <option value="4">4+</option>
+                                        <option value="5">5+</option>
+                                        <option value="6">6+</option>
+                                        <option value="7">7+</option>
+                                        <option value="8">8+</option>
+                                        
+                                    </select>
+                                </span>
+                                
+                                <button type="submit" style="width:23.5%;height:45px" class="btn-primary">Search</button>
                         </form>
                     </div>
                     <section id="bottom" class="demo">
-                        <a href="#bottom"><span></span>Scroll</a>
+                        <a><span></span>Scroll</a>
                     </section>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Slider -->
-    <!-- <section class="location-1">
-        <div class="location py-5">
-            <div class="container py-lg-5 py-md-4 py-2">
-                <div class="heading text-center mx-auto">
-                    <h3 class="title-big">Top Properties</h3>
-                </div>
-                <div class="owl-product">
-                    <div class="item">
-                        <div class="col-lg-4 col-md-6 listing-img">
-                            <a href="#url">
-                                <div class="box16">
-                                    <div class="rentext-listing-category"><span>Buy</span><span>Rent</span></div>
-                                    <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                    <div class="box-content">
-                                        <h3 class="title">$25,00,000</h3>
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="listing-details blog-details align-self">
-                                <h4 class="user_title agent">
-                                    <a href="#url">Cottage villa</a>
-                                </h4>
-                                <p class="user_position">Unnamed Road, Vegas, NV 89103.</p>
-                                <ul class="mt-3 estate-info">
-                                    <li><span class="fa fa-bed"></span> 1 Bed</li>
-                                    <li><span class="fa fa-shower"></span> 2 Baths</li>
-                                    <li><span class="fa fa-share-square-o"></span> 1760 Sqft</li>
-                                </ul>
-                                <div class="author align-items-center mt-4">
-                                    <a href="#img" class="comment-img">
-                                        <img src="assets/images/team1.jpg" alt="" class="img-fluid">
-                                    </a>
-                                    <ul class="blog-meta">
-                                        <li>
-                                            <a href="#url">Laura Antiochus </a>
-                                        </li>
-                                        <li class="meta-item blog-lesson">
-                                            <span class="meta-value"> Selling agent</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </section> -->
-    <!--/Slider  -->
+    
     <section class="locations-1" id="locations">
         <div class="locations py-5">
-            <div class="container py-lg-5 py-md-4 py-2">
-                <div class="heading text-center mx-auto">
+            <div class="container py-lg-5 py-md-4 py-2" id="featured_estate">
+                <div class="heading text-center mx-auto" >
                     <h3 class="title-big">Nhà đất cho thuê mới nhất</h3>
                 </div>
-                <div class="row pt-md-5 pt-4" id="featured_estate">
+                <div class="row pt-md-5 pt-4" >
                     
                 </div>
                 <a href="http://" class="pull-right">View more >></a>
@@ -113,95 +125,6 @@
         </div>
     </section>
 
-    {{-- <section class="locations-1">
-        <div class="locations py-5">
-            <div class="container py-lg-5 py-md-4 py-2">
-                <div class="heading text-center mx-auto">
-                    <h3 class="title-big">BĐS Nổi Bật</h3>
-                </div>
-                <div class="row pt-md-5 pt-4" id="featured_estate">
-                    <div class="col-lg-4 col-md-6">
-                        <a href="property-single.html">
-                            <div class="box16">
-                                <div class="rentext-listing-category"><span>Hot</span></div>
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title">50,000,000đ</h3>
-                                    <span class="post">Như Hòa, Kim Sơn, Ninh Bình</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-md-6 mt-md-0 mt-4">
-                        <a href="property-single.html">
-                            <div class="box16">
-                                <div class="rentext-listing-category"><span>Hot</span></div>
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title">50,000,000đ</h3>
-                                    <span class="post">Như Hòa, Kim Sơn, Ninh Bình</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-md-6 mt-lg-0 pt-lg-0 mt-4 pt-md-2">
-                        <a href="property-single.html">
-                            <div class="box16">
-                                <div class="rentext-listing-category"><span>Hot</span></div>
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title">50,000,000đ</h3>
-                                    <span class="post">Như Hòa, Kim Sơn, Ninh Bình</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-md-6 mt-4 pt-md-2">
-                        <a href="property-single.html">
-                            <div class="box16">
-                                <div class="rentext-listing-category"><span>Hot</span></div>
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title">50,000,000đ</h3>
-                                    <span class="post">Như Hòa, Kim Sơn, Ninh Bình</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-md-6 mt-4 pt-md-2">
-                        <a href="property-single.html">
-                            <div class="box16">
-                                <div class="rentext-listing-category"><span>Hot</span></div>
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title">50,000,000đ</h3>
-                                    <span class="post">Như Hòa, Kim Sơn, Ninh Bình</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-md-6 mt-4 pt-md-2">
-                        <a href="property-single.html">
-                            <div class="box16">
-                                <div class="rentext-listing-category"><span>Hot</span></div>
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title">50,000,000đ</h3>
-                                    <span class="post">Như Hòa, Kim Sơn, Ninh Bình</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </section> --}}
-
-    
-
-
-  
     <section class="locations-1 popular">
         <div class="locations py-5">
             <div class="container py-lg-5 py-md-4">
@@ -210,94 +133,7 @@
                     <h3 class="title-big">Khu vực</h3>
                 </div>
                 <div class="row pt-5" id="location_estate">
-                    {{-- <div class="col-lg-3 col-md-4 col-6">
-                        <a href="#url">
-                            <div class="box16">
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title mb-1">Hà Nội</h3>
-                                    <span class="post">40 căn</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-6">
-                        <a href="#url">
-                            <div class="box16">
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title mb-1">Hà Nội</h3>
-                                    <span class="post">40 căn</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-6 mt-md-0 pt-md-0 mt-sm-4 mt-3 pt-md-2">
-                        <a href="#url">
-                            <div class="box16">
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title mb-1">Hà Nội</h3>
-                                    <span class="post">40 căn</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-6 mt-lg-0 pt-lg-0 mt-sm-4 mt-3 pt-md-2">
-                        <a href="#url">
-                            <div class="box16">
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title mb-1">Hà Nội</h3>
-                                    <span class="post">40 căn</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-6 mt-sm-4 mt-3 pt-md-2">
-                        <a href="#url">
-                            <div class="box16">
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title mb-1">Hà Nội</h3>
-                                    <span class="post">40 căn</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-6 mt-sm-4 mt-3 pt-md-2">
-                        <a href="#url">
-                            <div class="box16">
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title mb-1">Hà Nội</h3>
-                                    <span class="post">40 căn</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-6 mt-sm-4 mt-3 pt-md-2">
-                        <a href="#url">
-                            <div class="box16">
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title mb-1">Hà Nội</h3>
-                                    <span class="post">40 căn</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-6 mt-sm-4 mt-3 pt-md-2">
-                        <a href="#url">
-                            <div class="box16">
-                                <img class="img-fluid" src="assets/images/p1.jpg" alt="">
-                                <div class="box-content">
-                                    <h3 class="title mb-1">Hà Nội</h3>
-                                    <span class="post">40 căn</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div> --}}
+                   
 
                 </div>
             </div>
@@ -306,12 +142,8 @@
     
     <div class="bds-news" id="news">
         <section id="grids5-block" class="py-5">
-            <div class="container py-lg-5 py-md-4 py-2">
-                <h3 class="title-big text-center">Tin tức nổi bật</h3>
-                <div class="row mt-lg-5 mt-4 pt-3" id="location_new">
-
-                </div>
-                <a href="http://" class="pull-right">View more >></a>
+            <div class="container py-lg-5 py-md-4 py-2" id="location_new">
+                
             </div>
         </section>
     </div>
@@ -354,7 +186,7 @@
         </div>
         <!-- //grids -->
     </section>
-
+    
     <script>
         $(document).ready(function(){
 
@@ -369,20 +201,27 @@
                     console.log(result);
                     var str="";
                     if(result.batdongsan.data.length==0){
-                        str+="Đang cập nhật...";
+                        str+="<div class='heading text-center mx-auto' >";
+                        str+="<h3 class='title-big'>Nhà đất cho thuê mới nhất</h3>";
+                        str+="</div>";
+                        str+="<div class='row pt-md-5 pt-4' >";
+                            str+="Đang cập nhật...";
+                        str+="</div>";
                     }
                     else{
+                        str+="<div class='heading text-center mx-auto' >";
+                        str+="<h3 class='title-big'>Nhà đất cho thuê mới nhất</h3>";
+                        str+="</div>";
+                        str+="<div class='row pt-md-5 pt-4' >";
                         for(var i=0;i<result.batdongsan.data.length;i++){
-
                             var dateNew=new Date(result.batdongsan.data[i].ThoiGianTaoBDS);
-
                             str+="<div class='col-lg-3 col-md-6 listing-img mb-5'>";
-                            str+="<a href='#url'>";
+                            str+="<a href='../"+dateNew.getFullYear()+(dateNew.getUTCMonth()+1)+(dateNew.getUTCDate()+1)+"/"+result.batdongsan.data[i].idBDS+"/"+result.batdongsan.data[i].TieuDeBDS_Slug+"'>";
                             str+="<div class='box16'>";
                                 str+="<div class='rentext-listing-category'><span>Hot</span><span>New</span></div>";
-                                str+="<img class='img-fluid' src='../image/avatar/estate/"+result.batdongsan.data[i].AnhDaiDien+"' alt=''>";
+                                str+="<img class='img-fluid avatar_image' src='../image/avatar/estate/"+result.batdongsan.data[i].AnhDaiDien+"' alt=''>";
                                 str+="<div class='box-content'>";
-                                    str+="<h3 class='title'>"+formatter.format(result.batdongsan.data[i].GiaTienBDS)+" VND</h3>";
+                                    str+="<h3 class='title'>"+(result.batdongsan.data[i].GiaTienBDS_JS)+" </h3>";
                                 str+="</div>";
                             str+="</div>";
                         str+="</a>";
@@ -405,6 +244,8 @@
                     str+="</div>";
 
                         }
+                        str+="</div>";
+                        str+="<a href='../nha-dat-cho-thue.html' class='pull-right'>View more >></a>";
                     }
 
                     $("#featured_estate").html(str);
@@ -421,9 +262,14 @@
                         console.log(result);
                         var str="";
                         if(result.tintuc.data.length==0){
-                            str+="Đang cập nhật...";
+                            str+="<h3 class='title-big text-center'>Tin tức nổi bật</h3>";
+                            str+="<div class='row mt-lg-5 mt-4 pt-3'>";
+                                str+="Đang cập nhật...";
+                            str+="</div>";
                         }
                         else{
+                            str+="<h3 class='title-big text-center'>Tin tức nổi bật</h3>";
+                            str+="<div class='row mt-lg-5 mt-4 pt-3'>";
                             for(var i=0;i<result.tintuc.data.length;i++){
                                 var dateNew=new Date(result.tintuc.data[i].ThoiGianTaoTT);
                                 
@@ -437,16 +283,17 @@
                                                 str+="<span class='small'>Tháng "+(dateNew.getUTCMonth() + 1)+"</span>";
                                             str+="</a>";
                                         str+="</span>";
-                                    str+="<a href='#blog-single' class='d-block zoom'><img src='../backend/dist/img/"+result.tintuc.data[i].AnhDaiDien+"' alt='' class='img-fluid news-image' /></a>";
+                                    str+="<a href='../"+result.tintuc.data[i].idTinTuc+"/"+result.tintuc.data[i].TieuDeTinTuc_Slug+".html' class='d-block zoom'><img src='../backend/dist/img/"+result.tintuc.data[i].AnhDaiDien+"' alt='' class='img-fluid news-image avatar_image' /></a>";
                                         str+="<div class='blog-info'>";
-                                            // str+="<a href='#category' class='category'>Tin tức 1</a>";
-                                            str+="<h4><a class='title_estate' title='"+result.tintuc.data[i].TieuDeTinTuc+"' href='#blog-single'>"+result.tintuc.data[i].TieuDeTinTuc+"</a></h4>";
+                                            str+="<h4><a class='title_estate' title='"+result.tintuc.data[i].TieuDeTinTuc+"' href='../"+result.tintuc.data[i].idTinTuc+"/"+result.tintuc.data[i].TieuDeTinTuc_Slug+".html'>"+result.tintuc.data[i].TieuDeTinTuc+"</a></h4>";
                                             str+="<p class='title_estate'>"+result.tintuc.data[i].MoTaTinTuc+"</p>";
                                         str+="</div>";
                                     str+="</div>";
                             str+="</div>";
 
                             }
+                            str+="</div>";
+                            str+="<a href='../tin-tuc' class='pull-right'>View more >></a>";
                         }
 
                         $("#location_new").html(str);
@@ -469,7 +316,7 @@
                             str+="<div class='col-lg-3 col-md-4 col-6'>";
                         str+="<a href='#url'>";
                             str+="<div class='box16'>";
-                                str+="<img class='img-fluid' src='assets/images/p1.jpg' alt=''>";
+                                str+="<img class='img-fluid' src='assets/images/thanh-pho-dep-nhat-the-gioi-20.jpg' alt=''>";
                                 str+="<div class='box-content'>";
                                     str+="<h3 class='title mb-1'>"+result.array[result.count.data[i].id_TinhThanh][0].name+"</h3>";
                                     str+="<span class='post'>"+result.count.data[i].BDS+" căn</span>";
@@ -485,4 +332,6 @@
             });
         })
     </script>
+    <script src="../backend/dist/js/select_location.js"></script>
+    <script src="../backend/dist/js/select_category.js"></script>
     @endsection
