@@ -19,9 +19,9 @@ class AuthController extends Controller
     public function login_auth(Request $request)
     {
         $messages=[
-            'required'=>'Không được để trống!',
-            'email.email'=>'Email không đúng định dạng',
-            'password.min'=>'Password phải lớn hơn 8 ký tự.',
+            'required'=>'*Không được để trống!',
+            'email.email'=>'*Email không đúng định dạng',
+            'password.min'=>'*Password phải lớn hơn 8 ký tự.',
 
         ];
 
@@ -39,10 +39,10 @@ class AuthController extends Controller
         }
         else{
             if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
-                $response=['success'=>'Dang nhap thanh cong!'];
+                $response=['success'=>'Đăng nhập thành công!'];
             }
             else{
-                $response=['error'=>'Ten tai khoan hoac mat khau khong dung!'];
+                $response=['error'=>'*Tên tài khoản hoặc mật khẩu không đúng!'];
             }
         }
         return response()->json([
@@ -146,7 +146,5 @@ class AuthController extends Controller
     }
 
 
-    public function forgetPass(){
-        return view('frontend.forgotPass');
-    }
+    
 }

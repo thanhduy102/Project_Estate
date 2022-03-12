@@ -19,11 +19,22 @@
         
         <section class="error-page py-5 text-center">
             <div class="container py-md-5 py-sm-4">
+                
                 <div class="main-cover w3">
-                    <form action="">
+                    <form action="{{ url('/recover-pass') }}" method="post">
+                        @csrf
                         <div class="form-group">
-                            <label for="txt_email">Nhập lại email đã đưng ký của bạn:</label>
-                            <input type="email" class="form-control" id="txt_email" name="txt_email" placeholder="Email...">
+                            <label for="txt_email">Nhập lại email đã đăng ký của bạn:</label>
+                            @if(session()->has('err'))
+                            <div class="alert alert-danger">
+                                {!! session()->get('err') !!}
+                            </div>
+                            @elseif(session()->has('message'))
+                            <div class="alert alert-success">
+                                {!! session()->get('message') !!}
+                            </div>
+                            @endif
+                            <input type="email" class="form-control" id="email_account" name="email_account" placeholder="Email...">
                             {{-- <div id="show_error"></div> --}}
                         </div>
                         <button type="submit" id="btn_add_dm" class="btn btn-primary" style="float: right;">Gửi đi</button>

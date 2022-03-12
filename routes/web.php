@@ -23,13 +23,17 @@ Route::post('/dang-ky','Auth\AuthController@Register')->name('register');//All-H
 Route::get('/validate-email','Auth\AuthController@validate_email');//All-Ham xu ly validate trung email
 Route::get('/validate-phone','Auth\AuthController@validate_phone');//All-Ham xu ly validate trung sdt
 Route::get('logout','Auth\AuthController@Logout');//All-Ham dang xuat
-Route::get('quen-mat-khau','Auth\AuthController@forgetPass');//All-view quen mat khau
 Route::get('{idNew}/{slug_new}.html','frontend\ChiTietTinTucController@view_new_detail');//Chi tiet tin tuc
 Route::post('/new_relate','frontend\ChiTietTinTucController@new_relate');//Tin tuc lien qua
 Route::get('{date_time}/{id_bds}/{slug_estate}','frontend\ChiTietBDSController@view_estate_detail');
 Route::post('/select_location','backend\BatDongSanController@Select_Location');
 Route::post('/select_category','backend\BatDongSanController@select_category');
 Route::get('search','frontend\FilterController@filter_estate')->name('filterEstate');
+
+Route::get('quen-mat-khau','frontend\MailController@forgetPass');//All-view quen mat khau
+Route::post('/recover-pass','frontend\MailController@recoverPass');
+Route::get('update-new-pass','frontend\MailController@update_new_pass');
+Route::post('/reset_new_pass','frontend\MailController@update_pass');
 
 Route::group(['middleware'=>'CheckLogin'],function(){
     Route::get('trang-ca-nhan','frontend\InfoUserController@info_user');//Login-View trang ca nhan

@@ -1,136 +1,109 @@
-<!DOCTYPE html>
-<html lang="zxx">
+@extends('frontend.master.master')
+@section('title','Đăng nhập')
+@section('content')
 
-<head>
-    <title>Login Form</title>
-    <base href="{{ asset('').'frontend/' }}">
-    <!-- Meta tags -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-    <!-- Google fonts -->
-    <link href="//fonts.googleapis.com/css2?family=Kumbh+Sans:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/app.css">
-    <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="assets/css/style.css" type="text/css" media="all" />
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
-
-    <script src="../backend/plugins/jquery/jquery.min.js"></script>
-
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-</head>
-
-<body>
-    <div class="signinform">
-        <h1>Login Form</h1>
-        <!-- container -->
-        <div class="container">
-            <!-- main content -->
-            <div class="w3l-form-info">
-                @csrf
-                <div class="w3_info">
-                    <h2>Login</h2>
-                    <form method="post" role="form" id="frm_login" data-route="{{ route('login') }}">
-                        <div class="input-group">
-                            <span><i class="fas fa-user" aria-hidden="true"></i></span>
-                            <input type="email" name="email" id="email" placeholder="Email">
-                        </div>
-                        <div id="show_error"></div>
-                        <div class="input-group">
-                            <span><i class="fas fa-key" aria-hidden="true"></i></span>
-                            <input type="Password" name="password" id="password" placeholder="Password">
-                        </div>
-                        <div id="show_error1"></div>
-                        <div id="show_error2"></div>
-                        <div class="form-row bottom">
-                            <div class="form-check">
-                                <input type="checkbox" id="remenber" name="remenber" value="remenber">
-                                <label for="remenber"> Remember me?</label>
-                            </div>
-                            <a href="#url" class="forgot">Forgot password?</a>
-                        </div>
-                        <button class="btn btn-primary btn-block" type="submit">Login</button>
-                    </form>
-                    <p class="continue"><span>or Login with</span></p>
-                    <div class="social-login">
-                        <a href="#facebook">
-                            <div class="facebook">
-                                <span class="fab fa-facebook-f" aria-hidden="true"></span>
-
-                            </div>
-                        </a>
-                        <a href="#twitter">
-                            <div class="twitter">
-                                <span class="fab fa-twitter" aria-hidden="true"></span>
-                            </div>
-                        </a>
-                        <a href="#google">
-                            <div class="google">
-                                <span class="fab fa-google" aria-hidden="true"></span>
-                            </div>
-                        </a>
-                    </div>
-                    <p class="account">Don't have an account? <a href="/dang-ky">Sign up</a></p>
+        <section class="w3l-about-breadcrumb">
+            <div class="breadcrumb-bg breadcrumb-bg-about pt-5">
+                <div class="container pt-lg-5 py-3">
                 </div>
             </div>
-            <!-- //main content -->
-        </div>
-        <!-- //container -->
-        <!-- footer -->
-        <div class="footer">
+        </section>
+        <section class="w3l-breadcrumb">
+            <div class="container">
+                <ul class="breadcrumbs-custom-path">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active"><span class="fa fa-angle-right mx-2" aria-hidden="true"></span> Đăng nhập</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section class="error-page py-5 text-center">
+            <div class="container py-md-5 py-sm-4">
+                
+                <div class="main-cover w3" style="max-width: 350px !important;">
+                    <h1 class="mb-4">ĐĂNG NHẬP</h1>
+                    <form method="post" role="form" id="frm_login" data-route="{{ route('login') }}">
+                        @if(session()->has('err'))
+                            <div class="alert alert-danger">
+                                {!! session()->get('err') !!}
+                            </div>
+                            @elseif(session()->has('message'))
+                            <div class="alert alert-success">
+                                {!! session()->get('message') !!}
+                            </div>
+                            @endif
+                        @csrf
+                        
+                        <div class="form-group" style="margin-bottom: 2rem !important;">
+                            <label for="email" class="pull-left">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Email...">
+                        <div id="show_error"></div>
+                        </div>
 
-        </div>
-        <!-- footer -->
-    </div>
-
-    <!-- fontawesome v5-->
-    <script src="./assets/js/fontawesome.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" type="text/javascript" charset="utf-8" async defer></script>
-
-    <script type="text/javascript" charset="utf-8">
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-    
-    </script>
-    <script>
-        $(function(){
-            $("#frm_login").submit(function(e){
-                var route=$("#frm_login").data('route');
-                var form=$(this);
-                $('.alert').remove();
-                $.ajax({
-                    type:'POST',
-                    url:route,
-                    data:form.serialize(),
-                    success:function(result){
-                        for(var i=0;i<result.length;i++){
-                            if(result[i].email){
-                                $("#show_error").append('<p class="alert alert-danger">'+result[i].email+'</p>');
-                            }
-                            if(result[i].password){
-                                $("#show_error1").append('<p class="alert alert-danger">'+result[i].password+'</p>');
-                            }
-
-                            if(result[i].success){
-                                toastr.success(result[i].success,'Thong bao');
-                                window.location.href='/';
-
-                            }
-                            if(result[i].error){
-                                $("#show_error2").append('<p class="alert alert-danger">'+result[i].error+'</p>');
-                            }
-                        }
+                        
+                        <div class="form-group form_password" style="margin-bottom: 2rem !important;">
+                            <label for="password" class="pull-left">Mật khẩu</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="password...">
+                            <a class="eye" href="javascript:void(0)"><i class="fa fa-eye"></i></a>
+                            <div id="show_error1"></div>
+                            <div id="show_error2"></div>
+                        </div>
+                        <button type="submit" id="btn_add_dm" class="btn btn-primary" style="float: left;">Đăng nhập</button>
+                        <a class="pull-right" style="text-decoration: underline !important;" href="../quen-mat-khau">Quên mật khẩu?</a>
+                          
+                    </form>
+                </div>
+            </div>
+        </section>
+        <script>
+            $(function(){
+                $(".form_password .eye").click(function(){
+                    let $this=$(this);
+                    if($this.hasClass('active')){
+                        $this.parents(".form_password").find('input').attr('type','password');
+                        $this.removeClass('active');
+                    }
+                    else{
+                        $this.parents(".form_password").find('input').attr('type','text');
+                        $this.addClass('active');
                     }
                 });
-                e.preventDefault();
-            })
-        })
-    </script>
-</body>
-
-</html>
+            });
+        </script>
+        <script>
+            $(function(){
+                $("#frm_login").submit(function(e){
+                    var route=$("#frm_login").data('route');
+                    var form=$(this);
+                    $('.notice').remove();
+                    $.ajax({
+                        type:'POST',
+                        url:route,
+                        data:form.serialize(),
+                        success:function(result){
+                            for(var i=0;i<result.length;i++){
+                                if(result[i].email){
+                                    $("#show_error").append('<p class="text-danger notice pull-left">'+result[i].email+'</p>');
+                                }
+                                if(result[i].password){
+                                    $("#show_error1").append('<p class="text-danger notice pull-left">'+result[i].password+'</p>');
+                                }
+    
+                                if(result[i].success){
+                                     
+                                    toastr.success(result[i].success,'Thông báo');
+                                    window.location.href='/';
+                                    //
+    
+                                }
+                                if(result[i].error){
+                                    $("#show_error2").append('<p class="text-danger notice pull-left" style="font-size:14px !important;">'+result[i].error+'</p>');
+                                }
+                            }
+                        }
+                    });
+                    e.preventDefault();
+                })
+            });
+        </script>
+@endsection

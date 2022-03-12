@@ -7,6 +7,7 @@ use App\models\NapTien;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 
 class NapTienController extends Controller
@@ -69,10 +70,22 @@ class NapTienController extends Controller
             $naptien->Status=1;
             $user->save();
             $naptien->save();
+            // Send mail
+            $sumMoney=$user->SoTien;
+            $emailUser=$user->email;
+            $now=Carbon::now('Asia/Ho_Chi_Minh');
+            $title_mail="NẠP TIỀN THÀNH CÔNG".' '.$now;
+            $page_notice="Bạn đã nạp thành công".' '.number_format($sotien).'VNĐ vào tài khoản có email: '.$emailUser.'. Tổng số tiền trong tài khoản là: '.number_format($sumMoney).'VNĐ';
+            $data=array("name"=>$title_mail,"body"=>$page_notice,"email"=>$emailUser);
+            Mail::send('frontend.notice_mail.notice_recharge',['data'=>$data],function($message) use($title_mail,$data){
+                $message->to($data['email'])->subject($title_mail);
+                $message->from($data['email'],$title_mail);
+            });
 
             return response()->json([
                 'success'=>'success',
             ],200);
+
         } catch (\Throwable $e) {
             return response()->json([
                 'err'=>'err',

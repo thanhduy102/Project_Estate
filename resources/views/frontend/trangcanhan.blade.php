@@ -1,27 +1,7 @@
 @extends('frontend.master.master')
 @section('title','Trang ca nhan')
 @section('content')
-{{-- <script>
-    $(document).ready(function(){
-        $("#frm_validate_naptien").validate({
-            rules:{
-                txt_numberMoney:{
-                    required:true,
-                    digits: true,
-                    min:20000,
-                },
-            }, 
-                messages:{
-                    txt_numberMoney:{
-                        required:"*Nhập số tiền muốn nạp",
-                        min:"*Số tiền nạp ít nhất 20,000VNĐ",
-                    },
 
-                },
-            
-        });
-    });
-</script> --}}
 <script>
     $(document).ready(function(){
         $("#frm_editUser").validate({
@@ -163,86 +143,7 @@
                         </div>
 
                         @include('frontend.layout.layout')
-                        {{-- <div class="col-lg-3 cont-details">
-                            <address id="info_user">
-                            <h5 class="text-center">Thông tin cá nhân</h5>
-                            <img src="./assets/images/default-user-avatar-blue.jpg" class="ml-5" alt="">
-
-                            <h5 class="mt-4 pt-lg-3 text-center">Thanh Duy</h5>
-                            <p style="font-size: 14px;"><span></span> Tài khoản tin rao: 10,000,000đ</p>
-                                
-
-                            <p><span class="fa fa-phone"></span> <strong>Tel :</strong>
-                                <a href="tel:+1(12) 366 411 4999"> (+1) 366 411 499</a></p>
-
-                            <p> <span class="fa fa-envelope"></span> <strong>Email :</strong>
-                                <a href="mailto:mail@example.com"> mail@example.com</a></p>
-
-                                <p class="title">Quản lý thông tin cá nhân</p>
-                                <ul>
-                                    <a href=""><li>Thay đổi thông tin cá nhân</li></a>
-                                   <a href=""><li>Thay đổi mật khẩu</li></a>
-                                   
-                                </ul>
-
-                                <p class="title">Quản lý tin đăng</p>
-                                <ul>
-                                    <a href=""><li>Thay đổi thông tin cá nhân</li></a>
-                                   <a href=""><li>Thay đổi mật khẩu</li></a>
-                                   
-                                </ul>
-                        </address>
-                           
-                        </div> --}}
-
-                       <!-- Button trigger modal -->
-                        {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            Launch demo modal
-                        </button> --}}
-                       <!-- Modal -->
-                        {{-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <form action="" id="frm_changePass" method="post" data-route="{{ route('changePass') }}" role="form">
-                                    @csrf
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Đổi mật khẩu</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="form-group form_password">
-                                                <label for="password_old">Mật khẩu cũ</label>
-                                                <input type="password" class="form-control" id="password_old" name="password_old" placeholder="Nhập mật khẩu cũ...">
-                                                <a class="eye" href="javascript:void(0)"><i class="fa fa-eye"></i></a>
-                                                
-                                            </div>
-                                            <div id="show_errors"></div>
-                                            <div class="form-group form_password">
-                                                <label for="password">Mật khẩu mới</label>
-                                                <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu mới...">
-                                                <a class="eye" href="javascript:void(0)"><i class="fa fa-eye"></i></a>
-                                                
-                                            </div>
-                                            <div id="show_errors1"></div>
-                                            <div class="form-group form_password">
-                                                <label for="password_confirmation">Nhập lại mật khẩu mới</label>
-                                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Nhập lại mật khẩu mới...">
-                                                <a class="eye" href="javascript:void(0)"><i class="fa fa-eye"></i></a>
-                                                
-                                            </div>
-                                            <div id="show_errors2"></div>
-                                        </div>
-                                        <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Đổi mật khẩu</button>
-                                        </div>
-                                    </div>
-                                </form>
-                              
-                            </div>
-                        </div> --}}
+                       
                     </div>
                 </div>
             </div>
@@ -250,49 +151,49 @@
         </div>
     </section>
     <!-- //contacts -->
-<script>
-    $(function(){
-    $("#frm_editUser").submit(function(e){
-        var route=$("#frm_editUser").data('route');
-        var form=$(this);
-        $('.alert').remove();
-        $.ajax({
-            type:'post',
-            url:route,
-            data:form.serialize(),
-            success:function(result){
-                for(var i=0;i<result.length;i++){
-                    if(result[i].txt_ho_user){
-                        $("#show_error").append('<p class="alert alert-danger">'+result[i].txt_ho_user+'</p>');
-                    }
-                    if(result[i].txt_ten_user){
-                        $("#show_error1").append('<p class="alert alert-danger">'+result[i].txt_ten_user+'</p>');
-                    }
-                    if(result[i].txt_sdt_user){
-                        $("#show_error2").append('<p class="alert alert-danger">'+result[i].txt_sdt_user+'</p>');
-                    }
-                    if(result[i].txt_gioitinh_user){
-                        $("#show_error3").append('<p class="alert alert-danger">'+result[i].txt_gioitinh_user+'</p>');
-                    }
-                    if(result[i].txt_diachi_user){
-                        $("#show_error4").append('<p class="alert alert-danger">'+result[i].txt_diachi_user+'</p>');
-                    }
-                    if(result[i].txt_email_user){
-                        $("#show_error5").append('<p class="alert alert-danger">'+result[i].txt_email_user+'</p>');
-                    }
-                   
-                    
-                    if(result[i].success){
-                            toastr.success(result[i].success,'Thong bao');
-                            window.location.href='/trang-ca-nhan';
+    <script>
+        $(function(){
+            $("#frm_editUser").submit(function(e){
+                var route=$("#frm_editUser").data('route');
+                var form=$(this);
+                $('.alert').remove();
+                $.ajax({
+                    type:'post',
+                    url:route,
+                    data:form.serialize(),
+                    success:function(result){
+                        for(var i=0;i<result.length;i++){
+                            if(result[i].txt_ho_user){
+                                $("#show_error").append('<p class="alert alert-danger">'+result[i].txt_ho_user+'</p>');
+                            }
+                            if(result[i].txt_ten_user){
+                                $("#show_error1").append('<p class="alert alert-danger">'+result[i].txt_ten_user+'</p>');
+                            }
+                            if(result[i].txt_sdt_user){
+                                $("#show_error2").append('<p class="alert alert-danger">'+result[i].txt_sdt_user+'</p>');
+                            }
+                            if(result[i].txt_gioitinh_user){
+                                $("#show_error3").append('<p class="alert alert-danger">'+result[i].txt_gioitinh_user+'</p>');
+                            }
+                            if(result[i].txt_diachi_user){
+                                $("#show_error4").append('<p class="alert alert-danger">'+result[i].txt_diachi_user+'</p>');
+                            }
+                            if(result[i].txt_email_user){
+                                $("#show_error5").append('<p class="alert alert-danger">'+result[i].txt_email_user+'</p>');
+                            }
+                        
+                            
+                            if(result[i].success){
+                                    toastr.success(result[i].success,'Thong bao');
+                                    window.location.href='/trang-ca-nhan';
+                                }
                         }
-                }
-            }
+                    }
+                });
+                e.preventDefault();
+            });
         });
-        e.preventDefault();
-    });
-});
-</script>
+    </script>
 
     <script>
         $(document).ready(function(){
@@ -326,6 +227,7 @@
             });
         })
     </script>
+
     <script>
         $(document).ready(function(){
             $.ajax({
@@ -334,7 +236,7 @@
                 success:function(result){
                     console.log(result);
                     var str="";
-                    // for(var i=0;i<result.user.length;i++){
+                    
                        str+= "<h5 class='text-center'>Thông tin cá nhân</h5>";
 
                             str+="<h5 class='mt-4 pt-lg-3 text-center'>"+result.user.Ho+" "+result.user.Ten+"</h5>";
@@ -361,7 +263,7 @@
                                     str+="<a href='../dang-tin'><li>Đăng tin</li></a>";
                                    
                                 str+="</ul>";
-                    // }
+                   
 
                         $("#info_user").html(str);
                 }
@@ -382,7 +284,6 @@
                     $this.parents(".form_password").find('input').attr('type','text');
                     $this.addClass('active');
                 }
-                // alert("12");
             });
         });
     </script>
@@ -408,11 +309,9 @@
                             if(result[i].password){
                                 $("#show_errors1").append('<p class="text-danger">'+result[i].password+'</p>');
                             }
-                            // if(result[i].password_confirm){
-                            //     $("#show_errors2").append('<p class="text-danger">'+result[i].password_confirm+'</p>');
-                            // }
+                        
                             if(result[i].success){
-                                toastr.success(result[i].success,'Thong bao');
+                                toastr.success(result[i].success,'Thông báo');
                                 
                             }
                         }
@@ -422,23 +321,4 @@
             });
         });
     </script>
-{{-- <script>
-    $(document).ready(function () { 
-        $("#box_info").hide();
-        
-        
-        $("#btn_naptien").click(function(){
-            $("#box_info").show();
-            $("#box_bank").hide();
-            var sotien=$("#txt_numberMoney").val();
-            var money=parseInt(sotien).toLocaleString()+" VNĐ";
-            $("#txt_money").html(money);
-            var numberRan= Math.floor(Math.random() * (999999 - 100000)) + 100000;
-            var numRan="Nap BDS "+numberRan;
-            $("#txt_numRan").html(numRan);
-            $("#numRan1").html(numberRan);
-            $("#txt_moneyHidden").val(sotien);
-        });
-     });
-</script>  --}}
 @endsection
