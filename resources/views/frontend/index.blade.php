@@ -68,34 +68,35 @@
                                     </select>
                                 </span>
                             
-                                <span class="input-group-btn mr-2">
-                                    <select class="btn btn-default bds_filter" name="bedroom" >
-                                        <option value="" selected="">Số phòng ngủ</option>
-                                        <option value="1">1+</option>
-                                        <option value="2">2+</option>
-                                        <option value="3">3+</option>
-                                        <option value="4">4+</option>
-                                        <option value="5">5+</option>
-                                        <option value="6">6+</option>
-                                        <option value="7">7+</option>
-                                        <option value="8">8+</option>
-                                        
-                                    </select>
+                                <span class="input-group-btn mr-2" id="filter_price">
+                                    <div id="str_price" style="line-height:44px;">Gia</div>
+                                  
+                                      <div class="range_price_js">
+                                        <div class="dropdown_range">
+                                            <div id="slider-range" class="price-filter-range m-auto" style="margin-top:4px;width:70%;" name="rangeInput"></div>
+                                            <div class="inp_price_range">
+                                                <input type="number" min=0 max="20000" oninput="validity.valid||(value='0');" id="min_price" name="min_price" class="price-range-field" />
+                                                <input type="number" min=0 max="20000" oninput="validity.valid||(value='20000');" id="max_price" name="max_price" class="price-range-field" />
+                                            </div>        
+                                        </div>
+                                    </div>
                                 </span>
                               
-                                <span class="input-group-btn mr-2">
-                                    <select class="btn btn-default bds_filter" name="floor" >
-                                        <option value="" selected="">Số tầng</option>
-                                        <option value="1">1+</option>
-                                        <option value="2">2+</option>
-                                        <option value="3">3+</option>
-                                        <option value="4">4+</option>
-                                        <option value="5">5+</option>
-                                        <option value="6">6+</option>
-                                        <option value="7">7+</option>
-                                        <option value="8">8+</option>
-                                        
-                                    </select>
+                                <span class="input-group-btn mr-2" id="dt_filter_price">
+                                    <div id="dt_str_price" style="line-height:44px;">Dien tich</div>
+                                  
+                                      <div class="dt_range_price_js">
+                                          <div class="dt_dropdown_range">
+                                               <div id="dt_slider-range" class="dt_price-filter-range m-auto" style="margin-top:4px;width:70%;" name="dt_rangeInput"></div>
+                                        <div class="dt_inp_price_range">
+                                            <input type="number" min=0 max="9900" oninput="validity.valid||(value='0');" id="dt_min_price" name="dt_min_price" class="dt_price-range-field" />
+                                            <input type="number" min=0 max="10000" oninput="validity.valid||(value='10000');" id="dt_max_price" name="dt_max_price" class="dt_price-range-field" />
+                                          
+                                        </div>
+                                                
+                                            </div>
+                                      
+                                    </div>
                                 </span>
                                 
                                 <button type="submit" style="width:23.5%;height:45px" class="btn-primary">Search</button>
@@ -218,7 +219,11 @@
                             str+="<div class='col-lg-3 col-md-6 listing-img mb-5'>";
                             str+="<a href='../"+dateNew.getFullYear()+(dateNew.getUTCMonth()+1)+(dateNew.getUTCDate()+1)+"/"+result.batdongsan.data[i].idBDS+"/"+result.batdongsan.data[i].TieuDeBDS_Slug+"'>";
                             str+="<div class='box16'>";
-                                str+="<div class='rentext-listing-category'><span>Hot</span><span>New</span></div>";
+                                str+="<div class='rentext-listing-category'>";
+                                    if(result.batdongsan.data[i].id_LoaiTin==50000){
+                                       str+="<span>Hot</span><span>New</span>"; 
+                                    }
+                                 str+= "</div>";  
                                 str+="<img class='img-fluid avatar_image' src='../image/avatar/estate/"+result.batdongsan.data[i].AnhDaiDien+"' alt=''>";
                                 str+="<div class='box-content'>";
                                     str+="<h3 class='title'>"+(result.batdongsan.data[i].GiaTienBDS_JS)+" </h3>";
@@ -314,9 +319,9 @@
                     else{
                         for(var i=0;i<result.count.data.length;i++){
                             str+="<div class='col-lg-3 col-md-4 col-6'>";
-                        str+="<a href='#url'>";
+                        str+="<a href='../bat-dong-san/khu-vuc/"+result.count.data[i].id_TinhThanh+"/"+result.array[result.count.data[i].id_TinhThanh][0].name+"'>";
                             str+="<div class='box16'>";
-                                str+="<img class='img-fluid' src='assets/images/thanh-pho-dep-nhat-the-gioi-20.jpg' alt=''>";
+                                str+="<img style='height:150px;' class='img-fluid' src='assets/images/thanh-pho-dep-nhat-the-gioi-20.jpg' alt=''>";
                                 str+="<div class='box-content'>";
                                     str+="<h3 class='title mb-1'>"+result.array[result.count.data[i].id_TinhThanh][0].name+"</h3>";
                                     str+="<span class='post'>"+result.count.data[i].BDS+" căn</span>";

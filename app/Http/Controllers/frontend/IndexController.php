@@ -50,17 +50,26 @@ class IndexController extends Controller
     }
 
     public function featured_estate(){
-        $batdongsan=BatDongSan::query()->fromSub(function($query){
-            $query->from('bat_dong_san')->join('provinces','provinces.id','=','bat_dong_san.id_TinhThanh')
+        // $batdongsan=BatDongSan::query()->fromSub(function($query){
+        //     $query->from('bat_dong_san')->join('provinces','provinces.id','=','bat_dong_san.id_TinhThanh')
 
-                                        ->where('HinhThuc',2);
-        },'batdongsan')->where('HienThiBDS',1)->orderBy('idBDS','ASC')->paginate(8);
+        //                                 ->where('HinhThuc',2);
+        // },'batdongsan')->where('HienThiBDS',1)->orderBy('idBDS','ASC')->paginate(8);
+
+        $batdongsan=ChiTietBatDongSan::query()->fromSub(function($query) {
+            $query->from('chi_tiet_bat_dong_san')->join('danh_muc','danh_muc.idDanhMuc','=','chi_tiet_bat_dong_san.id_DanhMuc')
+                                                ->join('bat_dong_san','bat_dong_san.idBDS','=','chi_tiet_bat_dong_san.id_BDS')
+                                                ->leftjoin('provinces','provinces.id','=','bat_dong_san.id_TinhThanh')
+                                                ->where('chi_tiet_bat_dong_san.id_DanhMuc',2)
+                                                ->where('bat_dong_san.HienThiBDS',1);
+                                                
+        },'batdongsan')->orderBy('id_LoaiTin','DESC')->orderBy('idBDS','DESC')->paginate(16);
 
         $tintuc=TinTuc::orderBy('idTinTuc','DESC')->paginate(8);
 
         //$count=BatDongSan::groupBy('id_TinhThanh')->count();
         $count=BatDongSan::select('id_TinhThanh',DB::raw("count(*) as BDS "))
-                    ->groupBy('id_TinhThanh')->orderBy('BDS','DESC')->paginate(8);
+                    ->groupBy('id_TinhThanh')->where('HienThiBDS','=',1)->orderBy('BDS','DESC')->paginate(8);
 
         $arr=array();
          foreach($count as $row){
@@ -101,15 +110,19 @@ class IndexController extends Controller
 
     public function tin_tuc(){
 
-        return view('frontend.blog');
+        $tintuc=TinTuc::orderBy('idTinTuc','DESC')->paginate(8);
+        return view('frontend.blog')->with('tintuc',$tintuc);
     }
     
-    public function Tintuc(){
-        $tintuc=TinTuc::orderBy('idTinTuc','DESC')->paginate(8);
+    public function view_estate_location($id_TinhThanh,$name){
+        $batdongsan=BatDongSan::join('provinces','provinces.id','=','bat_dong_san.id_TinhThanh')
+                    ->where('bat_dong_san.id_TinhThanh',$id_TinhThanh)
+                    ->where('provinces.name','=',$name)
+                    ->where('bat_dong_san.HienThiBDS',1)
+                    ->paginate(8);
+        return view('frontend.estate_location')->with('batdongsan',$batdongsan);
 
-        return response()->json([
-            'tintuc'=>$tintuc,
-        ],200);
+        // dd($id_TinhThanh,$name);
     }
   
 }

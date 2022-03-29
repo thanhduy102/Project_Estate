@@ -30,12 +30,12 @@ function viewGiaTien(){
       $("#txt_showMoney").val(formatter.format(b)+donVi2);
     }
     else if(a>=7 && a<=9){
-      var d=Math.trunc(Number(b)/1000);
+      var d=(Number(b)/1000000);
       $("#txt_sotien").html(formatter.format(d)+donVi3);
       $("#txt_showMoney").val(formatter.format(d)+donVi3);
     }
     else if(a>=10){
-      var d=Math.trunc(Number(b)/1000000);
+      var d=(Number(b)/1000000000);
       $("#txt_sotien").html(formatter.format(d)+donVi4);
       $("#txt_showMoney").val(formatter.format(d)+donVi4);
     }
@@ -71,12 +71,12 @@ function viewGiaTien(){
         $("#txt_showMoney").val(formatter.format(b)+donVi2);
       }
       else if(a>=7 && a<=9){
-        var d=Math.trunc(Number(b)/1000);
+        var d=(Number(b)/1000000);
         $("#txt_sotien").html(formatter.format(d)+donVi3);
         $("#txt_showMoney").val(formatter.format(d)+donVi3);
       }
       else if(a>=10){
-        var d=Math.trunc(Number(b)/1000000);
+        var d=(Number(b)/1000000000);
         $("#txt_sotien").html(formatter.format(d)+donVi4);
         $("#txt_showMoney").val(formatter.format(d)+donVi4);
       }
@@ -108,12 +108,12 @@ function viewGiaTien(){
         $("#txt_showMoney").val(formatter.format(b)+donVi2+"/m²");
       }
       else if(a>=7 && a<=9){
-        var d=Math.trunc(Number(b)/1000);
+        var d=(Number(b)/1000000);
         $("#txt_sotien").html(formatter.format(d)+donVi3+"/m²");
         $("#txt_showMoney").val(formatter.format(d)+donVi3+"/m²");
       }
       else if(a>=10){
-        var d=Math.trunc(Number(b)/1000000);
+        var d=(Number(b)/1000000000);
         $("#txt_sotien").html(formatter.format(d)+donVi4+"/m²");
         $("#txt_showMoney").val(formatter.format(d)+donVi4+"/m²");
       }
@@ -145,12 +145,12 @@ function viewGiaTien(){
         $("#txt_showMoney").val(formatter.format(b)+donVi2+"/tháng");
       }
       else if(a>=7 && a<=9){
-        var d=Math.trunc(Number(b)/1000);
+        var d=(Number(b)/1000000);
         $("#txt_sotien").html(formatter.format(d)+donVi3+"/tháng");
         $("#txt_showMoney").val(formatter.format(d)+donVi3+"/tháng");
       }
       else if(a>=10){
-        var d=Math.trunc(Number(b)/1000000);
+        var d=(Number(b)/1000000000);
         $("#txt_sotien").html(formatter.format(d)+donVi4+"/tháng");
         $("#txt_showMoney").val(formatter.format(d)+donVi4+"/tháng");
       }

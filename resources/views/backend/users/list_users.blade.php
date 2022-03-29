@@ -29,16 +29,31 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
+
                                 <div class="card-header">
                                     <h3 class="card-title">Danh sách người dùng</h3>
+                                    <div class="card-tools">
+                                        <form action="/admin/search_user" method="get">
+                                            @csrf
+                                            <div class="input-group input-group-sm" style="width: 260px;">
+                                                <input type="search" name="txt_search" class="form-control float-right" value="{{ request('txt_search') }}" placeholder="Nhập mã người dùng hoặc email...">
+                                                <div class="input-group-append">
+                                                    <button type="submit" class="btn btn-default">
+                                                        <i class="fas fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
+                                  
                                 @if(session()->has('success'))
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                                     <strong>{{ session()->get('success') }}</strong>
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                       <span aria-hidden="true">&times;</span>
                                     </button>
-                                  </div>
+                                </div>
                                 @elseif(session()->has('err'))
                                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                                     <strong>{{ session()->get('err') }}</strong>
@@ -85,11 +100,14 @@
                                                 <td><input type="checkbox" name="role_admin" {{ $row->hasRole('Admin') ? 'checked' : '' }} ></td>
                                                 <td><input type="checkbox" name="role_employy" {{ $row->hasRole('Nhân viên') ? 'checked' : '' }}></td>
                                                 <td><input type="checkbox" name="role_guest" {{ $row->hasRole('Khách hàng') ? 'checked' : '' }}></td>
-                                                <td><button type="submit" value="Doi Quyen" class="btn btn-primary">Doi quyen</button></td>
+                                                <td>
+                                                    <button type="submit" value="Doi Quyen" class="btn btn-primary">Doi quyen</button>
+                                                </td>
                                                 <td>
                                                     <a id={{ $row->id }} onclick="btn_del_user('{{ $row->id }}')" class="fas fa-trash-alt"></a>
                                                     <a id="{{ $row->id }}" onclick="btn_detail('{{ $row->id }}')" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Xem chi tiết</a>
                                                     
+
                                                 </td>
                                             </tr>
                                         </form>

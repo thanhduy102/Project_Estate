@@ -173,7 +173,7 @@
                                             <div id="show_error6"></div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group" hidden>
                                             <label>Nội dung</label>
                                             <textarea class="form-control" id="summernote" name="txt_noidung" rows="5" placeholder="Nội dung..."></textarea>
                                         </div>

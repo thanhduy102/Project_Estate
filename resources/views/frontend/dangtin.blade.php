@@ -37,7 +37,7 @@
                 <div class="top-map">
                     <div class="row map-content-9">
                         <div class="col-lg-9">
-                            <div class="contact-form">
+                            <div class="contact-form" style="padding: 60px 35px !important;">
                                 <h5 class="mb-2">Đăng tin rao bán, cho thuê nhà đất</h5>
                                 {{-- <p class="mb-4">Đăng tin</p> --}}
                                 @csrf
@@ -166,7 +166,7 @@
                                         <div id="show_error6"></div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group" hidden>
                                         <label>Nội dung</label>
                                         <textarea class="form-control" id="summernote" name="txt_noidung" rows="5" placeholder="Nội dung..."></textarea>
                                     </div>
@@ -340,8 +340,9 @@
                                         </div>
                                         
                                     </div>
-
-                                    <button type="submit" id="btn_add_dm" class="btn btn-primary btn-style pull-right mt-3">Submit</button>
+                                    <div class="group">
+                                         <button type="submit" id="btn_add_dm" style="border-radius: 2px !important;margin-top: 28px !important;padding:7px !important;" class="btn btn-primary btn-style pull-right mt-3">Đăng tin</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -389,28 +390,12 @@
         </div>
         
     </section>
-    {{-- <script>
-        $(document).ready(function () { 
-            $("#box_info").hide();
-    
-            $("#btn_naptien").click(function(){
-                $("#box_info").show();
-                $("#box_bank").hide();
-                var sotien=$("#txt_numberMoney").val();
-                var money=parseInt(sotien).toLocaleString()+" VNĐ";
-                $("#txt_money").html(money);
-                var numberRan= Math.floor(Math.random() * (999999 - 100000)) + 100000;
-                var numRan="Nap BDS "+numberRan;
-                $("#txt_numRan").html(numRan);
-                $("#numRan1").html(numberRan);
-                $("#txt_moneyHidden").val(sotien);
-            });
-         });
-    </script> --}}
+   
     <script src="../backend/dist/js/select_location.js"></script>
     <script src="../backend/dist/js/select_category.js"></script> 
     
 <script>
+    $('#txt_gia').simpleMoneyFormat();
     Dropzone.autoDiscover = false;	
     let token = $('meta[name="csrf-token"]').attr('content');
     $(function() {

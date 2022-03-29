@@ -24,14 +24,14 @@ class DanhMucController extends Controller
         return Datatables::of($danhmuc)
         ->addIndexColumn()
         ->addColumn(__('edit_danh_muc'),function($danhmuc){
-            if(Auth::user()->hasRole(['Admin'])){
-                return '<a href="../admin/edit-category/id='.$danhmuc->idDanhMuc.'" class="fa fa-edit"></a>
+            // if(Auth::user()->hasRole(['Admin'])){
+                return '<a href="../admin/category/edit-category/id='.$danhmuc->idDanhMuc.'" class="fa fa-edit"></a>
                 <a id="'.$danhmuc->idDanhMuc.'" onclick=btn_del_dm('.$danhmuc->idDanhMuc.') class="fas fa-trash-alt"></a>';
-            }
-            else{
-                return '<a href="../admin/edit-category/id='.$danhmuc->idDanhMuc.'" class="fa fa-edit"></a>';
+            // }
+            // else{
+            //     return '<a href="../admin/edit-category/id='.$danhmuc->idDanhMuc.'" class="fa fa-edit"></a>';
 
-            }
+            // }
         })
         
         ->addColumn(__('ViewMainMenu'),function($danhmuc){
@@ -218,7 +218,7 @@ class DanhMucController extends Controller
         $danhmuc->delete();
 
         return response()->json([
-            'message'=>'Xoa thanh cong',
+            'message'=>'Xóa thành công',
         ]);
 
 

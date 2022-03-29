@@ -100,7 +100,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel12">Modal title</h5>
+          <h5 class="modal-title" id="exampleModalLabel12">Nạp tiền</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -120,42 +120,43 @@
                     <div class="card-body">
                         <div id="box_info">
                             <div class="row" >
-                            <div class="col-12">
-                                <p>Để hoàn tất đơn nạp, bạn vui lòng chuyển khoản theo nội dung sau:</p>
-                                <p>Ngân hàng Vietcombank (VCB): <strong class="text-danger">0123456789</strong></p>
-                                <p>Chủ tài khoản: <strong class="text-danger">TRẦN THANH DUY</strong></p>
-                                <p>Số tiền: <strong class="text-danger" id="txt_money_ck"></strong></p>
-                                <p>Nội dung chuyển khoản: <strong class="text-danger" id="txt_numRan"></strong></p>
-                            </div>
-                        </div>
-                        <hr>
-                        <p>Sau khi chuyển khoản xong, vui lòng thông báo nạp tiền ở ô bên dưới. Mã nạp tiền là: </p>
-                        <p class="text-center text-danger"><strong id="numRan1"></strong></p>
-
-                    <form class="" id="frm_naptienbank" method="post" role="form" data-route="{{ route('recharge') }}" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-group">
-                            <label for="">Ảnh chuyển khoản</label>
-                            <div>
-                              <input id="select_file_bank" type="file" name="select_file_bank" class="form-control hidden" style="display: none;"
-                                onchange="changeImgBank(this)">
-                            <img id="img_transfer" class="thumbnail" width="200px" height="150px" src="../backend/dist/img/import-img.png" style="cursor: pointer;border-style:groove;">
-                            </div>
-                            
-                            </div>  
-                            
-                            <div class="form-group">
-                                <div class="form-group">
-                                    <label for="">Mã xác nhận</label>
-                                  <input type="number" class="form-control" id="txt_manaptien" name="txt_manaptien" placeholder="Mã nạp tiền">
+                                <div class="col-12">
+                                    <p>Để hoàn tất đơn nạp, bạn vui lòng chuyển khoản theo nội dung sau:</p>
+                                    <p>Ngân hàng Vietcombank (VCB): <strong class="text-danger">0123456789</strong></p>
+                                    <p>Chủ tài khoản: <strong class="text-danger">TRẦN THANH DUY</strong></p>
+                                    <p>Số tiền: <strong class="text-danger" id="txt_money_ck"></strong></p>
+                                    <p>Nội dung chuyển khoản: <strong class="text-danger" id="txt_numRan"></strong></p>
                                 </div>
-                                <div id="show_error66"></div>
-                                <input type="text" name="txt_maxacnhan" id="txt_maxacnhan">
-                                <input type="text" name="txt_moneyHidden" id="txt_moneyHidden">
-                                <button type="submit" class="btn btn-primary mb-2">Xác nhận</button>
-                            </div> 
-                        
-                    </form>
+                            </div>
+                            <hr>
+                            <p>Sau khi chuyển khoản xong, vui lòng thông báo nạp tiền ở ô bên dưới. Mã nạp tiền là: </p>
+                            <p class="text-center text-danger"><strong id="numRan1"></strong></p>
+
+                            <form class="" id="frm_naptienbank" method="post" role="form" data-route="{{ route('recharge') }}" enctype="multipart/form-data">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="">Ảnh chuyển khoản</label>
+                                    <div>
+                                    <input id="select_file_bank" type="file" name="select_file_bank" class="form-control hidden" style="display: none;"
+                                        onchange="changeImgBank(this)">
+                                    <img id="img_transfer" class="thumbnail" width="200px" height="150px" src="../backend/dist/img/import-img.png" style="cursor: pointer;border-style:groove;">
+                                    </div>
+                                    
+                                    </div>  
+                                    
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label for="">Mã xác nhận</label>
+                                        <input type="number" class="form-control" id="txt_manaptien" name="txt_manaptien" placeholder="Mã nạp tiền">
+                                        </div>
+                                        <div id="show_error66"></div>
+                                        <input type="hidden" name="txt_maxacnhan" id="txt_maxacnhan">
+                                        <input type="hidden" name="txt_moneyHidden" id="txt_moneyHidden">
+                                        <button type="submit" class="btn btn-primary mb-2">Xác nhận</button>
+                                        <button type="button" id="btn_back" class="btn btn-primary mb-2">Quay lại</button>
+                                    </div>                        
+                            </form>
+                            <p>*Nếu có vấn đề về nạp tiền, vui lòng liên hệ hotline: 0987 381 401 hoặc email: email@gmail.com</p>
                         </div>
                          
                         <div id="box_bank">
@@ -177,8 +178,9 @@
                             <div class="row mt-3">
                                 <form action="" id="frm_validate_naptien" role="form" style="width: 100%;">
                                 <div class="col-lg-12">
-                                    <input type="number" class="form-control text-center" id="txt_numberMoney" name="txt_numberMoney" placeholder="Số tiền muốn nap (VNĐ)">
+                                    <input type="number" required class="form-control text-center" id="txt_numberMoney" name="txt_numberMoney" placeholder="Số tiền muốn nap (VNĐ)">
                                 </div>
+                                
                                 </form>
                                 <div class="col-lg-12 mt-3"><button type="submit" class="btn btn-primary form-control" id="btn_naptien">Nạp tiền</button></div>
 
@@ -197,30 +199,43 @@
 
         </div>
 
-        <div class="modal-footer">
+        {{-- <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
+        </div> --}}
       </div>
     </div>
   </div>
+  
   <script>
     $(document).ready(function () { 
         $("#box_info").hide();
 
         $("#btn_naptien").click(function(){
-            $("#box_info").show();
-            $("#box_bank").hide();
             var sotien=$("#txt_numberMoney").val();
-            var money=parseInt(sotien).toLocaleString()+" VNĐ";
-            $("#txt_money_ck").html(money);
-            var numberRan= Math.floor(Math.random() * (999999 - 100000)) + 100000;
-            var numRan="Nap BDS "+numberRan;
-            $("#txt_numRan").html(numRan);
-            $("#numRan1").html(numberRan);
-            $("#txt_moneyHidden").val(sotien);
-            $("#txt_maxacnhan").val(numberRan);
+            if(sotien=='undefined' || sotien=='' || sotien==null){
+                alert("Vui lòng nhập số tiền muốn nạp.");
+            }
+            else{
+                $("#box_info").show();
+                $("#box_bank").hide();
+                var money=parseInt(sotien).toLocaleString()+" VNĐ";
+                $("#txt_money_ck").html(money);
+                var numberRan= Math.floor(Math.random() * (999999 - 100000)) + 100000;
+                var numRan="Nap BDS "+numberRan;
+                $("#txt_numRan").html(numRan);
+                $("#numRan1").html(numberRan);
+                $("#txt_moneyHidden").val(sotien);
+                $("#txt_maxacnhan").val(numberRan);
+            }
+            
         });
      });
+</script>
+<script>
+    $("#btn_back").on('click',function(e){
+        $("#box_info").hide();
+        $("#box_bank").show();
+    })
 </script>
 <script>
     $(function(){
@@ -242,6 +257,11 @@
                         }
                         if(result[i].success){
                             toastr.success(result[i].success,'Thong bao');
+                            $("#box_info").hide();
+                            $("#box_bank").show();
+                            $("#txt_numberMoney").val('');
+                            $('#exampleModal12').modal('hide');
+                            
                         }
                     }
                 }

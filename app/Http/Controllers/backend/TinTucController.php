@@ -22,14 +22,14 @@ class TinTucController extends Controller
         return Datatables::of($tintuc)
         ->addIndexColumn()
         ->addColumn(__('edit_tin_tuc'),function($tintuc){
-            if(Auth::user()->hasRole(['Admin'])){
-                return '<a href="../admin/edit-news/id='.$tintuc->idTinTuc.'" class="fa fa-edit"></a>
+            // if(Auth::user()->hasRole(['Admin'])){
+                return '<a href="../admin/new/edit-news/id='.$tintuc->idTinTuc.'" class="fa fa-edit"></a>
                 <a id="'.$tintuc->idTinTuc.'" onclick=btn_del_new('.$tintuc->idTinTuc.') class="fas fa-trash-alt"></a>';
-            }
-            else{
-                return '<a href="../admin/edit-news/id='.$tintuc->idTinTuc.'" class="fa fa-edit"></a>';
+            // }
+            // else{
+            //     return '<a href="../admin/edit-news/id='.$tintuc->idTinTuc.'" class="fa fa-edit"></a>';
 
-            }
+            // }
         })
         ->addColumn(__('danhmuc'),function($tintuc){
             $tintucs=TinTuc::get();
@@ -61,7 +61,7 @@ class TinTucController extends Controller
 
     // View page them tin tuc
     function AddTinTuc(){
-        $data['category']=DanhMuc::all()->toArray();
+        $data['category']=DanhMuc::where('TieuDeDanhMuc_Slug','=','tin-tuc')->get()->toArray();
         return view('backend.tin-tuc.add_tin_tuc',$data);
     }
     // END

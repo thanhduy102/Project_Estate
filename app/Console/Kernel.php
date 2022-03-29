@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        Commands\UpdateHienThiBDS::class,
     ];
 
     /**
@@ -24,8 +25,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command(\App\Console\Commands\UpdateHienThiBDS::class)
+                 ->everyMinute();
+                //   ->dailyAt('00:00')->timezone('Asia/Ho_Chi_Minh')->withoutOverlapping();
     }
 
     /**

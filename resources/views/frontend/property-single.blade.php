@@ -94,7 +94,7 @@
                                     @endif
                                     <li><strong>Hướng nhà :</strong> {{ $batdongsan->HuongNha }} </li>
                                     <li><strong>Hướng ban công :</strong> {{ $batdongsan->HuongBanCong }} </li>
-                                    @if ($batdongsan->ThongTinPhapLy!=0)
+                                    @if ($batdongsan->ThongTinPhapLy!=null)
                                         <li><strong>Thông tin pháp lý :</strong> {{ $batdongsan->ThongTinPhapLy }} </li>
                                     @else 
                                     @endif
@@ -154,7 +154,7 @@
 
 
                         <!-- Popular Post Widget-->
-                        <div class="sidebar-widget popular-posts">
+                        {{-- <div class="sidebar-widget popular-posts">
                             <div class="sidebar-title">
                                 <h4>Tin liên quan</h4>
                             </div>
@@ -184,7 +184,7 @@
                                 </div>
                             </article>
 
-                        </div>
+                        </div> --}}
 
                         <!-- sidebar sticky -->
                         <div class="sidebar-sticky">

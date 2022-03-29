@@ -29,7 +29,28 @@
                                 <h5 class="mb-2 pb-3">Danh sách tin đăng</h5>
                                 {{-- <p class="mb-4">Đăng tin</p> --}}
                                 <input type="hidden" value="{{route('ListEstateUser')}}" id="estateUserData"/>
-
+                                <div class="row mb-3">
+                                    <div class="col-2">
+                                        <select data-column="2" class="filter-select" name="" id="">
+                                            <option value="">---Loại tin---</option>
+                                            <option value="Tin thường">Tin thường</option>
+                                            <option value="Tin VIP">Tin VIP</option>
+                                        </select>
+                                        
+                                    </div>
+                                    
+                                    
+                                    <div class="col-2">
+                                        <select data-column="6" class="filter-select" name="" id="">
+                                            <option value="">---Tình trạng---</option>
+                                            <option value="Đang chờ duyệt...">Đang chờ duyệt</option>
+                                            <option value="Đã duyệt">Đã duyệt</option>
+                                            <option value="Hết hạn">Hết hạn</option>
+                                            <option value="Đã bán">Đã bán</option>
+                                            <option value="Duyệt không thành công">Duyệt không thành công</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <table class="table table-bordered" id="listBDSTable">
                                     <thead>
                                         <tr>
@@ -64,7 +85,7 @@
     <script>
         $(function(){
             var urlData=$("#estateUserData").val();
-            $("#listBDSTable").DataTable({
+            var table=$("#listBDSTable").DataTable({
                 processing:true,
                 serverSide:true,
                 ajax:urlData,
@@ -82,6 +103,11 @@
                 ],
                 "pageLength":10
             });
+            $('.filter-select').change(function(){
+            table.column( $(this).data('column'))
+                .search($(this).val())
+                .draw();
+        });
         });
     </script>
   
@@ -182,24 +208,6 @@
         });
     </script>
 
-{{-- <script>
-    $(document).ready(function () { 
-        $("#box_info").hide();
-
-        $("#btn_naptien").click(function(){
-            $("#box_info").show();
-            $("#box_bank").hide();
-            var sotien=$("#txt_numberMoney").val();
-            var money=parseInt(sotien).toLocaleString()+" VNĐ";
-            $("#txt_money").html(money);
-            var numberRan= Math.floor(Math.random() * (999999 - 100000)) + 100000;
-            var numRan="Nap BDS "+numberRan;
-            $("#txt_numRan").html(numRan);
-            $("#numRan1").html(numberRan);
-            $("#txt_moneyHidden").val(sotien);
-        });
-     });
-</script> --}}
 <script>
     function btn_del_bds_user(id_BDS){
         if(confirm("Bạn có chắc chắn muốn xóa không?")==true){
@@ -219,6 +227,25 @@
                 }
             });
         }
+    }
+</script>
+<script>
+    function btn_sold(id_BDS){
+        $.ajax({
+            url:'/sold_estate',
+            type:'post',
+            data:{id_BDS:id_BDS},
+            success:function(result){
+                    if(result.message=="Gỡ tin thành công"){
+                        toastr.success(result.message);
+                        $("#listBDSTable").DataTable().ajax.reload();
+                    }
+                    else{
+                        toastr.warning(result.err);
+                    }
+                    
+                }
+        });
     }
 </script>
 @endsection

@@ -8,7 +8,7 @@ use App\User;
 use App\models\Role;
 use Auth;
 use App\models\RoleUsers;
-
+use Session;
 
 class UserController extends Controller
 {
@@ -74,5 +74,19 @@ class UserController extends Controller
         return response()->json([
             'users'=>$user,
         ]);
+    }
+
+    public function search_user(Request $request){
+        $search=$request->txt_search;
+        // dd($search);
+        if($search==null){
+            return redirect('../admin/user');
+        }
+        else{
+            $users=User::where('email',$search)->orWhere('id',$search)->paginate(10);
+
+            return view('backend.users.list_users')->with('users',$users);
+        }
+        
     }
 }

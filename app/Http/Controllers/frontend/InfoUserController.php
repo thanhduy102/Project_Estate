@@ -84,7 +84,6 @@ class InfoUserController extends Controller
             [
                 'password_old'=>'required',
                 'password'=>'required|confirmed|min:8',
-               
             ],
             $messages
         );
@@ -92,13 +91,10 @@ class InfoUserController extends Controller
             $response=$validate->messages();
         }
         else{
-
             $idUser=Auth::user()->id;
             $pass=User::find($idUser);
-            
               if(Hash::check($request->password_old,$pass->password))
               {
-    
                 $user=User::find($idUser);
                 $user->password=bcrypt($request->password);
                 $user->save();
@@ -107,10 +103,7 @@ class InfoUserController extends Controller
                 
               }else{
                   $response=['err'=>'*Mật khẩu cũ không đúng'];
-              }
-
-                    
-              
+              }              
         }
         return response()->json([
             $response,

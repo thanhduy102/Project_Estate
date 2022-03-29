@@ -65,12 +65,13 @@
                 <!-- pagination -->
                 <div class="pagination-wrapper mt-5 pt-lg-3 text-center">
                     <ul class="page-pagination">
-                        <li><span aria-current="page" class="page-numbers current">1</span></li>
+                        {!! $batdongsan->links() !!}
+                        {{-- <li><span aria-current="page" class="page-numbers current">1</span></li>
                         <li><a class="page-numbers" href="#url">2</a></li>
                         <li><a class="page-numbers" href="#url">3</a></li>
                         <li><a class="page-numbers" href="#url">...</a></li>
                         <li><a class="page-numbers" href="#url">15</a></li>
-                        <li><a class="next" href="#url">Next <span class="fa fa-angle-right"></span></a></li>
+                        <li><a class="next" href="#url">Next <span class="fa fa-angle-right"></span></a></li> --}}
                     </ul>
                 </div>
                 <!-- //pagination -->

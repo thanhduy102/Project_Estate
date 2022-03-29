@@ -68,7 +68,6 @@ class AuthController extends Controller
             'password.min'=>'Password phải lớn hơn 8 ký tự.',
             'password.confirmed'=>'Mật khẩu không trùng khớp',
 
-
         ];
 
         $validate=Validator::make(
@@ -97,6 +96,7 @@ class AuthController extends Controller
             $user->email=$request->txt_email;
             $user->password=bcrypt($request->password);
             $user->AnhAvatar='avatar.jpg';
+            $user->SoTien=40000;
             $dateTime=Carbon::now('Asia/Ho_Chi_Minh');
             $user->ThoiGianTaoUs=$dateTime;
             $user->save();

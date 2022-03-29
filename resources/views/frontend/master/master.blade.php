@@ -22,13 +22,21 @@
     <link rel="stylesheet" href="../backend/assets/css/dropzone.css">
     <link rel="stylesheet" href="../backend/plugins/summernote/summernote-bs4.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="assets/css/range.css">
+    <link rel="stylesheet" href="assets/css/dt_range.css">
+    
     <script src="../backend/plugins/jquery/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+
     <script src="assets/js/jquery.formatCurrency-1.4.0.min.js"></script>
     <script src="assets/js/simple.money.format.js"></script>
     <script src="../backend/assets/js/dropzone.js"></script>
-    <script src="assets/js/rangeslider.min.js"></script>
+    {{-- <script src="assets/js/rangeslider.min.js"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>  
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/additional-methods.min.js"></script>
+    <script src="assets/js/price_range_script.js"></script>
+    <script src="assets/js/dt_range_script.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <style>
@@ -56,7 +64,7 @@
             <nav class="navbar navbar-expand-lg stroke px-0">
                 <h1>
                     <a class="navbar-brand" href="../">
-                        <span class="fa fa-home"></span> BDS
+                        <span class="fa fa-home"></span> BDS<small style="font-size: 14px;">ⓜ</small>
                     </a>
                 </h1>
                 <!-- if logo is image enable this   

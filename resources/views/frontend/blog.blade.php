@@ -22,18 +22,40 @@
                 <div class="row mt-md-5">
                     <div class="col-lg-8 bds-news">
                         <div class="row" id="new_estate">
-                           
+                            @forelse ($tintuc as $row)
+                                <div class='col-md-6 mt-md-0 mt-sm-4 mb-5'>
+                                    <div class='grids5-info'>
+                                        <span class='posted-date'>
+                                            <a href='../{{ $row->idTinTuc }}/{{ $row->TieuDeTinTuc_Slug }}.html'>
+                                                <span class='small'>{{ \Carbon\Carbon::parse($row->ThoiGianTaoTT)->format('Y') }}</span>
+                                                <span class='big'>{{ \Carbon\Carbon::parse($row->ThoiGianTaoTT)->format('m') }}</span>
+                                                <span class='small'>Tháng {{ \Carbon\Carbon::parse($row->ThoiGianTaoTT)->format('d') }}</span>
+                                            </a>
+                                        </span>
+                                        <a href='../{{ $row->idTinTuc }}/{{ $row->TieuDeTinTuc_Slug }}.html' class='d-block zoom'><img src='../backend/dist/img/{{ $row->AnhDaiDien }}' alt='{{ $row->AnhDaiDien }}' class='img-fluid news-image avatar_image' /></a>
+                                        <div class='blog-info'>
+                                            {{-- // <a href='#category' class='category'>Tin tức 1</a> --}}
+                                            <h4><a class='title_estate' title='{{ $row->TieuDeTinTuc }}' href='../{{ $row->idTinTuc }}/{{ $row->TieuDeTinTuc_Slug }}.html'>{{ $row->TieuDeTinTuc }}</a></h4>
+                                            <p class='title_estate'>{{ $row->MoTaTinTuc }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                
+                            @endforelse
+                            
                         </div>
                         <!-- pagination -->
                         <div class="pagination-wrapper mt-5 pt-lg-3 text-center">
-                            <ul class="page-pagination">
+                            {!! $tintuc->links() !!}
+                            {{-- <ul class="page-pagination">
                                 <li><span aria-current="page" class="page-numbers current">1</span></li>
                                 <li><a class="page-numbers" href="#url">2</a></li>
                                 <li><a class="page-numbers" href="#url">3</a></li>
                                 <li><a class="page-numbers" href="#url">...</a></li>
                                 <li><a class="page-numbers" href="#url">15</a></li>
                                 <li><a class="next" href="#url">Next <span class="fa fa-angle-right"></span></a></li>
-                            </ul>
+                            </ul> --}}
                         </div>
                         <!-- //pagination -->
                     </div>
@@ -56,7 +78,7 @@
         </section>
         <!--//blog-posts-->
 
-        <script>
+        {{-- <script>
             $(document).ready(function(){
                 $.ajax({
                     type:'post',
@@ -81,7 +103,7 @@
                                                 str+="<span class='small'>Tháng "+(dateNew.getUTCMonth() + 1)+"</span>";
                                             str+="</a>";
                                         str+="</span>";
-                                    str+="<a href='../"+result.tintuc.data[i].idTinTuc+"/"+result.tintuc.data[i].TieuDeTinTuc_Slug+".html' class='d-block zoom'><img src='../backend/dist/img/"+result.tintuc.data[i].AnhDaiDien+"' alt='' class='img-fluid news-image' /></a>";
+                                    str+="<a href='../"+result.tintuc.data[i].idTinTuc+"/"+result.tintuc.data[i].TieuDeTinTuc_Slug+".html' class='d-block zoom'><img src='../backend/dist/img/"+result.tintuc.data[i].AnhDaiDien+"' alt='' class='img-fluid news-image avatar_image' /></a>";
                                         str+="<div class='blog-info'>";
                                             // str+="<a href='#category' class='category'>Tin tức 1</a>";
                                             str+="<h4><a class='title_estate' title='"+result.tintuc.data[i].TieuDeTinTuc+"' href='../"+result.tintuc.data[i].idTinTuc+"/"+result.tintuc.data[i].TieuDeTinTuc_Slug+".html'>"+result.tintuc.data[i].TieuDeTinTuc+"</a></h4>";
@@ -97,7 +119,7 @@
                     }
                 })
             });
-        </script>
+        </script> --}}
 <script>
     $(document).ready(function(){
         $.ajax({

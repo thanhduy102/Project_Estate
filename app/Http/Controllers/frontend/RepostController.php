@@ -20,7 +20,7 @@ class RepostController extends Controller
 {
     public function Edit_repost($idBDS){
         $bds=BatDongSan::where('idBDS',$idBDS)->first();
-        if($bds->id_User==Auth::user()->id && $bds->HienThiBDS==2){
+        if($bds->id_User==Auth::user()->id && $bds->HienThiBDS==2 || $bds->HienThiBDS==6){
             $batdongsan=BatDongSan::join('districts','districts.id','=','bat_dong_san.id_QuanHuyen')
             ->join('provinces','provinces.id','=','bat_dong_san.id_TinhThanh')
             ->join('wards','wards.id','=','bat_dong_san.id_XaPhuong')
@@ -159,7 +159,7 @@ class RepostController extends Controller
             
                 $dateTime=Carbon::now('Asia/Ho_Chi_Minh');
                 $batdongsan->ThoiGianTaoBDS=$dateTime;
-                $batdongsan->hienThiBDS=3;
+                $batdongsan->HienThiBDS=3;
                 $batdongsan->save();
 
                 $idBDS=$batdongsan->idBDS;

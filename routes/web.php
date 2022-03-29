@@ -1,5 +1,5 @@
 <?php
-
+// use Illuminate\Routing\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,7 +14,7 @@ Route::get('','frontend\IndexController@Index');//All-View trang chu
 Route::post('/danh_muc','frontend\IndexController@danh_muc');//All-Ham lay danh muc
 Route::get('{slug_category}.html','frontend\IndexController@GetCategorys');//All-View theo danh muc
 Route::get('tin-tuc','frontend\IndexController@tin_tuc');//All-View list tin tuc
-Route::post('/tin_tuc','frontend\IndexController@Tintuc');//All-Lay tat ca tin tuc
+// Route::post('/tin_tuc','frontend\IndexController@Tintuc');//All-Lay tat ca tin tuc
 Route::post('/featured_estate','frontend\IndexController@featured_estate');//All-Lay bds noi bat
 Route::get('dang-nhap','Auth\AuthController@Login')->middleware('CheckLogout');//All-View dang nhap
 Route::post('/dang-nhap','Auth\AuthController@login_auth')->name('login');//All-Ham xu ly danh nhap
@@ -29,6 +29,7 @@ Route::get('{date_time}/{id_bds}/{slug_estate}','frontend\ChiTietBDSController@v
 Route::post('/select_location','backend\BatDongSanController@Select_Location');
 Route::post('/select_category','backend\BatDongSanController@select_category');
 Route::get('search','frontend\FilterController@filter_estate')->name('filterEstate');
+Route::get('bat-dong-san/khu-vuc/{id_TinhThanh}/{name}','frontend\IndexController@view_estate_location');
 
 Route::get('quen-mat-khau','frontend\MailController@forgetPass');//All-view quen mat khau
 Route::post('/recover-pass','frontend\MailController@recoverPass');
@@ -47,9 +48,6 @@ Route::group(['middleware'=>'CheckLogin'],function(){
     Route::post('/image-estate','backend\BatDongSanController@image_estate');//Login-Ham luu nhieu anh luc them moi bds
     Route::get('dang-tin','frontend\DangTinController@dang_tin');//All-View dang tin bds
 
-    //Login-Ham list select Hinh thuc bds
-   //Login-Ham list select quan huyen
-
     Route::post('/recharge','frontend\NapTienController@recharge')->name('recharge');//Ham them thong tin nap tien
     
     Route::get('chinh-sua-bat-dong-san/id={idBDS}','frontend\BatDongSanUserController@EditBDS_User');
@@ -58,8 +56,8 @@ Route::group(['middleware'=>'CheckLogin'],function(){
     Route::post('/edit_bds_user','frontend\BatDongSanUserController@EditEstate_User')->name('edit_estate_user');
     Route::post('/editImage','backend\BatDongSanController@editImage');
     Route::post('/del_bds_user','frontend\BatDongSanUserController@Delete_BDS_User');
-
-    Route::get('/repost/id={idBDS}','frontend\RepostController@Edit_repost');
+    Route::post('/sold_estate','frontend\BatDongSanUserController@sold_estate');
+    Route::get('repost/id={idBDS}','frontend\RepostController@Edit_repost');
     Route::post('/add_repost','frontend\RepostController@add_repost')->name('addRepost');
 });
 
@@ -67,86 +65,79 @@ Route::group(['middleware'=>'CheckLogin'],function(){
 
 //Phan backend
 Route::group(['prefix'=>'admin','middleware'=>'CheckLogin'],function(){
-Route::group(['middleware'=>'auth.role'],function(){ //Role Admin, Nhan vien
-    Route::get('','backend\IndexController@Index');//Admin/Nhan Vien-View trang quan tri
-    // Role Admin
-    Route::group(['middleware'=>'adminRole'],function(){
-        Route::get('user','backend\UserController@GetUser');//Admin-View danh sach User
-        Route::post('assign_role','backend\UserController@assign_role');//Admin-Ham doi quyen User
-        Route::post('/delete_user','backend\UserController@delete_user');//Admin-Ham xoa User
-        Route::post('/view_users','backend\UserController@view_users');//Admin-Ham xem chi tiet User
+    Route::group(['middleware'=>'auth.role'],function(){ //Role Admin, Nhan vien
+        Route::get('','backend\IndexController@Index');//Admin/Nhan Vien-View trang quan tri
+        // Role Admin
+        Route::group(['middleware'=>'adminRole'],function(){
+            Route::get('user','backend\UserController@GetUser');//Admin-View danh sach User
+            Route::post('assign_role','backend\UserController@assign_role');//Admin-Ham doi quyen User
+            Route::post('/delete_user','backend\UserController@delete_user');//Admin-Ham xoa User
+            Route::post('/view_users','backend\UserController@view_users');//Admin-Ham xem chi tiet User
+            Route::get('search_user','backend\UserController@search_user');
+            
+            Route::post('/delete_estate','backend\BatDongSanController@delete_estate');//Admin-Xoa bds
+            Route::get('recharge','backend\NapTienController@View_Recharge');//Admin-View trang list thong tin nap tien
+            Route::get('recharge_ajax','backend\NapTienController@List_Recharge')->name('naptien.data');//Admin-Hàm hien thị thong tin nap tien
+            Route::post('/ajax_recharge','backend\NapTienController@ajax_recharge');//Ham nap tien
+            Route::post('/del_recharge','backend\NapTienController@del_recharge');
+        });
+        // End role admin
+        //Danh muc
+            Route::post('/delete-category','backend\DanhMucController@DeleteCategory');//Admin-Ham xoa danh muc
+            Route::post('/delete-new','backend\TinTucController@DeleteNews');
+            //List Danh Muc
+            Route::get('danhmuc-ajax','backend\DanhMucController@ListCategory')->name('danhmuc.data');
+            Route::get('list-category',function(){
+                return view('backend.danh-muc.list_danh_muc');
+            });
+            //End List Danh Muc
         
-        Route::post('/delete-category','backend\DanhMucController@DeleteCategory');//Admin-Ham xoa danh muc
-        Route::post('/delete-new','backend\TinTucController@DeleteNews');//Admin-Ham xoa tin tuc
-    
-        // Route::get('edit-bat-dong-san/id={idBDS}','backend\BatDongSanController@View_Edit_Estate');//Admin-view sua bds
-        // Route::post('/get-id-bds','backend\BatDongSanController@Get_Estate');//Admin-Lay thong tin bds theo id
-        // Route::post('/edit_estate','backend\BatDongSanController@edit_estate')->name('edit_estate');//Admin-Ham sua bds
+            //Add Danh Muc
+            Route::get('add-category','backend\DanhMucController@GetCategorys');
+            Route::post('/add-category','backend\DanhMucController@AddCategory')->name('addCate');
+            // End Add Danh muc
         
-        //Admin-Xoa nhieu hinh anh trong sua bds
-        //Admin-Ham luu anh da sua bds
+            //Edit Danh muc
+            Route::get('category/edit-category/id={idDanhMuc}','backend\DanhMucController@EditCategory');
+            Route::post('/get-id','backend\DanhMucController@GetIDDanhMuc');
+            Route::post('/edit-category','backend\DanhMucController@EditDanhMuc')->name('editCategory');
+            // End Edit
+        // End danh muc
 
-        Route::post('/delete_estate','backend\BatDongSanController@delete_estate');//Admin-Xoa bds
-        Route::get('recharge','backend\NapTienController@View_Recharge');//Admin-View trang list thong tin nap tien
-        Route::get('recharge_ajax','backend\NapTienController@List_Recharge')->name('naptien.data');//Admin-Hàm hien thị thong tin nap tien
-        Route::post('/ajax_recharge','backend\NapTienController@ajax_recharge');//Ham nap tien
-        Route::post('/del_recharge','backend\NapTienController@del_recharge');
+        // Tin tức
+            // List tin tuc
+            Route::get('tintuc-ajax','backend\TinTucController@ListTinTuc')->name('dataTinTuc');
+            Route::get('list-news',function(){
+                return view('backend.tin-tuc.list_tin_tuc');
+            });
+            // End list tin tuc
+            // Lay danh sach danh muc
+            Route::post('/get-category','backend\TinTucController@GetCate')->name('getCate');
+            // End
+            // Them tin tuc
+            Route::get('add-news','backend\TinTucController@AddTinTuc');
+            Route::post('/add-news','backend\TinTucController@AddNews')->name('addNews');
+            // End them tin tuc
+            //Chinh sua tin tuc
+            Route::get('new/edit-news/id={idTinTuc}','backend\TinTucController@ViewEdit');
+            Route::post('/get-id-new','backend\TinTucController@GetIDNews');
+            Route::post('/edit-news','backend\TinTucController@EditNews')->name('editNews');
+            // End chinh sua tin tuc
+        // End tin tức
+        // Bat dong san
+        // List danh sách bất động sản
+            Route::get('bds-ajax','backend\BatDongSanController@Bds_Ajax')->name('dataBDS');
+            Route::get('estate','backend\BatDongSanController@ListBDS');
+            Route::post('/approve_estate','backend\BatDongSanController@approve_estate');//Admin/Nhan vien - Ham duyet bai dang
+            Route::post('/remove_estate','backend\BatDongSanController@remove_estate');//Admin/Nhan vien - Ham go bai dang
+            
+            Route::post('/estate_detail','backend\BatDongSanController@estate_detail');
+
+            Route::get('post-estate','backend\BatDongSanController@PostEstate');//Admin/Nhan vien - Ham hien thi trang them moi bds
+            
+            Route::post('/cancel_estate','backend\BatDongSanController@cancel_estate');
+        
+        // End list
     });
-    // End role admin
-    //Danh muc
-     
-        //List Danh Muc
-        Route::get('danhmuc-ajax','backend\DanhMucController@ListCategory')->name('danhmuc.data');
-        Route::get('list-category',function(){
-            return view('backend.danh-muc.list_danh_muc');
-        });
-        //End List Danh Muc
-    
-        //Add Danh Muc
-        Route::get('add-category','backend\DanhMucController@GetCategorys');
-        Route::post('/add-category','backend\DanhMucController@AddCategory')->name('addCate');
-        // End Add Danh muc
-    
-        //Edit Danh muc
-        Route::get('edit-category/id={idDanhMuc}','backend\DanhMucController@EditCategory');
-        Route::post('/get-id','backend\DanhMucController@GetIDDanhMuc');
-        Route::post('/edit-category','backend\DanhMucController@EditDanhMuc')->name('editCategory');
-        // End Edit
-    // End danh muc
-
-    // Tin tức
-        // List tin tuc
-        Route::get('tintuc-ajax','backend\TinTucController@ListTinTuc')->name('dataTinTuc');
-        Route::get('list-news',function(){
-            return view('backend.tin-tuc.list_tin_tuc');
-        });
-        // End list tin tuc
-        // Lay danh sach danh muc
-        Route::post('/get-category','backend\TinTucController@GetCate')->name('getCate');
-        // End
-        // Them tin tuc
-        Route::get('add-news','backend\TinTucController@AddTinTuc');
-        Route::post('/add-news','backend\TinTucController@AddNews')->name('addNews');
-        // End them tin tuc
-        //Chinh sua tin tuc
-        Route::get('edit-news/id={idTinTuc}','backend\TinTucController@ViewEdit');
-        Route::post('/get-id-new','backend\TinTucController@GetIDNews');
-        Route::post('/edit-news','backend\TinTucController@EditNews')->name('editNews');
-        // End chinh sua tin tuc
-    // End tin tức
-    // Bat dong san
-     // List danh sách bất động sản
-        Route::get('bds-ajax','backend\BatDongSanController@Bds_Ajax')->name('dataBDS');
-        Route::get('estate','backend\BatDongSanController@ListBDS');
-        Route::post('/approve_estate','backend\BatDongSanController@approve_estate');//Admin/Nhan vien - Ham duyet bai dang
-        Route::post('/remove_estate','backend\BatDongSanController@remove_estate');//Admin/Nhan vien - Ham go bai dang
-        
-        Route::post('/estate_detail','backend\BatDongSanController@estate_detail');
-
-        Route::get('post-estate','backend\BatDongSanController@PostEstate');//Admin/Nhan vien - Ham hien thi trang them moi bds
-        
-     
-     // End list
-});
 
 });

@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use App\User;
 use Auth;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 
 class BatDongSanController extends Controller
@@ -21,11 +22,12 @@ class BatDongSanController extends Controller
     //
 
     function ListBDS(){
-        return view('backend.bat-dong-san.list_bds');
+        $user=User::orderBy('id','ASC')->get();
+        return view('backend.bat-dong-san.list_bds')->with('user',$user);
     }
     // Hàm lấy danh sách tin bất động sản
     public function Bds_Ajax(){
-        $bds=BatDongSan::orderBy('idBDS','desc')->get();
+        $bds=BatDongSan::join('user','user.id','=','bat_dong_san.id_User')->join('loai_tin','loai_tin.idLoaiTin','=','bat_dong_san.id_LoaiTin')->orderBy('idBDS','desc')->get();
         return Datatables::of($bds)
         ->addIndexColumn()
         ->addColumn(__('hinhanh'),function($bds){
@@ -81,18 +83,33 @@ class BatDongSanController extends Controller
             }
             else if($bds->HienThiBDS==0){
                 return '<span class="badge bg-gradient-red">Chưa duyệt</span>
-                <a onclick=btn_approve('.$bds->idBDS.') class="btn btn-primary">Duyệt bài</a>';
+                <a onclick=btn_approve('.$bds->idBDS.') class="btn btn-primary">Duyệt bài</a>
+                <a onclick=btn_cancel_bds('.$bds->idBDS.') class="btn btn-danger">Hủy</a>';
             }
             else if($bds->HienThiBDS==3){
                 return '<span class="badge bg-primary">Đăng lại</span>
-                <a onclick=btn_approve('.$bds->idBDS.') class="btn btn-primary">Duyệt bài</a>';
+                <a onclick=btn_approve('.$bds->idBDS.') class="btn btn-primary">Duyệt bài</a>
+                <a onclick=btn_cancel_bds('.$bds->idBDS.') class="btn btn-danger">Hủy</a>';
 
+            }
+            else if($bds->HienThiBDS==5){
+                return '<span class="badge bg-gradient-red">Đã bán</span>';
+            }
+            else if($bds->HienThiBDS==6){
+                return '<span class="badge bg-gradient-red">Đã hủy duyệt</span>';
             }
             else{
                 return '<span class="badge bg-gradient-red">Hết hạn</span>';
             }
         })
-        ->rawColumns([__('hinhanh'),__('hanhdong'),__('tinhtrang'),__('ngaycapnhat'),__('thongtinngay')])
+        ->addColumn(__('HoTen'),function($bds){
+            return $bds->Ho.' '.$bds->Ten;
+        })
+        ->addColumn(__('TieuDe'),function($bds){
+            return '<p class="title_estate_admin">'.$bds->TieuDeBDS.'</p>';
+        })
+        
+        ->rawColumns([__('hinhanh'),__('hanhdong'),__('tinhtrang'),__('ngaycapnhat'),__('thongtinngay'),__('HoTen'),__('TieuDe')])
         ->make(true);
     }
 
@@ -143,33 +160,32 @@ class BatDongSanController extends Controller
         }
         echo $output;
     }
-// Hàm lưu hình ảnh lên serve
+
    
 // Hàm đăng tin bất động sản
     public function Add_Estate(Request $request){
     
-            $messages=[
-            'required'=>'Không được để trống!',
-            'txt_tieude.max'=>'Tiêu đề tối đa 100 ký tự',
-            'txt_tieude.min'=>'Tiêu đề tối thiểu 6 ký tự',
-            'txt_dientich.numeric'=>'Diện tích phải là chữ số',
-            'txt_dientich.min'=>'Diện tích phải lớn hơn 0',
-            'select_file.mimes'=>'File ảnh phải đúng định dạng (jpg, jpeg, png)',
-            'txt_mota.max'=>'Mô tả tối đa 3000 ký tự',
-            'txt_mattien.numeric'=>'Mặt tiền phải là chữ số',
-            'txt_mattien.min'=>'Mặt tiền phải lớn hơn 0',
-            'txt_duongvao.numeric'=>'Đường vào phải là chữ số',
-            'txt_duongvao.min'=>'Đường vào phải lớn hơn 0',
-            'txt_sotang.numeric'=>'Số tầng phải là chữ số',
-            'txt_sotang.min'=>'Số tầng phải lớn hơn 0',
-            'txt_sophongngu.numeric'=>'Số phòng ngủ phải là chữ số',
-            'txt_sophongngu.min'=>'Số phòng ngủ phải lớn hơn 0',
-            'txt_sotoilet.numeric'=>'Số Toilet phải là chữ số',
-            'txt_sotoilet.min'=>'Số Toilet phải lớn hơn 0',
-            'txt_ngayketthuc.date'=>'Dữ liệu nhập phải đúng định dạng',
-            'txt_ngayketthuc.after'=>'Ngày kết thúc lớn hơn ngày bắt đầu',
+        $messages=[
+                'required'=>'Không được để trống!',
+                'txt_tieude.max'=>'Tiêu đề tối đa 100 ký tự',
+                'txt_tieude.min'=>'Tiêu đề tối thiểu 6 ký tự',
+                'txt_dientich.numeric'=>'Diện tích phải là chữ số',
+                'txt_dientich.min'=>'Diện tích phải lớn hơn 0',
+                'select_file.mimes'=>'File ảnh phải đúng định dạng (jpg, jpeg, png)',
+                'txt_mota.max'=>'Mô tả tối đa 3000 ký tự',
+                'txt_mattien.numeric'=>'Mặt tiền phải là chữ số',
+                'txt_mattien.min'=>'Mặt tiền phải lớn hơn 0',
+                'txt_duongvao.numeric'=>'Đường vào phải là chữ số',
+                'txt_duongvao.min'=>'Đường vào phải lớn hơn 0',
+                'txt_sotang.numeric'=>'Số tầng phải là chữ số',
+                'txt_sotang.min'=>'Số tầng phải lớn hơn 0',
+                'txt_sophongngu.numeric'=>'Số phòng ngủ phải là chữ số',
+                'txt_sophongngu.min'=>'Số phòng ngủ phải lớn hơn 0',
+                'txt_sotoilet.numeric'=>'Số Toilet phải là chữ số',
+                'txt_sotoilet.min'=>'Số Toilet phải lớn hơn 0',
+                'txt_ngayketthuc.date'=>'Dữ liệu nhập phải đúng định dạng',
+                'txt_ngayketthuc.after'=>'Ngày kết thúc lớn hơn ngày bắt đầu',
         ];
-
         $validate=Validator::make(
             $request->all(),
             [
@@ -328,23 +344,33 @@ class BatDongSanController extends Controller
             $ngaykethuc=strtotime($bds->NgayKetThuc);
             $datediff=abs($ngaybatdau-$ngaykethuc);
             $numberDate=floor($datediff / (60*60*24));
-
             $dateTime=Carbon::now('Asia/Ho_Chi_Minh');
             $date_start=$dateTime->toDateString();
             $date_end=$dateTime->addDays($numberDate)->toDateString();
-
             $bds->NgayBatDau=$date_start;
             $bds->NgayKetThuc=$date_end;
-
             $bds->HienThiBDS=1;
             $bds->idUserPost=Auth::id();
             $dateTime=Carbon::now('Asia/Ho_Chi_Minh');
             $bds->ThoiGianTaoBDS=$dateTime;
             $bds->save();
+            // Send mail
+            $user=User::find($bds->id_User);
+            $email=$user->email;
+            $now=Carbon::now('Asia/Ho_Chi_Minh');
+            $datetime_mail=new Carbon($bds->ThoiGianTaoBDS);
+            $date_mail=$datetime_mail->format('Ymd');
+            $title_mail="THÔNG BÁO: TIN ĐĂNG ĐÃ ĐƯỢC DUYỆT";
+            $page_notice_mail="Tin đăng của bạn đã được duyệt vào ".$now.". Ngày bắt đầu là: ".$bds->NgayBatDau.". Ngày kết thúc là: ".$bds->NgayKetThuc;
+            $url_estate_mail=url($date_mail."/".$bds->idBDS."/".$bds->TieuDeBDS_Slug);
+            $data=array("name"=>$title_mail,"body"=>$page_notice_mail,"url"=>$url_estate_mail,"email"=>$email);
+            Mail::send('frontend.notice_mail.notice_approve',['data'=>$data],function($message) use($title_mail,$data){
+                $message->to($data['email'])->subject($title_mail);
+                $message->from($data['email'],$title_mail);
+            });
             return response()->json([
                 'success'=>'Duyệt bài thành công',
-            ],200);
-            
+            ],200);   
         } catch (\Throwable $e) {
             return response()->json([
                 'err'=>'Duyệt bài không thành công',
@@ -460,5 +486,37 @@ class BatDongSanController extends Controller
         return response()->json([
             'message'=>"Xóa thành công!",
         ],200);
+    }
+
+
+    public function cancel_estate(Request $request){
+        $id_BDS=$request->id_BDS;
+        $bds=BatDongSan::find($id_BDS);
+        $bds->HienThiBDS=6;
+        $idUser=$bds->id_User;
+        $user=User::find($idUser);
+        $tien_dang=$bds->TongTien;
+        $user->SoTien=$user->SoTien+$tien_dang;
+        $bds->save();
+        $user->save();
+
+        // Send mail
+        // $user=User::find($bds->id_User);
+        $email=$user->email;
+        $now=Carbon::now('Asia/Ho_Chi_Minh');
+        $datetime_mail=new Carbon($bds->ThoiGianTaoBDS);
+        
+        $title_mail="THÔNG BÁO: DUYỆT TIN KHÔNG THÀNH CÔNG";
+        $page_notice_mail="Tin đăng ngày: ".$bds->ThoiGianTaoBDS." duyệt không thành công";
+        // $url_estate_mail=url($date_mail."/".$bds->idBDS."/".$bds->TieuDeBDS_Slug);
+        $data=array("name"=>$title_mail,"body"=>$page_notice_mail,"email"=>$email);
+        Mail::send('frontend.notice_mail.notice_cancel_approve',['data'=>$data],function($message) use($title_mail,$data){
+            $message->to($data['email'])->subject($title_mail);
+            $message->from($data['email'],$title_mail);
+        });
+
+        return response()->json([
+            'message'=>"Hủy thành công!",
+        ]);
     }
 }

@@ -119,7 +119,7 @@
                                     <!-- /.card-body -->
 
                                     <div class="card-footer">
-                                        <input type="submit" name="upload" id="upload" class="btn btn-primary" value="Them moi">
+                                        <input type="submit" name="upload" id="upload" class="btn btn-primary" value="Cập nhật">
                                     </div>
                                 </form>
                                 </div>
@@ -196,7 +196,7 @@
 
               if(result[i].success){
                 toastr.success(result[i].success,'Thong bao');
-                window.location.href='/list-news';
+                window.location.href='/admin/list-news';
               }
           }
         }

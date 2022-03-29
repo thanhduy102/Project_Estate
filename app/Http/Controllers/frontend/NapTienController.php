@@ -34,7 +34,6 @@ class NapTienController extends Controller
             $naptien=new NapTien();
             $naptien->SoTienNap=$request->txt_moneyHidden;
             $naptien->MaXacNhan=$request->txt_maxacnhan;
-            
             if($request->hasFile('select_file_bank')){
                 $image=$request->file('select_file_bank');
                 $new_name=rand(1,10000) . '.' . $image->getClientOriginalExtension();
@@ -47,11 +46,8 @@ class NapTienController extends Controller
             $dateTime=Carbon::now('Asia/Ho_Chi_Minh');
             $naptien->ThoiGianNT=$dateTime;
             $naptien->idUser=Auth::user()->id;
-
             $naptien->save();
-
             $response=['success'=>'Nạp tiền thành công! Tiền sẽ chuyển vào tài khoản sớm nhất.'];
-
         }
         return response()->json([
             $response,

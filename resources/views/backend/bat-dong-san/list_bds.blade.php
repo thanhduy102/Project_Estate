@@ -1,6 +1,17 @@
 @extends('backend.master.master')
 @section('title','Danh sach bat dong san')
 @section('content')
+<style>
+    .title_estate_admin{
+        -webkit-line-clamp: 5;
+    display: -webkit-box;
+    font-size: 15px;
+    white-space: normal;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    }
+    
+</style>
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -15,6 +26,7 @@
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                                 <li class="breadcrumb-item active">Danh sách bất động sản</li>
                             </ol>
+                            
                         </div>
                     </div>
                 </div>
@@ -28,8 +40,55 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Danh sách bất động sản</h3>
+                                    <div>
+                                        {{-- <h3 class="card-title">Danh sách bất động sản</h3> --}}
                                     <a href="../add-category" class="btn btn-primary" style="float: right;">Thêm mới</a>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <select data-column="1" class="filter-select" name="" id="">
+                                                <option value="">---Chọn mã khách hàng---</option>
+                                                @foreach ($user as $row)
+                                                    <option value="{{ $row->id }}">{{ $row->id }}</option>
+                                                @endforeach
+                                                
+                                            </select>
+                                            
+                                        </div>
+                                        <div class="col-3">
+                                            <select data-column="2" class="filter-select" name="" id="">
+                                                <option value="">---Chọn tên khách hàng---</option>
+                                                @foreach ($user as $row)
+                                                    <option value="{{ $row->Ho }} {{ $row->Ten }}">{{ $row->Ho }} {{ $row->Ten }}</option>
+                                                @endforeach
+                                            </select>
+                                            
+                                        </div>
+                                        
+                                        <div class="col-3">
+                                            <select data-column="9" class="filter-select" name="" id="">
+                                                <option value="">---Tình trạng---</option>
+                                                <option value="Chưa duyệt">Chưa duyệt</option>
+                                                <option value="Đã duyệt">Đã duyệt</option>
+                                                <option value="Hết hạn">Hết hạn</option>
+                                                <option value="Đã bán">Đã bán</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-3">
+                                            <select data-column="7" class="filter-select" name="" id="">
+                                                <option value="">---Loại tin---</option>
+                                                <option value="Tin thường">Tin thường</option>
+                                                <option value="Tin VIP">Tin VIP</option>
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                      
+                                        
+                                        
+                                
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
@@ -38,10 +97,13 @@
                                         <thead>
                                             <tr>
                                                 <th style="width: 10px">#</th>
+                                                <th>Mã khách hàng</th>
+                                                <th>Tên khách hàng</th>
                                                 <th style="width: 100px">Hình ảnh</th>
                                                 <th>Tiêu đề</th>
                                                 <th>Ngày bắt đầu</th>
                                                 <th>Ngày kết thúc</th>
+                                                <th>Loại tin</th>
                                                 <th>Thông tin ngày</th>
                                                 <th>Cập nhật lần cuối</th>
                                                 <th style="width:100px">Tình trạng</th>
@@ -51,6 +113,7 @@
                                         <tbody id="tbd_bds">
                                          
                                         </tbody>
+                                      
                                     </table>
                                 </div>
                                 <!-- /.card-body -->
@@ -101,17 +164,23 @@
     $(function (){
 
         var urlData=$('#bdsData').val();
-        $('#bdsTable').DataTable({
+        var table=$('#bdsTable').DataTable({
             processing:true,
             serverSide:true,
-            ajax:urlData,
+            ajax:{ 
+                url:urlData,
+               
+            },
             type:'post',
             columns:[
                 {data:'DT_RowIndex',name:'DT_RowIndex'},
+                {data:'id',name:'id'},
+                {data:'HoTen',name:'HoTen'},
                 {data:'hinhanh',name:'hinhanh'},
-                {data:'TieuDeBDS'},
+                {data:'TieuDe',name:'TieuDe'},
                 {data:'NgayBatDau'},
                 {data:'NgayKetThuc'},
+                {data:'LoaiTin'},
                 {data:'thongtinngay',name:'thongtinngay'},
                 {data:'ngaycapnhat',name:'ngaycapnhat'},
                 {data:'tinhtrang',name:'tinhtrang'},
@@ -119,6 +188,14 @@
             ],
             "pageLength":10
 
+
+           
+
+        });
+        $('.filter-select').change(function(){
+            table.column( $(this).data('column'))
+                .search($(this).val())
+                .draw();
         });
     });
 
@@ -258,6 +335,7 @@
                 str+="<p><label>Điện thoại:</label> "+result.bds.DienThoai+"</p>";
                 str+="<p><label>Email:</label> "+result.bds.emailUser+"</p>";
                 str+="<p><label>Loại tin:</label> "+result.bds.LoaiTin+"</p>";
+                str+="<p><label>Tiền đăng tin:</label>"+result.bds.TongTien+" VNĐ</p>"
                 str+="<p><label>Ngày bắt đầu:</label> "+result.bds.NgayBatDau+"</p>";
                 str+="<p><label>Ngày kết thúc:</label> "+result.bds.NgayKetThuc+"</p>";
                 str+="<p><label>Người đăng:</label> "+result.bds.Ho+" "+result.bds.Ten+"</p>";
@@ -286,6 +364,20 @@
                 url:'/admin/delete_estate',
                 type:'post',
                 data:{txt_id_bds:idBDS},
+                success:function(result){
+                    toastr.success(result.message);
+                    $("#bdsTable").DataTable().ajax.reload();
+                }
+            });
+        }
+    }
+
+    function btn_cancel_bds(id_BDS){
+        if(confirm("Bạn có chắc chắn không duyệt bài này?")==true){
+            $.ajax({
+                url:'/admin/cancel_estate',
+                type:'post',
+                data:{id_BDS:id_BDS},
                 success:function(result){
                     toastr.success(result.message);
                     $("#bdsTable").DataTable().ajax.reload();

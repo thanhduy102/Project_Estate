@@ -14,7 +14,7 @@ class UserSeed extends Seeder
     {
         //
         //   User::truncate();
-
+        
         $adminRole=Role::where('TenQuyen','Admin')->first();
         $employyRole=Role::where('TenQuyen','Nhân viên')->first();
 
@@ -23,11 +23,11 @@ class UserSeed extends Seeder
         $admin=User::create([
             'Ho'=>'Trần Thanh',
             'Ten'=>'Duy Admin',
-            'email'=>'thanhduyadmin@gmail.com',
+            'email'=>'tranduy6111@gmail.com',
             'Phone'=>'0123456789',
             'DiaChi'=>'Ha Noi',
             'GioiTinh'=>'Nam',
-            'SoTien'=>30000,
+            'SoTien'=>40000,
             'AnhAvatar'=>'no-img.jpg',
             'password'=>bcrypt('123456789'),
 
@@ -36,11 +36,11 @@ class UserSeed extends Seeder
         $employee=User::create([
             'Ho'=>'Trần Thanh',
             'Ten'=>'Duy Employee',
-            'email'=>'thanhduyemployee@gmail.com',
+            'email'=>'huydinh08367@gmail.com',
             'Phone'=>'0123456789',
             'DiaChi'=>'Ha Noi',
             'GioiTinh'=>'Nam',
-            'SoTien'=>30000,
+            'SoTien'=>40000,
             'AnhAvatar'=>'no-img.jpg',
             'password'=>bcrypt('123456789'),
 
@@ -49,11 +49,11 @@ class UserSeed extends Seeder
         $guest=User::create([
             'Ho'=>'Trần Thanh',
             'Ten'=>'Duy Guest',
-            'email'=>'thanhduyguest@gmail.com',
+            'email'=>'tranduy0165@gmail.com',
             'Phone'=>'0123456789',
             'DiaChi'=>'Ha Noi',
             'GioiTinh'=>'Nam',
-            'SoTien'=>30000,
+            'SoTien'=>40000,
             'AnhAvatar'=>'no-img.jpg',
             'password'=>bcrypt('123456789'),
 

@@ -48,22 +48,37 @@ class BatDongSanUserController extends Controller
             else if($bds_user->HienThiBDS==0 || $bds_user->HienThiBDS==3){
                 return '<span>Đang chờ duyệt...</span>';    
             }
+            else if($bds_user->HienThiBDS==5){
+                return '<span class="badge bg-primary">Đã bán</span>';
+            }
+            else if($bds_user->HienThiBDS==6){
+                return '<span class="badge bg-primary">Duyệt không thành công</span>';
+            }
             else{
                 return '<span>Đã hêt hạn</span>';
             }
         })
+                                // <a onclick=btn_del_bds_user('.$bds_user->idBDS.') style="color:red;" title="Xóa" class="fa fa-trash"></a>';
+
         ->addColumn(__('hanhdong'),function($bds_user){
             if($bds_user->HienThiBDS==1){
                 $timeBDS=new Carbon($bds_user->ThoiGianTaoBDS);
                 $dtFormat=$timeBDS->year . $timeBDS->month . $timeBDS->day;
                 return '<a href="../chinh-sua-bat-dong-san/id='.$bds_user->idBDS.'" class="fa fa-edit" title="Sửa"></a> |
                         <a onclick=btn_del_bds_user('.$bds_user->idBDS.') style="color:red;" title="Xóa" class="fa fa-trash"></a> |
-                        <a style="color: blue; text-decoration: underline" href="../'.$dtFormat.'/'.$bds_user->idBDS.'/'.$bds_user->TieuDeBDS_Slug.'">Xem tin đăng</a>';
+                        <a style="color: blue; text-decoration: underline" href="../'.$dtFormat.'/'.$bds_user->idBDS.'/'.$bds_user->TieuDeBDS_Slug.'">Xem tin đăng</a> |
+                        <a style="color: blue; text-decoration: underline" onclick=btn_sold('.$bds_user->idBDS.')>Đã bán</a>';
             }
             else if($bds_user->HienThiBDS==0 || $bds_user->HienThiBDS==3){
-                return '<a href="../chinh-sua-bat-dong-san/id='.$bds_user->idBDS.'" class="fa fa-edit" title="Sửa"></a> |
+                return '<a href="../chinh-sua-bat-dong-san/id='.$bds_user->idBDS.'" class="fa fa-edit" title="Sửa"></a>';
+            } 
+            else if($bds_user->HienThiBDS==5){
+                return '<a onclick=btn_del_bds_user('.$bds_user->idBDS.') style="color:red;" title="Xóa" class="fa fa-trash"></a>';
+                     
+            }
+            else if($bds_user->HienThiBDS==6){
+                return '<a href="../repost/id='.$bds_user->idBDS.'">Đăng lại</a> |
                         <a onclick=btn_del_bds_user('.$bds_user->idBDS.') style="color:red;" title="Xóa" class="fa fa-trash"></a>';
-                         
             }
             else{
                 return '<a href="../repost/id='.$bds_user->idBDS.'">Đăng lại</a> |
@@ -294,6 +309,7 @@ class BatDongSanUserController extends Controller
 
             return response()->json([
                 'message'=>"Xóa thành công!",
+                
             ],200);
         }
         else{
@@ -301,5 +317,29 @@ class BatDongSanUserController extends Controller
                 'err'=>"Thao tác sai, vui lòng thực hiện lại",
             ],400);
         }
+    }
+
+    // Hàm gỡ bài đã bán
+    public function sold_estate(Request $request){
+        try {
+            $bds=new BatDongSan();
+            $idBDS=$request->id_BDS;
+            $bds=BatDongSan::find($idBDS);
+            if(Auth::user()->id==$bds->id_User){
+                $bds->HienThiBDS=5;
+                $bds->save();
+                return response()->json([
+                    'message'=>'Gỡ tin thành công',
+                ],200);
+            }
+            else{
+                return response()->json([
+                    'err'=>'Lỗi!',
+                ],200);
+            }
+            
+        } catch (\Throwable $e) {
+            return "-1";
+        }   
     }
 }
