@@ -27,13 +27,6 @@ class BatDongSanUserController extends Controller
             $query->from('bat_dong_san')->join('loai_tin','loai_tin.idLoaiTin','=','bat_dong_san.id_LoaiTin')
                                 ->where('id_user',$idUser);
         },'batdongsan')->where('HienThiBDS','<>',4)->orderBy('idBDS','desc')->get();
-
-        // $bds_user=BatDongSan::join('loai_tin','loai_tin.idLoaiTin','=','bat_dong_san.id_LoaiTin')
-        //                     ->where('id_User',$idUser)
-        //                     ->where('HienThiBDS','<>',4)
-                           
-                            
-        //                     ->orderBy('idBDS','desc')->get();
         
         return Datatables::of($bds_user)
         ->addIndexColumn()
@@ -58,7 +51,6 @@ class BatDongSanUserController extends Controller
                 return '<span>Đã hêt hạn</span>';
             }
         })
-                                // <a onclick=btn_del_bds_user('.$bds_user->idBDS.') style="color:red;" title="Xóa" class="fa fa-trash"></a>';
 
         ->addColumn(__('hanhdong'),function($bds_user){
             if($bds_user->HienThiBDS==1){
@@ -269,11 +261,7 @@ class BatDongSanUserController extends Controller
                 $response=[
                             'success'=>'success',
                             'txt_id_bds'=>$txt_id_bds,
-                          ];
-                    // return response()->json([
-                    //     $response,
-                    //     'txt_id_bds'=>$txt_id_bds, 
-                    // ],200);
+                ];
             } 
             else{
                 $response=['err'=>'err'];

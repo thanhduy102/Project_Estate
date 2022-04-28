@@ -19,9 +19,7 @@ class ChiTietBDSController extends Controller
             $now = Carbon::now('Asia/Ho_Chi_Minh');
             $days=$dateTime->diffForHumans($now);
             $hinhanh=HinhAnh::where('id_BDS',$id_bds)->get();
-            // return response()->json([
-            //     'bds'=>$batdongsan,
-            // ]);
+    
             $viewBDS=BatDongSan::where('idBDS',$id_bds)->first();
             $viewBDS->ViewBDS=$viewBDS->ViewBDS+1;
             $viewBDS->save();

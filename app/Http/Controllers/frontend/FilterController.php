@@ -16,10 +16,6 @@ class FilterController extends Controller
                                       
         },'batdongsan')->where('HienThiBDS',1)->orderBy('id_LoaiTin','desc')->orderBy('idBDS','ASC')->filter($bdsFilter)->paginate(8);
        
-
-        // return response()->json([
-        //     'bds'=>$batdongsan,
-        // ]);
         return view('frontend.search')->with('batdongsan',$batdongsan);
     }
 }

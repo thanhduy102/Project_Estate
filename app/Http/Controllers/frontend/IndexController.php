@@ -50,11 +50,6 @@ class IndexController extends Controller
     }
 
     public function featured_estate(){
-        // $batdongsan=BatDongSan::query()->fromSub(function($query){
-        //     $query->from('bat_dong_san')->join('provinces','provinces.id','=','bat_dong_san.id_TinhThanh')
-
-        //                                 ->where('HinhThuc',2);
-        // },'batdongsan')->where('HienThiBDS',1)->orderBy('idBDS','ASC')->paginate(8);
 
         $batdongsan=ChiTietBatDongSan::query()->fromSub(function($query) {
             $query->from('chi_tiet_bat_dong_san')->join('danh_muc','danh_muc.idDanhMuc','=','chi_tiet_bat_dong_san.id_DanhMuc')
